@@ -1,0 +1,64 @@
+---
+const today = new Date();
+---
+
+<footer class="mt-32 pb-12 px-6">
+    <div class="max-w-3xl mx-auto text-center">
+        
+        <!-- Garis Pemisah yang Alus -->
+        <div class="h-px w-24 bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-700 to-transparent mx-auto mb-12"></div>
+
+        <!-- Pesan Penutup Personal -->
+        <div class="mb-10">
+            <h3 class="font-display font-bold text-2xl text-ink dark:text-white mb-3">
+                Mari berteman di internet.
+            </h3>
+            <p class="text-gray-500 dark:text-gray-400 leading-relaxed max-w-md mx-auto">
+                Saya aktif di Twitter dan kadang-kadang pamer foto kopi di Instagram. 
+                Sapa aja kalau ketemu, saya nggak gigit kok.
+            </p>
+        </div>
+
+        <!-- Social Links (Gede & Centered) -->
+        <div class="flex justify-center gap-6 mb-12">
+            <!-- Twitter -->
+            <a href="#" aria-label="Twitter" class="group flex flex-col items-center gap-2 text-gray-400 hover:text-ink dark:hover:text-white transition-colors">
+                <div class="w-12 h-12 flex items-center justify-center rounded-2xl bg-gray-50 dark:bg-gray-800 border border-transparent group-hover:border-gray-200 dark:group-hover:border-gray-700 group-hover:scale-110 transition-all duration-300 shadow-sm">
+                    <i class="ph-bold ph-twitter-logo text-xl group-hover:text-[#1DA1F2]"></i>
+                </div>
+            </a>
+            
+            <!-- Instagram -->
+            <a href="#" aria-label="Instagram" class="group flex flex-col items-center gap-2 text-gray-400 hover:text-ink dark:hover:text-white transition-colors">
+                <div class="w-12 h-12 flex items-center justify-center rounded-2xl bg-gray-50 dark:bg-gray-800 border border-transparent group-hover:border-gray-200 dark:group-hover:border-gray-700 group-hover:scale-110 transition-all duration-300 shadow-sm">
+                    <i class="ph-bold ph-instagram-logo text-xl group-hover:text-[#E1306C]"></i>
+                </div>
+            </a>
+
+            <!-- Email -->
+            <a href="mailto:email@example.com" aria-label="Email" class="group flex flex-col items-center gap-2 text-gray-400 hover:text-ink dark:hover:text-white transition-colors">
+                <div class="w-12 h-12 flex items-center justify-center rounded-2xl bg-gray-50 dark:bg-gray-800 border border-transparent group-hover:border-gray-200 dark:group-hover:border-gray-700 group-hover:scale-110 transition-all duration-300 shadow-sm">
+                    <i class="ph-bold ph-envelope-simple text-xl group-hover:text-accent"></i>
+                </div>
+            </a>
+        </div>
+
+        <!-- Menu Kecil -->
+        <nav class="flex flex-wrap justify-center gap-x-8 gap-y-4 mb-10 text-sm font-medium text-gray-500 dark:text-gray-400">
+            <a href="/" class="hover:text-accent transition-colors">Jurnal</a>
+            <a href="/about" class="hover:text-accent transition-colors">Tentang Saya</a>
+            <a href="/rss.xml" class="hover:text-accent transition-colors">RSS Feed</a>
+        </nav>
+
+        <!-- Copyright & Credits -->
+        <div class="text-xs text-gray-400 dark:text-gray-500 font-medium uppercase tracking-widest">
+            <p class="mb-2">&copy; {today.getFullYear()} Catatan Pinggir.</p>
+            <p class="opacity-60 normal-case tracking-normal">
+                Dibuat dengan <a href="https://astro.build" target="_blank" class="hover:text-ink dark:hover:text-white transition-colors underline decoration-dotted underline-offset-2">Astro</a>, 
+                <a href="https://tailwindcss.com" target="_blank" class="hover:text-ink dark:hover:text-white transition-colors underline decoration-dotted underline-offset-2">Tailwind</a>, 
+                & <span class="hover:text-red-500 cursor-default transition-colors" title="Serius, butuh tidur">Kurang Tidur</span>.
+            </p>
+        </div>
+
+    </div>
+</footer>

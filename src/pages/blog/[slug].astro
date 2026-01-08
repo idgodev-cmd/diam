@@ -1,0 +1,70 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+// 1. Generate URL untuk setiap file markdown yang ada
+export async function getStaticPaths() {
+    const posts = await getCollection('blog');
+    return posts.map((post) => ({
+        params: { slug: post.slug },
+        props: post,
+    }));
+}
+
+// 2. Ambil data artikel yang sedang dibuka
+const post = Astro.props;
+const { Content } = await post.render();
+---
+
+<BaseLayout title={post.data.title}>
+    <Header />
+    
+    <main class="max-w-3xl mx-auto px-6 pt-32 min-h-screen relative z-10">
+        <!-- Back Button -->
+        <div class="mb-8">
+            <a href="/" class="text-sm font-bold text-gray-500 hover:text-ink dark:hover:text-white transition-colors inline-flex items-center gap-2">
+                &larr; Kembali
+            </a>
+        </div>
+
+        <!-- Article Header -->
+        <header class="mb-10 text-center md:text-left">
+            <div class="flex gap-2 mb-4 justify-center md:justify-start">
+                {post.data.tags && post.data.tags.map(tag => (
+                    <span class="px-2 py-1 bg-accent/20 text-yellow-800 dark:text-yellow-200 text-xs font-bold rounded-md uppercase tracking-wide">
+                        {tag}
+                    </span>
+                ))}
+            </div>
+            <h1 class="font-display font-extrabold text-3xl md:text-5xl leading-tight mb-4 text-ink dark:text-white">
+                {post.data.title}
+            </h1>
+            <div class="text-sm text-gray-500">
+                <time datetime={post.data.pubDate.toISOString()}>
+                    {post.data.pubDate.toLocaleDateString('id-ID', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                    })}
+                </time>
+            </div>
+        </header>
+
+        <!-- Featured Image -->
+        {post.data.heroImage && (
+            <div class="mb-10 rounded-xl overflow-hidden shadow-sm">
+                <img width={1020} height={510} src={post.data.heroImage} alt="" class="w-full object-cover aspect-video" />
+            </div>
+        )}
+
+        <!-- CONTENT AREA (Prose / Typography) -->
+        <article class="prose prose-lg dark:prose-invert prose-headings:font-display prose-headings:font-bold prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-a:text-yellow-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-img:shadow-sm max-w-none">
+            <Content />
+        </article>
+
+    </main>
+
+    <Footer />
+</BaseLayout>

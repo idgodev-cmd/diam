@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+// Data Social Media (Bisa ditambahin nanti)
+const socials = [
+	{ name: 'Twitter', url: '#', icon: 'ph-twitter-logo' },
+	{ name: 'Instagram', url: '#', icon: 'ph-instagram-logo' },
+	{ name: 'Email', url: 'mailto:email@example.com', icon: 'ph-envelope-simple' },
+];
+
+// Data Minat/Hobi (Buat aksesoris visual)
+const interests = ["Kopi Hitam", "Rebahan", "Overthinking", "Astro", "Menulis"];
+---
+
+<BaseLayout title="Tentang Saya">
+	<Header />
+
+	<main class="max-w-5xl mx-auto px-6 pt-32 pb-20 min-h-screen relative z-10">
+		
+		<!-- GRID LAYOUT: Mobile 1 Kolom, Desktop 12 Kolom -->
+		<div class="grid grid-cols-1 md:grid-cols-12 gap-12 animate-enter">
+			
+			<!-- SIDEBAR (Foto & Info Singkat) - Span 4 kolom -->
+			<aside class="md:col-span-4 md:sticky md:top-32 h-fit text-center md:text-left">
+				<!-- Avatar dengan Efek Ring -->
+				<div class="relative w-40 h-40 mx-auto md:mx-0 mb-6">
+					<div class="absolute inset-0 bg-accent/20 rounded-full blur-xl transform translate-y-2"></div>
+					<div class="w-full h-full rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden relative border-4 border-white dark:border-dark-card shadow-lg">
+						<img 
+							src="/images/avatardiam.png" 
+							alt="Profile" 
+							width="160" 
+							height="160" 
+							class="object-cover w-full h-full"
+						>
+					</div>
+					<!-- Status Dot -->
+					<div class="absolute bottom-2 right-2 md:right-4 w-5 h-5 bg-green-500 border-4 border-white dark:border-dark-card rounded-full" title="Online (tapi males bales chat)"></div>
+				</div>
+
+				<!-- Nama & Tagline -->
+				<h1 class="font-display font-bold text-2xl text-ink dark:text-white mb-2">
+					Penulis Iseng
+				</h1>
+				<p class="text-sm text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">
+					Bukan influencer, cuma manusia biasa yang kebetulan punya kuota internet.
+				</p>
+
+				<!-- Interest Tags -->
+				<div class="flex flex-wrap justify-center md:justify-start gap-2 mb-8">
+					{interests.map(item => (
+						<span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-gray-100 dark:bg-gray-800 text-gray-500 rounded-md border border-gray-200 dark:border-gray-700">
+							{item}
+						</span>
+					))}
+				</div>
+
+				<!-- Social Links -->
+				<div class="flex justify-center md:justify-start gap-4">
+					{socials.map(social => (
+						<a href={social.url} class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800 text-gray-400 hover:text-ink hover:bg-accent hover:scale-110 transition-all duration-300">
+							<i class={`ph-bold ${social.icon} text-lg`}></i>
+						</a>
+					))}
+				</div>
+			</aside>
+
+			<!-- MAIN CONTENT (Cerita) - Span 8 kolom -->
+			<article class="md:col-span-8">
+				<div class="prose prose-lg dark:prose-invert prose-headings:font-display prose-p:text-gray-600 dark:prose-p:text-gray-400 prose-p:leading-8 prose-blockquote:border-accent prose-blockquote:bg-gray-50 dark:prose-blockquote:bg-gray-800/30 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg max-w-none">
+					
+					<h2 class="text-3xl md:text-4xl font-bold mb-8 text-ink dark:text-white">
+						Bukan CV, cuma cerita.
+					</h2>
+
+					<p>
+						Hai. Saya orang biasa yang nulis di internet. Umur sudah mendekati kepala tiga, 
+						pinggang mulai protes kalau duduk kelamaan, dan sampai sekarang masih suka mikir 
+						<span class="highlight px-1 font-medium text-ink dark:text-white">“sebenarnya gua mau jadi apa?”</span>.
+					</p>
+
+					<p>
+						Blog ini bukan portofolio, bukan personal branding, dan jelas bukan CV. 
+						Ini cuma kumpulan catatan orang yang kebanyakan mikir tapi jarang ngomong. 
+						Kalau dipendem terus, kepala berisik. Jadi ditulis.
+					</p>
+
+					<blockquote>
+						"Menulis adalah cara terbaik berbicara tanpa harus diinterupsi."
+					</blockquote>
+
+					<p>
+						Saya nulis soal hidup yang kadang lucu, sering absurd, dan sesekali capek. 
+						Soal <em>quarter-life crisis</em>, kopi dingin, penghasilan yang pas-pasan tapi masih 
+						bersyukur, dan pertanyaan-pertanyaan kecil yang biasanya muncul jam dua pagi.
+					</p>
+
+					<p>
+						Kalau kamu nemu tulisan yang terasa “kok ini gua banget”, tenang, 
+						kita sama-sama lagi pura-pura paham hidup. 
+						Bedanya, saya ngetiknya di sini.
+					</p>
+
+					<!-- Signature Section -->
+					<div class="mt-12 pt-8 border-t border-gray-100 dark:border-gray-800">
+						<p class="font-hand text-2xl text-gray-400 rotate-[-2deg]">
+							Salam hangat, <span class="text-accent underline decoration-wavy">Si Penulis.</span>
+						</p>
+					</div>
+
+				</div>
+			</article>
+			
+		</div>
+	</main>
+
+	<Footer />
+</BaseLayout>

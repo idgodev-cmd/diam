@@ -1,0 +1,41 @@
+---
+// src/components/ArticleCard.astro
+interface Props {
+    title: string;
+    excerpt: string;
+    category: string;
+    date: string;
+    image: string;
+    href: string;
+}
+
+const { title, excerpt, category, date, image, href } = Astro.props;
+---
+
+<article class="group cursor-pointer flex flex-col h-full">
+    <a href={href} class="block h-full flex flex-col">
+        <div class="aspect-video w-full bg-gray-200 dark:bg-gray-800 rounded-xl overflow-hidden mb-4 border border-gray-100 dark:border-gray-800 relative">
+            <img 
+                src={image} 
+                alt={title} 
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0"
+            />
+            <div class="absolute top-3 right-3 bg-white/90 dark:bg-black/80 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm shadow-sm border border-gray-100 dark:border-gray-700">
+                {category}
+            </div>
+        </div>
+        
+        <h3 class="font-display font-bold text-xl mb-2 group-hover:text-yellow-600 dark:group-hover:text-yellow-500 transition-colors leading-tight">
+            {title}
+        </h3>
+        
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4 flex-1">
+            {excerpt}
+        </p>
+        
+        <div class="flex items-center justify-between text-xs font-medium text-gray-400 mt-auto pt-4 border-t border-gray-100 dark:border-gray-800">
+            <span>{date}</span>
+            <span class="group-hover:translate-x-1 transition-transform text-ink dark:text-white">Baca &rarr;</span>
+        </div>
+    </a>
+</article>
