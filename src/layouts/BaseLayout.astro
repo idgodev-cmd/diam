@@ -19,29 +19,42 @@ const {
     image = "/images/og-default.png"
 } = Astro.props;
 
-// 1. Tentukan Base URL yang pasti (dari Astro.site atau origin)
-const siteBase = Astro.site ? Astro.site : Astro.url.origin;
+// 1. Tentukan Base URL yang PASTI
+// Kita paksa pakai domain asli kalau Astro.site gak kebaca (misal pas build di local)
+// Ini penting biar wsrv.nl bisa akses gambar kita dari internet
+const LIVE_DOMAIN = "https://diam.blog";
+const siteBase = Astro.site ? Astro.site.toString() : LIVE_DOMAIN;
 const canonicalURL = new URL(Astro.url.pathname, siteBase);
 
-// 2. LOGIC BARU: OG Image Optimizer
-// Sosmed (terutama WhatsApp) kadang benci WebP. Kita paksa convert ke JPG on-the-fly pake CDN.
+// 2. LOGIC BARU: OG Image Optimizer (Versi Lebih Kuat)
 const getSocialImage = (imgDict: string) => {
-    // Kalau URL eksternal (https://...), biarin aja
+    // A. Kalau URL eksternal, biarin
     if (imgDict.startsWith('http')) return imgDict;
 
-    // Gabungin jadi URL absolute (Wajib buat sosmed)
-    // Hapus slash di awal biar gak double (siteBase biasanya gak ada slash di akhir, tapi jaga-jaga)
-    const cleanPath = imgDict.startsWith('/') ? imgDict.slice(1) : imgDict;
-    const cleanBase = siteBase.toString().endsWith('/') ? siteBase.toString().slice(0, -1) : siteBase;
-    const fullUrl = `${cleanBase}/${cleanPath}`;
-
-    // Kalau di Production, pake wsrv.nl buat convert ke JPG (Safety net buat WA/FB)
-    if (import.meta.env.PROD) {
-        return `https://wsrv.nl/?url=${encodeURIComponent(fullUrl)}&w=1200&h=630&fit=cover&output=jpg`;
+    // B. Buat Full URL yang Valid (Handle spasi dan path)
+    // new URL() otomatis benerin spasi jadi %20 dan gabungin path dengan benar
+    let fileUrl = "";
+    try {
+        fileUrl = new URL(imgDict, siteBase).href;
+    } catch (e) {
+        // Fallback kalau error parsing, rakit manual
+        const cleanPath = imgDict.startsWith('/') ? imgDict : `/${imgDict}`;
+        fileUrl = `${LIVE_DOMAIN}${cleanPath}`;
     }
 
-    // Kalau localhost, balikin URL biasa
-    return fullUrl;
+    // C. Cek apakah URL ini localhost? Kalau iya, ganti ke domain asli
+    // Ini penyebab utama wsrv.nl gagal (karena gak bisa akses localhost kita)
+    if (fileUrl.includes('localhost') || fileUrl.includes('127.0.0.1')) {
+        fileUrl = fileUrl.replace(/http:\/\/localhost:\d+/, LIVE_DOMAIN);
+        fileUrl = fileUrl.replace(/http:\/\/127.0.0.1:\d+/, LIVE_DOMAIN);
+    }
+
+    // D. Convert ke JPG via wsrv.nl (Hanya di Production)
+    if (import.meta.env.PROD) {
+        return `https://wsrv.nl/?url=${encodeURIComponent(fileUrl)}&w=1200&h=630&fit=cover&output=jpg`;
+    }
+
+    return fileUrl;
 }
 
 const socialImageURL = getSocialImage(image);
