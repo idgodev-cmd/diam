@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css'; 
 import { ClientRouter } from 'astro:transitions';
+
+// Icons
 import '@phosphor-icons/web/bold';
 import '@phosphor-icons/web/fill';
 import '@phosphor-icons/web/regular';
@@ -31,13 +33,32 @@ const socialImageURL = new URL(image, Astro.url);
 		<meta name="generator" content={Astro.generator} />
         
         <!-- === PERFORMANCE OPTIMIZATIONS === -->
+        
+        <!-- 1. Resource Hints: Prioritas Koneksi -->
+        <!-- Grainy Gradient: Preconnect + Preload biar gak nunggu CSS -->
+        <link rel="preconnect" href="https://grainy-gradients.vercel.app" crossorigin>
+        <link rel="preload" as="image" href="https://grainy-gradients.vercel.app/noise.svg">
+        
+        <!-- Google Fonts: Preconnect -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        
-        <!-- Fix: Preconnect buat Grainy Gradients (Hemat ~340ms) -->
-        <link rel="preconnect" href="https://grainy-gradients.vercel.app">
 
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+        <!-- 2. Font Loading Strategy: Async + Swap -->
+        <!-- Preload stylesheet -->
+		<link 
+            rel="preload" 
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;700;800&family=Patrick+Hand&display=swap" 
+            as="style" 
+            onload="this.onload=null;this.rel='stylesheet'"
+        >
+        <!-- Fallback non-JS -->
+        <noscript>
+            <link 
+                href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;700;800&family=Patrick+Hand&display=swap" 
+                rel="stylesheet" 
+                type="text/css"
+            >
+        </noscript>
 		
         <!-- SEO -->
 		<title>{title} | Catatan Pinggir</title>
@@ -91,12 +112,24 @@ const socialImageURL = new URL(image, Astro.url);
 
 		<script>
 			document.addEventListener('astro:page-load', () => {
+                const bar = document.getElementById("reading-progress");
+                if (!bar) return;
+
+                // FIX FORCED REFLOW / LAYOUT THRASHING
+                // Menggunakan requestAnimationFrame agar perhitungan layout sinkron dengan refresh rate layar
+                let ticking = false;
+
 				window.addEventListener('scroll', () => {
-					const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-					const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-					const scrolled = (winScroll / height) * 100;
-					const bar = document.getElementById("reading-progress");
-					if(bar) bar.style.width = scrolled + "%";
+                    if (!ticking) {
+                        window.requestAnimationFrame(() => {
+                            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                            const scrolled = (winScroll / height) * 100;
+                            bar.style.width = scrolled + "%";
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
 				});
 
                 window.showToast = (msg: string) => {
