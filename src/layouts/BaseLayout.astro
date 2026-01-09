@@ -112,27 +112,26 @@ const socialImageURL = new URL(image, Astro.url);
 
 		<script>
 			document.addEventListener('astro:page-load', () => {
+                // 1. Reading Progress Bar Logic
                 const bar = document.getElementById("reading-progress");
-                if (!bar) return;
+                if (bar) {
+                    let ticking = false;
+                    window.addEventListener('scroll', () => {
+                        if (!ticking) {
+                            window.requestAnimationFrame(() => {
+                                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                                const scrolled = (winScroll / height) * 100;
+                                bar.style.width = scrolled + "%";
+                                ticking = false;
+                            });
+                            ticking = true;
+                        }
+                    });
+                }
 
-                // FIX FORCED REFLOW / LAYOUT THRASHING
-                // Menggunakan requestAnimationFrame agar perhitungan layout sinkron dengan refresh rate layar
-                let ticking = false;
-
-				window.addEventListener('scroll', () => {
-                    if (!ticking) {
-                        window.requestAnimationFrame(() => {
-                            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-                            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                            const scrolled = (winScroll / height) * 100;
-                            bar.style.width = scrolled + "%";
-                            ticking = false;
-                        });
-                        ticking = true;
-                    }
-				});
-
-                window.showToast = (msg: string) => {
+                // 2. Toast Notification Logic
+                window.showToast = (msg) => {
                     const toast = document.getElementById('toast');
                     const msgEl = document.getElementById('toast-msg');
                     if(toast && msgEl) {
@@ -143,6 +142,35 @@ const socialImageURL = new URL(image, Astro.url);
                         }, 2000);
                     }
                 };
+
+                // 3. GLOBAL BOOKMARK BADGE LOGIC (Fix Bookmark gak update)
+                // Kita taruh sini biar jalan di semua halaman (Layout-level)
+                const updateBadge = () => {
+                    // Ambil data dari localStorage
+                    const saved = JSON.parse(localStorage.getItem('myBookmarks') || '[]');
+                    const count = saved.length;
+                    
+                    const desktopBadge = document.getElementById('saved-count-desktop');
+                    const mobileBadge = document.getElementById('saved-count-mobile');
+
+                    if(count > 0) {
+                        if(desktopBadge) { 
+                            desktopBadge.innerText = count.toString(); 
+                            desktopBadge.classList.remove('hidden'); 
+                        }
+                        if(mobileBadge) { 
+                            mobileBadge.classList.remove('hidden'); 
+                        }
+                    } else {
+                        if(desktopBadge) desktopBadge.classList.add('hidden');
+                        if(mobileBadge) mobileBadge.classList.add('hidden');
+                    }
+                };
+                
+                // Jalanin pas load
+                updateBadge();
+                // Dengerin event custom 'bookmark-updated' dari komponen lain
+                window.addEventListener('bookmark-updated', updateBadge);
 			});
 		</script>
 	</body>

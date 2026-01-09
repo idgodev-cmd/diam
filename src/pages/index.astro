@@ -8,16 +8,29 @@ import { getCollection } from 'astro:content';
 const allPosts = await getCollection('blog');
 const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-// Ambil 4 artikel awal
 const initialPosts = sortedPosts.slice(0, 4);
 
 const DEFAULT_IMG = "/images/og-default.webp"; 
 
+// Helper: Ambil URL gambar mentah
 const getPostImage = (post) => {
     const img = post.data.image || post.data.cover || post.data.heroImage;
     if (typeof img === 'string') return img;
     if (img && typeof img === 'object' && img.src) return img.src; 
     return DEFAULT_IMG;
+};
+
+// === OPTIMIZER HELPER (SERVER) ===
+const optimizeImage = (url, width = 600) => {
+    if (!url || url.startsWith('http') || url === DEFAULT_IMG) return url;
+    const isProd = import.meta.env.PROD; 
+    const siteUrl = 'https://diam.blog'; 
+
+    if (isProd) {
+        const fullUrl = `${siteUrl}${url}`;
+        return `https://wsrv.nl/?url=${encodeURIComponent(fullUrl)}&w=${width}&output=webp&q=80`;
+    }
+    return url; 
 };
 ---
 
@@ -30,13 +43,14 @@ const getPostImage = (post) => {
         <section class="mb-20 text-center md:text-left flex flex-col md:flex-row items-center gap-8 animate-fade-in">
             <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-100 flex-shrink-0">
                 <img 
-                    src="/images/avatardiam.webp" 
+                    src={optimizeImage("/images/avatardiam.webp", 256)} 
                     alt="Avatar" 
                     width="128" 
                     height="128" 
                     class="w-full h-full object-cover"
                     loading="eager" 
                     fetchpriority="high"
+                    onerror="this.onerror=null; this.src='/images/avatardiam.png';"
                 />
             </div>
             <div>
@@ -60,24 +74,42 @@ const getPostImage = (post) => {
             <!-- GRID CONTAINER -->
             <div id="post-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                 {initialPosts.map((post, index) => {
-                    const imageSrc = getPostImage(post);
+                    const rawImg = getPostImage(post);
+                    const optimizedImg = optimizeImage(rawImg, 600);
                     const isLCP = index === 0;
+                    const category = post.data.category || "Cerita"; // Default Category
                     
                     return (
-                        <article class="group flex flex-col gap-4 border-b border-gray-100 dark:border-gray-800 pb-8 md:border-0 md:pb-0">
-                            <a href={`/blog/${post.slug}`} class="block overflow-hidden rounded-2xl aspect-[16/9] bg-gray-100 dark:bg-gray-800 relative z-10" aria-label={`Baca: ${post.data.title}`}>
-                                <img 
-                                    src={imageSrc} 
-                                    alt="" 
-                                    width="600"
-                                    height="338"
-                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                    loading={isLCP ? "eager" : "lazy"}
-                                    fetchpriority={isLCP ? "high" : "auto"}
-                                    decoding={isLCP ? "sync" : "async"} 
-                                    onerror={`this.onerror=null; this.src='${DEFAULT_IMG}';`}
-                                />
-                            </a>
+                        <article class="group flex flex-col gap-4 border-b border-gray-100 dark:border-gray-800 pb-8 md:border-0 md:pb-0 relative">
+                            <div class="relative overflow-hidden rounded-2xl aspect-[16/9] bg-gray-100 dark:bg-gray-800 z-10">
+                                <a href={`/blog/${post.slug}`} class="block w-full h-full" aria-label={`Baca: ${post.data.title}`}>
+                                    <img 
+                                        src={optimizedImg} 
+                                        alt="" 
+                                        width="600"
+                                        height="338"
+                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                        loading={isLCP ? "eager" : "lazy"}
+                                        fetchpriority={isLCP ? "high" : "auto"}
+                                        decoding={isLCP ? "sync" : "async"} 
+                                        onerror={`this.onerror=null; this.src='${rawImg}';`} 
+                                    />
+                                </a>
+                                
+                                <!-- KATEGORI JUDUL (Kiri Atas) -->
+                                <span class="absolute top-3 left-3 bg-white/90 dark:bg-dark-card/90 backdrop-blur-sm text-xs font-bold px-3 py-1 rounded-full shadow-sm text-ink dark:text-white border border-gray-100 dark:border-gray-700">
+                                    {category}
+                                </span>
+
+                                <!-- TOMBOL BOOKMARK (Kanan Atas) -->
+                                <button 
+                                    class="bookmark-btn absolute top-3 right-3 w-8 h-8 bg-white/90 dark:bg-dark-card/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-accent hover:text-white dark:hover:bg-accent dark:hover:text-white transition-all shadow-sm text-gray-400 dark:text-gray-400 border border-gray-100 dark:border-gray-700 z-20"
+                                    data-slug={post.slug}
+                                    aria-label="Simpan ke koleksi"
+                                >
+                                    <i class="ph-bold ph-bookmark-simple"></i>
+                                </button>
+                            </div>
                             
                             <div class="flex flex-col gap-2">
                                 <time datetime={new Date(post.data.pubDate).toISOString()} class="text-sm text-gray-500 dark:text-gray-400 font-mono">
@@ -98,11 +130,11 @@ const getPostImage = (post) => {
                 })}
             </div>
 
-            <!-- TOMBOL LOAD MORE -->
-            <div class="text-center">
+            <!-- TOMBOL LOAD MORE (Fixed Z-Index & Relative) -->
+            <div class="text-center pb-8 md:pb-0 relative z-30">
                 <button 
                     id="load-more-btn" 
-                    class="group px-6 py-3 border border-dashed border-gray-400 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 hover:border-accent hover:text-accent transition-all duration-300 font-medium text-sm flex items-center gap-2 mx-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="group px-6 py-3 border border-dashed border-gray-400 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 hover:border-accent hover:text-accent transition-all duration-300 font-medium text-sm flex items-center gap-2 mx-auto disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-paper dark:bg-dark-bg"
                 >
                     <span>Lihat Artikel Lain</span>
                     <i class="ph-bold ph-arrow-down group-hover:translate-y-1 transition-transform"></i>
@@ -120,20 +152,70 @@ const getPostImage = (post) => {
 </BaseLayout>
 
 <script>
-  // FIX: Bungkus semua logic dalam astro:page-load biar jalan setiap navigasi
   document.addEventListener('astro:page-load', () => {
+      // === BOOKMARK LOGIC (Inisialisasi Status Tombol) ===
+      const initBookmarks = () => {
+          const saved = JSON.parse(localStorage.getItem('myBookmarks') || '[]');
+          document.querySelectorAll('.bookmark-btn').forEach(btn => {
+              const slug = (btn as HTMLElement).dataset.slug;
+              const icon = btn.querySelector('i');
+              if (saved.includes(slug)) {
+                  btn.classList.add('text-accent');
+                  icon.classList.replace('ph-bookmark-simple', 'ph-bookmark-fill');
+              } else {
+                  btn.classList.remove('text-accent');
+                  icon.classList.replace('ph-bookmark-fill', 'ph-bookmark-simple');
+              }
+          });
+      };
+      initBookmarks();
+
+      // Logic Handle Klik Bookmark (Event Delegation biar jalan di item baru load more)
+      const container = document.getElementById('post-container');
+      if (container) {
+          container.addEventListener('click', (e) => {
+              const target = e.target as HTMLElement;
+              const btn = target.closest('.bookmark-btn') as HTMLElement;
+              
+              if (btn) {
+                  e.preventDefault(); // Biar gak nge-trigger link artikel
+                  e.stopPropagation();
+                  
+                  const slug = btn.dataset.slug;
+                  let saved = JSON.parse(localStorage.getItem('myBookmarks') || '[]');
+                  const icon = btn.querySelector('i');
+
+                  if (saved.includes(slug)) {
+                      // Hapus bookmark
+                      saved = saved.filter(s => s !== slug);
+                      btn.classList.remove('text-accent');
+                      icon.classList.replace('ph-bookmark-fill', 'ph-bookmark-simple');
+                  } else {
+                      // Tambah bookmark
+                      saved.push(slug);
+                      btn.classList.add('text-accent');
+                      icon.classList.replace('ph-bookmark-simple', 'ph-bookmark-fill');
+                      if (window.showToast) window.showToast("Disimpan ke koleksi");
+                  }
+
+                  localStorage.setItem('myBookmarks', JSON.stringify(saved));
+                  window.dispatchEvent(new Event('bookmark-updated')); // Kabarin Header
+              }
+          });
+      }
+
+      // === LOAD MORE LOGIC ===
       let allRemainingPosts = [];
       let currentIndex = 0;
       let isDataFetched = false;
       let isLoading = false;
       const ITEMS_PER_LOAD = 4;
       const DEFAULT_IMG = "/images/og-default.png";
+      const SITE_URL = 'https://diam.blog'; 
 
-      const container = document.getElementById('post-container');
       const btn = document.getElementById('load-more-btn');
       const endMessage = document.getElementById('end-message');
 
-      // Kalau tombol gak ada (misal di halaman lain), stop script
       if (!btn) return;
 
       const getImageSrc = (post) => {
@@ -144,31 +226,61 @@ const getPostImage = (post) => {
         } else if (imgData && typeof imgData === 'object' && imgData.src) {
             src = imgData.src;
         }
-        return encodeURI(src);
+        return src; 
+      };
+
+      const optimizeImageClient = (url, width = 600) => {
+        if (!url || url.startsWith('http') || url === DEFAULT_IMG) return url;
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        if (!isLocal) {
+             const fullUrl = `${SITE_URL}${url}`;
+             return `https://wsrv.nl/?url=${encodeURIComponent(fullUrl)}&w=${width}&output=webp&q=80`;
+        }
+        return url;
       };
 
       const createPostCard = (post) => {
         const dateStr = new Date(post.data.pubDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
         const isoDate = new Date(post.data.pubDate).toISOString();
-        const imageSrc = getImageSrc(post);
+        const rawImg = getImageSrc(post);
+        const optimizedImg = optimizeImageClient(rawImg, 600);
+        const category = post.data.category || "Jurnal";
         
+        // Cek status bookmark buat item baru
+        const saved = JSON.parse(localStorage.getItem('myBookmarks') || '[]');
+        const isSaved = saved.includes(post.slug);
+        const bookmarkIcon = isSaved ? 'ph-bookmark-fill' : 'ph-bookmark-simple';
+        const bookmarkClass = isSaved ? 'text-accent' : '';
+
         const imageHtml = `
-            <a href="/blog/${post.slug}" class="block overflow-hidden rounded-2xl aspect-[16/9] bg-gray-100 dark:bg-gray-800 relative z-10" aria-label="Baca: ${post.data.title}">
-                <img 
-                    src="${imageSrc}" 
-                    alt="" 
-                    loading="lazy" 
-                    decoding="async"
-                    width="600" 
-                    height="338"
-                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    onerror="this.onerror=null; this.src='${DEFAULT_IMG}';"
-                />
-            </a>
+            <div class="relative overflow-hidden rounded-2xl aspect-[16/9] bg-gray-100 dark:bg-gray-800 z-10">
+                <a href="/blog/${post.slug}" class="block w-full h-full" aria-label="Baca: ${post.data.title}">
+                    <img 
+                        src="${optimizedImg}" 
+                        alt="" 
+                        loading="lazy" 
+                        decoding="async"
+                        width="600" 
+                        height="338"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        onerror="this.onerror=null; this.src='${rawImg}';"
+                    />
+                </a>
+                <span class="absolute top-3 left-3 bg-white/90 dark:bg-dark-card/90 backdrop-blur-sm text-xs font-bold px-3 py-1 rounded-full shadow-sm text-ink dark:text-white border border-gray-100 dark:border-gray-700">
+                    ${category}
+                </span>
+                <button 
+                    class="bookmark-btn absolute top-3 right-3 w-8 h-8 bg-white/90 dark:bg-dark-card/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-accent hover:text-white dark:hover:bg-accent dark:hover:text-white transition-all shadow-sm text-gray-400 dark:text-gray-400 border border-gray-100 dark:border-gray-700 z-20 ${bookmarkClass}"
+                    data-slug="${post.slug}"
+                    aria-label="Simpan ke koleksi"
+                >
+                    <i class="ph-bold ${bookmarkIcon}"></i>
+                </button>
+            </div>
         `;
 
         return `
-        <article class="group flex flex-col gap-4 border-b border-gray-100 dark:border-gray-800 pb-8 md:border-0 md:pb-0 fade-in">
+        <article class="group flex flex-col gap-4 border-b border-gray-100 dark:border-gray-800 pb-8 md:border-0 md:pb-0 relative fade-in">
             ${imageHtml}
             <div class="flex flex-col gap-2">
                 <time datetime="${isoDate}" class="text-sm text-gray-500 dark:text-gray-400 font-mono">${dateStr}</time>
