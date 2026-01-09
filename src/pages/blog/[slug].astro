@@ -16,9 +16,21 @@ export async function getStaticPaths() {
 // 2. Ambil data artikel yang sedang dibuka
 const post = Astro.props;
 const { Content } = await post.render();
+
+// Helper: Ambil gambar prioritas (heroImage > image > cover)
+// Ini biar konsisten kalau lu gonta-ganti nama field di markdown
+const heroImage = post.data.heroImage || post.data.image || post.data.cover;
 ---
 
-<BaseLayout title={post.data.title}>
+<!-- 
+    FIX UTAMA: Kirim props 'description' dan 'image' ke BaseLayout.
+    Sekarang thumbnail sosmed bakal pake gambar artikel ini!
+-->
+<BaseLayout 
+    title={post.data.title} 
+    description={post.data.description} 
+    image={heroImage}
+>
     <Header />
     
     <main class="max-w-3xl mx-auto px-6 pt-32 min-h-screen relative z-10">
@@ -53,9 +65,16 @@ const { Content } = await post.render();
         </header>
 
         <!-- Featured Image -->
-        {post.data.heroImage && (
+        {heroImage && (
             <div class="mb-10 rounded-xl overflow-hidden shadow-sm">
-                <img width={1020} height={510} src={post.data.heroImage} alt="" class="w-full object-cover aspect-video" />
+                <!-- Tambahin alt text dari judul artikel biar SEO bagus -->
+                <img 
+                    width={1020} 
+                    height={510} 
+                    src={heroImage} 
+                    alt={post.data.title} 
+                    class="w-full object-cover aspect-video" 
+                />
             </div>
         )}
 
