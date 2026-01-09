@@ -26,9 +26,11 @@ const { title, image } = Astro.props;
         <link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
-		<script src="https://unpkg.com/@phosphor-icons/web"></script>
+		
+        <!-- ICONS: Menggunakan CDN (Pastikan internet aktif) atau install via NPM untuk offline -->
+        <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-        <!-- 1. VIEW TRANSITIONS -->
+        <!-- 1. VIEW TRANSITIONS (Navigasi ala Aplikasi) -->
 		<ClientRouter />
 
 		<script is:inline>
@@ -51,10 +53,10 @@ const { title, image } = Astro.props;
 	</head>
 	<body class="bg-paper text-ink dark:bg-dark-bg dark:text-dark-text transition-colors duration-300 pb-32">
 		
-        <!-- Background Noise -->
+        <!-- Background Noise Texture -->
 		<div class="fixed inset-0 pointer-events-none z-0 opacity-[0.04] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
         
-        <!-- Progress Bar -->
+        <!-- Reading Progress Bar -->
 		<div id="reading-progress" class="fixed top-0 left-0 h-1 bg-accent z-50 w-0 transition-all duration-100"></div>
 
         <!-- TOAST NOTIFICATION (Disembunyikan default) -->
@@ -62,16 +64,17 @@ const { title, image } = Astro.props;
             <i class="ph-bold ph-check-circle text-accent"></i> <span id="toast-msg">Disimpan</span>
         </div>
 
-		<!-- Konten Halaman -->
+		<!-- Konten Halaman dengan Transisi Fade -->
 		<div transition:animate="fade">
 			<slot />
 		</div>
 
 		<script>
             // LOGIC GLOBAL: Progress Bar & Bookmark Event Listener
+            // Menggunakan 'astro:page-load' agar jalan setiap kali navigasi (View Transitions)
 			document.addEventListener('astro:page-load', () => {
 				
-                // 1. Reading Progress
+                // 1. Reading Progress Bar Logic
 				window.addEventListener('scroll', () => {
 					const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
 					const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -81,12 +84,14 @@ const { title, image } = Astro.props;
 				});
 
                 // 2. Global Toast Function (Bisa dipanggil dari mana aja)
+                // Digunakan oleh fitur Bookmark
                 window.showToast = (msg) => {
                     const toast = document.getElementById('toast');
                     const msgEl = document.getElementById('toast-msg');
                     if(toast && msgEl) {
                         msgEl.innerText = msg;
                         toast.classList.remove('opacity-0', 'translate-y-10');
+                        // Hide after 2 seconds
                         setTimeout(() => {
                             toast.classList.add('opacity-0', 'translate-y-10');
                         }, 2000);
