@@ -2,12 +2,28 @@
 import '../styles/global.css'; 
 import { ClientRouter } from 'astro:transitions';
 
+// FIX ICON: Import langsung biar jalan sama View Transitions
+// Pastiin udah install: npm install @phosphor-icons/web
+import '@phosphor-icons/web/bold';
+import '@phosphor-icons/web/fill';
+import '@phosphor-icons/web/regular';
+
 interface Props {
 	title: string;
+    description?: string; // Tambahin ini buat deskripsi
     image?: string;
 }
 
-const { title, image } = Astro.props;
+// Default value kalau halaman gak ngasih deskripsi/gambar
+const { 
+    title, 
+    description = "Menulis untuk merayakan kebingungan quarter-life crisis dan mencari arti hidup.", 
+    image = "/images/og-default.png" // Pastiin lu punya gambar ini di folder public/images/
+} = Astro.props;
+
+// Pastiin URL gambar jadi Absolute (https://...) biar kebaca sosmed
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const socialImageURL = new URL(image, Astro.url);
 ---
 
 <!doctype html>
@@ -18,23 +34,36 @@ const { title, image } = Astro.props;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
         
-        <!-- Meta Tags & Fonts -->
+        <!-- === SEO & META TAGS UTAMA === -->
 		<title>{title} | Catatan Pinggir</title>
+        <meta name="title" content={`${title} | Catatan Pinggir`} />
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonicalURL} />
+
+        <!-- === OPEN GRAPH / FACEBOOK / WHATSAPP === -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={Astro.url} />
         <meta property="og:title" content={title} />
-        {image && <meta property="og:image" content={image} />}
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={socialImageURL} />
+
+        <!-- === TWITTER === -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={Astro.url} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
+        <meta property="twitter:image" content={socialImageURL} />
         
+        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
 		
-        <!-- ICONS: Menggunakan CDN (Pastikan internet aktif) atau install via NPM untuk offline -->
-        <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
-        <!-- 1. VIEW TRANSITIONS (Navigasi ala Aplikasi) -->
+        <!-- 1. VIEW TRANSITIONS -->
 		<ClientRouter />
 
 		<script is:inline>
-            // Dark Mode Logic (Jalanin awal & pas ganti halaman)
+            // Dark Mode Logic
 			function setDarkMode() {
 				const theme = (() => {
 					if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
@@ -53,28 +82,25 @@ const { title, image } = Astro.props;
 	</head>
 	<body class="bg-paper text-ink dark:bg-dark-bg dark:text-dark-text transition-colors duration-300 pb-32">
 		
-        <!-- Background Noise Texture -->
+        <!-- Background Noise -->
 		<div class="fixed inset-0 pointer-events-none z-0 opacity-[0.04] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
         
         <!-- Reading Progress Bar -->
 		<div id="reading-progress" class="fixed top-0 left-0 h-1 bg-accent z-50 w-0 transition-all duration-100"></div>
 
-        <!-- TOAST NOTIFICATION (Disembunyikan default) -->
+        <!-- Toast Notification -->
         <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white dark:bg-white dark:text-ink px-4 py-2 rounded-full text-sm font-bold shadow-xl transition-all duration-300 opacity-0 translate-y-10 pointer-events-none flex items-center gap-2">
             <i class="ph-bold ph-check-circle text-accent"></i> <span id="toast-msg">Disimpan</span>
         </div>
 
-		<!-- Konten Halaman dengan Transisi Fade -->
+		<!-- Konten -->
 		<div transition:animate="fade">
 			<slot />
 		</div>
 
 		<script>
-            // LOGIC GLOBAL: Progress Bar & Bookmark Event Listener
-            // Menggunakan 'astro:page-load' agar jalan setiap kali navigasi (View Transitions)
+            // Logic Global
 			document.addEventListener('astro:page-load', () => {
-				
-                // 1. Reading Progress Bar Logic
 				window.addEventListener('scroll', () => {
 					const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
 					const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -83,15 +109,12 @@ const { title, image } = Astro.props;
 					if(bar) bar.style.width = scrolled + "%";
 				});
 
-                // 2. Global Toast Function (Bisa dipanggil dari mana aja)
-                // Digunakan oleh fitur Bookmark
                 window.showToast = (msg) => {
                     const toast = document.getElementById('toast');
                     const msgEl = document.getElementById('toast-msg');
                     if(toast && msgEl) {
                         msgEl.innerText = msg;
                         toast.classList.remove('opacity-0', 'translate-y-10');
-                        // Hide after 2 seconds
                         setTimeout(() => {
                             toast.classList.add('opacity-0', 'translate-y-10');
                         }, 2000);
