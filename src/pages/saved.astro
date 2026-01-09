@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+// Kita ambil semua post buat database di JS nanti
+const allPosts = await getCollection('blog');
+// Serialisasi data biar bisa dibaca di script tag
+const postsJson = JSON.stringify(allPosts.map(p => ({
+    slug: p.slug,
+    title: p.data.title,
+    desc: p.data.description,
+    date: p.data.pubDate,
+    heroImage: p.data.heroImage,
+    tags: p.data.tags
+})));
+---
+
+<BaseLayout title="Koleksi Tersimpan">
+    <Header />
+
+    <main class="max-w-6xl mx-auto px-6 pt-32 min-h-screen relative z-10">
+        
+        <div class="text-center mb-12 animate-fade-in">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-accent/10 mb-4">
+                <i class="ph-fill ph-bookmark-simple text-3xl text-accent"></i>
+            </div>
+            <h1 class="font-display font-bold text-3xl md:text-4xl mb-2 text-ink dark:text-white">Koleksi Tersimpan</h1>
+            <p class="text-gray-500">Artikel yang kamu simpan untuk dibaca nanti.</p>
+        </div>
+
+        <!-- Container Kartu Bookmark -->
+        <div id="saved-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- JS akan isi ini -->
+        </div>
+
+        <!-- Empty State (Hidden by default) -->
+        <div id="saved-empty" class="hidden text-center py-20 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700">
+            <i class="ph-duotone ph-ghost text-4xl text-gray-300 mb-4"></i>
+            <p class="text-gray-500 font-medium">Belum ada artikel yang disimpan.</p>
+            <a href="/" class="mt-4 inline-block text-sm font-bold text-accent hover:underline">Cari bacaan dulu &rarr;</a>
+        </div>
+
+    </main>
+
+    <Footer />
+</BaseLayout>
+
+<script define:vars={{ postsJson }}>
+    // Logic Render Bookmark
+    document.addEventListener('astro:page-load', () => {
+        const grid = document.getElementById('saved-grid');
+        const empty = document.getElementById('saved-empty');
+        if(!grid) return;
+
+        const allPosts = JSON.parse(postsJson);
+        const savedSlugs = JSON.parse(localStorage.getItem('myBookmarks') || '[]');
+
+        // Filter post yang ada di bookmark
+        const myPosts = allPosts.filter(p => savedSlugs.includes(p.slug));
+
+        if (myPosts.length > 0) {
+            empty.classList.add('hidden');
+            grid.innerHTML = myPosts.map(post => `
+                <article class="group cursor-pointer flex flex-col h-full relative border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:shadow-lg transition-all bg-white dark:bg-dark-card">
+                    <a href="/blog/${post.slug}" class="block h-full">
+                        <div class="aspect-video w-full bg-gray-200 dark:bg-gray-800 rounded-lg overflow-hidden mb-4 relative">
+                            ${post.heroImage ? `<img src="${post.heroImage}" class="w-full h-full object-cover" />` : ''}
+                        </div>
+                        <h3 class="font-display font-bold text-xl mb-2 group-hover:text-accent transition-colors">${post.title}</h3>
+                        <p class="text-sm text-gray-500 line-clamp-2">${post.desc}</p>
+                    </a>
+                    
+                    <!-- Tombol Hapus -->
+                    <button onclick="removeBookmark('${post.slug}')" class="absolute top-6 right-6 bg-white/90 dark:bg-black/80 w-8 h-8 flex items-center justify-center rounded-full text-red-500 hover:bg-red-50 transition-colors shadow-sm z-20">
+                        <i class="ph-bold ph-trash"></i>
+                    </button>
+                </article>
+            `).join('');
+        } else {
+            grid.innerHTML = '';
+            empty.classList.remove('hidden');
+        }
+    });
+
+    // Fungsi Hapus Global
+    window.removeBookmark = (slug) => {
+        const saved = JSON.parse(localStorage.getItem('myBookmarks') || '[]');
+        const newSaved = saved.filter(s => s !== slug);
+        localStorage.setItem('myBookmarks', JSON.stringify(newSaved));
+        
+        // Refresh Halaman (Cara paling gampang biar re-render)
+        window.location.reload(); 
+    };
+</script>
