@@ -21,9 +21,15 @@ const {
     image = "/images/og-default.png" // Pastiin lu punya gambar ini di folder public/images/
 } = Astro.props;
 
+// === FIX UTAMA DI SINI ===
+// Kita buat fallback: Kalau Astro.site undefined (belum diset di config),
+// pake Astro.url.origin (http://localhost:4321 atau domain saat ini).
+// Ini mencegah error "Invalid URL".
+const siteBase = Astro.site ? Astro.site : Astro.url.origin;
+
 // Pastiin URL gambar jadi Absolute (https://...) biar kebaca sosmed
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const socialImageURL = new URL(image, Astro.url);
+const canonicalURL = new URL(Astro.url.pathname, siteBase);
+const socialImageURL = new URL(image, Astro.url); // Pake Astro.url biar aman kalau image-nya relatif
 ---
 
 <!doctype html>
@@ -109,7 +115,7 @@ const socialImageURL = new URL(image, Astro.url);
 					if(bar) bar.style.width = scrolled + "%";
 				});
 
-                window.showToast = (msg) => {
+                window.showToast = (msg: string) => {
                     const toast = document.getElementById('toast');
                     const msgEl = document.getElementById('toast-msg');
                     if(toast && msgEl) {
