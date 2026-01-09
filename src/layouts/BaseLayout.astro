@@ -1,67 +1,97 @@
 ---
 import '../styles/global.css'; 
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
 	title: string;
+    image?: string;
 }
 
-const { title } = Astro.props;
+const { title, image } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="id" class="scroll-smooth">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Catatan pinggir tentang kehidupan." />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		
-		<!-- FONTS -->
-		<link rel="preconnect" href="https://fonts.googleapis.com">
+        
+        <!-- Meta Tags & Fonts -->
+		<title>{title} | Catatan Pinggir</title>
+        <meta property="og:title" content={title} />
+        {image && <meta property="og:image" content={image} />}
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
-		
-		<!-- ICONS (PENTING BIAR NAVBAR MUNCUL) -->
 		<script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-		<title>{title} | Catatan Pinggir</title>
+        <!-- 1. VIEW TRANSITIONS -->
+		<ClientRouter />
 
 		<script is:inline>
-			const theme = (() => {
-				if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-					return localStorage.getItem('theme');
-				}
-				if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-					return 'dark';
-				}
-				return 'light';
-			})();
-		
-			if (theme === 'dark') {
-				document.documentElement.classList.add('dark');
-			} else {
-				document.documentElement.classList.remove('dark');
+            // Dark Mode Logic (Jalanin awal & pas ganti halaman)
+			function setDarkMode() {
+				const theme = (() => {
+					if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+						return localStorage.getItem('theme');
+					}
+					if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+						return 'dark';
+					}
+					return 'light';
+				})();
+				document.documentElement.classList.toggle('dark', theme === 'dark');
 			}
+			setDarkMode();
+			document.addEventListener('astro:after-swap', setDarkMode);
 		</script>
 	</head>
-	<body class="bg-paper text-ink dark:bg-dark-bg dark:text-dark-text transition-colors duration-300 selection:bg-accent selection:text-ink pb-32 md:pb-20 tracking-wide font-sans antialiased">
+	<body class="bg-paper text-ink dark:bg-dark-bg dark:text-dark-text transition-colors duration-300 pb-32">
 		
-		<!-- Progress Bar -->
+        <!-- Background Noise -->
+		<div class="fixed inset-0 pointer-events-none z-0 opacity-[0.04] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+        
+        <!-- Progress Bar -->
 		<div id="reading-progress" class="fixed top-0 left-0 h-1 bg-accent z-50 w-0 transition-all duration-100"></div>
 
-		<!-- Texture Overlay -->
-		<div class="fixed inset-0 pointer-events-none z-40 opacity-[0.04] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+        <!-- TOAST NOTIFICATION (Disembunyikan default) -->
+        <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white dark:bg-white dark:text-ink px-4 py-2 rounded-full text-sm font-bold shadow-xl transition-all duration-300 opacity-0 translate-y-10 pointer-events-none flex items-center gap-2">
+            <i class="ph-bold ph-check-circle text-accent"></i> <span id="toast-msg">Disimpan</span>
+        </div>
 
-		<slot />
+		<!-- Konten Halaman -->
+		<div transition:animate="fade">
+			<slot />
+		</div>
 
 		<script>
-			window.addEventListener('scroll', () => {
-				const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-				const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-				const scrolled = (winScroll / height) * 100;
-				const bar = document.getElementById("reading-progress");
-				if(bar) bar.style.width = scrolled + "%";
+            // LOGIC GLOBAL: Progress Bar & Bookmark Event Listener
+			document.addEventListener('astro:page-load', () => {
+				
+                // 1. Reading Progress
+				window.addEventListener('scroll', () => {
+					const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+					const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+					const scrolled = (winScroll / height) * 100;
+					const bar = document.getElementById("reading-progress");
+					if(bar) bar.style.width = scrolled + "%";
+				});
+
+                // 2. Global Toast Function (Bisa dipanggil dari mana aja)
+                window.showToast = (msg) => {
+                    const toast = document.getElementById('toast');
+                    const msgEl = document.getElementById('toast-msg');
+                    if(toast && msgEl) {
+                        msgEl.innerText = msg;
+                        toast.classList.remove('opacity-0', 'translate-y-10');
+                        setTimeout(() => {
+                            toast.classList.add('opacity-0', 'translate-y-10');
+                        }, 2000);
+                    }
+                };
 			});
 		</script>
 	</body>

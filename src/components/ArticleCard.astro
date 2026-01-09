@@ -1,41 +1,95 @@
 ---
-// src/components/ArticleCard.astro
-interface Props {
-    title: string;
-    excerpt: string;
-    category: string;
-    date: string;
-    image: string;
-    href: string;
-}
-
-const { title, excerpt, category, date, image, href } = Astro.props;
+const { post } = Astro.props;
 ---
 
-<article class="group cursor-pointer flex flex-col h-full">
-    <a href={href} class="block h-full flex flex-col">
-        <div class="aspect-video w-full bg-gray-200 dark:bg-gray-800 rounded-xl overflow-hidden mb-4 border border-gray-100 dark:border-gray-800 relative">
-            <img 
-                src={image} 
-                alt={title} 
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0"
-            />
-            <div class="absolute top-3 right-3 bg-white/90 dark:bg-black/80 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm shadow-sm border border-gray-100 dark:border-gray-700">
-                {category}
+<article class="group cursor-pointer flex flex-col h-full bento-card relative" data-id={post.slug}>
+    <!-- Link Pembungkus -->
+    <a href={`/blog/${post.slug}`} class="block h-full">
+        
+        <div class="aspect-video w-full bg-gray-200 dark:bg-gray-800 rounded-xl overflow-hidden mb-4 relative border border-gray-100 dark:border-gray-800">
+            {post.data.heroImage ? (
+                <img src={post.data.heroImage} alt={post.data.title} class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 grayscale group-hover:grayscale-0" />
+            ) : (
+                <div class="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100 dark:bg-gray-800">No Image</div>
+            )}
+            
+            <!-- Tag -->
+            <div class="absolute top-3 right-3 pointer-events-none">
+                <span class="bg-white/90 dark:bg-black/80 px-2 py-1 rounded text-[10px] font-bold uppercase backdrop-blur-sm shadow-sm border border-gray-100 dark:border-gray-700">
+                    {post.data.tags ? post.data.tags[0] : 'Blog'}
+                </span>
             </div>
         </div>
-        
-        <h3 class="font-display font-bold text-xl mb-2 group-hover:text-yellow-600 dark:group-hover:text-yellow-500 transition-colors leading-tight">
-            {title}
+
+        <h3 class="font-display font-bold text-xl mb-2 group-hover:text-accent dark:group-hover:text-accent transition-colors leading-tight">
+            {post.data.title}
         </h3>
-        
-        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4 flex-1">
-            {excerpt}
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+            {post.data.description}
         </p>
         
-        <div class="flex items-center justify-between text-xs font-medium text-gray-400 mt-auto pt-4 border-t border-gray-100 dark:border-gray-800">
-            <span>{date}</span>
-            <span class="group-hover:translate-x-1 transition-transform text-ink dark:text-white">Baca &rarr;</span>
+        <div class="flex items-center gap-2 text-xs font-medium text-gray-400 mt-auto pt-4 border-t border-gray-100 dark:border-gray-800">
+            <time>{new Date(post.data.pubDate).toLocaleDateString('id-ID', {day: 'numeric', month: 'short'})}</time>
+            <span>•</span>
+            <span>Baca &rarr;</span>
         </div>
     </a>
+
+    <!-- TOMBOL BOOKMARK (Floating) -->
+    <!-- Kita taruh di luar <a> biar gak trigger navigasi pas diklik -->
+    <button class="bookmark-btn absolute top-3 left-3 w-8 h-8 rounded-full bg-white/90 dark:bg-black/80 flex items-center justify-center shadow-sm hover:bg-accent hover:text-ink transition-colors z-20 text-gray-400" 
+            data-slug={post.slug}
+            aria-label="Simpan Artikel">
+        <i class="ph-bold ph-bookmark-simple text-lg icon"></i>
+    </button>
 </article>
+
+<script>
+    // Logic Bookmark Client-Side
+    function initBookmarkButtons() {
+        const buttons = document.querySelectorAll('.bookmark-btn');
+        const saved = JSON.parse(localStorage.getItem('myBookmarks') || '[]');
+
+        buttons.forEach(btn => {
+            const slug = btn.getAttribute('data-slug');
+            const icon = btn.querySelector('.icon');
+            
+            // Set Initial State
+            if(saved.includes(slug)) {
+                btn.classList.add('text-accent');
+                icon.classList.remove('ph-bold');
+                icon.classList.add('ph-fill');
+            }
+
+            // Click Handler
+            btn.addEventListener('click', (e) => {
+                e.preventDefault(); // Stop link navigasi
+                e.stopPropagation();
+                
+                const currentSaved = JSON.parse(localStorage.getItem('myBookmarks') || '[]');
+                const index = currentSaved.indexOf(slug);
+                
+                if (index === -1) {
+                    // Simpan
+                    currentSaved.push(slug);
+                    btn.classList.add('text-accent');
+                    icon.classList.remove('ph-bold'); icon.classList.add('ph-fill');
+                    window.showToast?.("Artikel Disimpan");
+                } else {
+                    // Hapus
+                    currentSaved.splice(index, 1);
+                    btn.classList.remove('text-accent');
+                    icon.classList.remove('ph-fill'); icon.classList.add('ph-bold');
+                    window.showToast?.("Dihapus dari koleksi");
+                }
+                
+                localStorage.setItem('myBookmarks', JSON.stringify(currentSaved));
+                // Dispatch event biar header update badge
+                window.dispatchEvent(new Event('bookmark-updated'));
+            });
+        });
+    }
+
+    // Jalanin pas load awal & view transition
+    document.addEventListener('astro:page-load', initBookmarkButtons);
+</script>
