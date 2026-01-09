@@ -1,12 +1,12 @@
 ---
 const pathname = new URL(Astro.request.url).pathname;
-const isActive = (path) => pathname === path || (path !== '/' && pathname.startsWith(path));
+const isActive = (path: string) => pathname === path || (path !== '/' && pathname.startsWith(path));
 ---
 
 <!-- DESKTOP HEADER -->
 <header class="fixed top-0 w-full z-40 bg-paper/90 dark:bg-dark-bg/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 transition-colors">
     <div class="max-w-6xl mx-auto px-6 h-16 flex justify-between items-center">
-        <a href="/" class="font-display font-bold text-lg tracking-tight hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+        <a href="/" class="font-display font-bold text-lg tracking-tight hover:text-gray-600 dark:hover:text-gray-300 transition-colors" aria-label="Beranda Diam.blog">
             Diam<span class="text-accent">.</span>
         </a>
 
@@ -22,7 +22,7 @@ const isActive = (path) => pathname === path || (path !== '/' && pathname.starts
 
             <div class="w-px h-4 bg-gray-300 dark:bg-gray-700"></div>
 
-            <button id="theme-toggle-desktop" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-accent/20 transition-colors">
+            <button id="theme-toggle-desktop" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-accent/20 transition-colors" aria-label="Ganti Tema">
                 <i class="ph-bold ph-sun hidden dark:block"></i>
                 <i class="ph-bold ph-moon block dark:hidden"></i>
             </button>
@@ -33,21 +33,21 @@ const isActive = (path) => pathname === path || (path !== '/' && pathname.starts
 <!-- MOBILE NAV DOCK -->
 <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
     <div class="flex items-center gap-1 bg-white/90 dark:bg-dark-card/90 backdrop-blur-md border border-gray-200 dark:border-gray-700 p-2 rounded-full shadow-2xl ring-1 ring-black/5">
-        <a href="/" class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all ${isActive('/') ? 'text-ink bg-gray-100 dark:bg-gray-800 dark:text-white' : 'text-gray-400'}`}>
+        <a href="/" class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all ${isActive('/') ? 'text-ink bg-gray-100 dark:bg-gray-800 dark:text-white' : 'text-gray-400'}`} aria-label="Beranda">
             <i class="ph-bold ph-book-open text-xl"></i>
         </a>
-        <a href="/about" class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all ${isActive('/about') ? 'text-ink bg-gray-100 dark:bg-gray-800 dark:text-white' : 'text-gray-400'}`}>
+        <a href="/about" class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all ${isActive('/about') ? 'text-ink bg-gray-100 dark:bg-gray-800 dark:text-white' : 'text-gray-400'}`} aria-label="Tentang Saya">
             <i class="ph-bold ph-user text-xl"></i>
         </a>
-        <a href="/now" class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all ${isActive('/now') ? 'text-ink bg-gray-100 dark:bg-gray-800 dark:text-white' : 'text-gray-400'}`}>
+        <a href="/now" class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all ${isActive('/now') ? 'text-ink bg-gray-100 dark:bg-gray-800 dark:text-white' : 'text-gray-400'}`} aria-label="Halaman Now">
             <i class="ph-bold ph-lightning text-xl"></i>
         </a>
-        <a href="/saved" class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all relative ${isActive('/saved') ? 'text-ink bg-gray-100 dark:bg-gray-800 dark:text-white' : 'text-gray-400'}`}>
+        <a href="/saved" class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all relative ${isActive('/saved') ? 'text-ink bg-gray-100 dark:bg-gray-800 dark:text-white' : 'text-gray-400'}`} aria-label="Halaman Tersimpan">
             <i class="ph-bold ph-bookmark-simple text-xl"></i>
             <span id="saved-count-mobile" class="absolute top-2 right-2 w-2 h-2 bg-accent rounded-full hidden"></span>
         </a>
         <div class="w-px h-6 bg-gray-200 mx-1"></div>
-        <button id="theme-toggle-mobile" class="w-12 h-12 flex flex-col items-center justify-center rounded-full text-gray-400 hover:text-accent">
+        <button id="theme-toggle-mobile" class="w-12 h-12 flex flex-col items-center justify-center rounded-full text-gray-400 hover:text-accent" aria-label="Ganti Tema">
             <i class="ph-bold ph-sun hidden dark:block text-xl"></i>
             <i class="ph-bold ph-moon block dark:hidden text-xl"></i>
         </button>
@@ -66,7 +66,7 @@ const isActive = (path) => pathname === path || (path !== '/' && pathname.starts
             const mobileBadge = document.getElementById('saved-count-mobile');
 
             if(count > 0) {
-                if(desktopBadge) { desktopBadge.innerText = count; desktopBadge.classList.remove('hidden'); }
+                if(desktopBadge) { desktopBadge.innerText = count.toString(); desktopBadge.classList.remove('hidden'); }
                 if(mobileBadge) { mobileBadge.classList.remove('hidden'); }
             } else {
                 if(desktopBadge) desktopBadge.classList.add('hidden');

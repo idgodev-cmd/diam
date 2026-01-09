@@ -2,7 +2,7 @@
 const today = new Date();
 ---
 
-<footer class="mt-32 pb-12 px-6">
+<footer class="mt-32 pb-32 md:pb-12 px-6">
     <div class="max-w-3xl mx-auto text-center">
         
         <!-- Garis Pemisah yang Alus -->
@@ -13,20 +13,29 @@ const today = new Date();
             <h3 class="font-display font-bold text-2xl text-ink dark:text-white mb-3">
                 Mari berteman di internet.
             </h3>
-            <p class="text-gray-500 dark:text-gray-400 leading-relaxed max-w-md mx-auto">
+            <!-- Fix Contrast: text-gray-500 ke text-gray-600 biar lebih tajam dikit -->
+            <p class="text-gray-600 dark:text-gray-400 leading-relaxed max-w-md mx-auto">
                 Saya aktif di Majlis terdekat dan kadang-kadang pamer foto kopi di Instagram. 
                 Sapa aja kalau ketemu.
             </p>
         </div>
 
-
-
         <!-- Copyright & Credits -->
-        <div class="text-xs text-gray-400 dark:text-gray-500 font-medium uppercase tracking-widest">
+        <!-- Fix Contrast: text-gray-400 ke text-gray-500 -->
+        <div class="text-xs text-gray-500 dark:text-gray-500 font-medium uppercase tracking-widest">
             <p class="mb-2">&copy; {today.getFullYear()} Catatan Pinggir.</p>
-            <p class="opacity-60 normal-case tracking-normal">
+            
+            <!-- Fix Contrast: Hapus opacity-60, pake warna solid -->
+            <p class="normal-case tracking-normal text-gray-500 dark:text-gray-400">
                 Dibuat dengan Laper
-                & <span class="hover:text-red-500 cursor-default transition-colors" title="Serius, butuh tidur">Kurang Tidur</span>.
+                & 
+                <span class="hover:text-red-500 cursor-default transition-colors group relative inline-block" aria-label="Kurang Tidur">
+                    Kurang Tidur
+                    <!-- Tooltip kecil iseng -->
+                    <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs bg-ink text-white rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none normal-case tracking-normal">
+                        Butuh Kopi ☕
+                    </span>
+                </span>.
             </p>
         </div>
 
