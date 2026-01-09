@@ -1,8 +1,6 @@
 ---
 import '../styles/global.css'; 
 import { ClientRouter } from 'astro:transitions';
-
-// FIX: Import icon tetap di sini, tapi nanti CSS-nya kita optimasi via browser cache
 import '@phosphor-icons/web/bold';
 import '@phosphor-icons/web/fill';
 import '@phosphor-icons/web/regular';
@@ -33,28 +31,26 @@ const socialImageURL = new URL(image, Astro.url);
 		<meta name="generator" content={Astro.generator} />
         
         <!-- === PERFORMANCE OPTIMIZATIONS === -->
-        <!-- 1. Preconnect ke origin penting biar lebih ngebut -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="preconnect" href="https://grainy-gradients.vercel.app"> <!-- Fix laporan Grainy Gradient -->
+        
+        <!-- Fix: Preconnect buat Grainy Gradients (Hemat ~340ms) -->
+        <link rel="preconnect" href="https://grainy-gradients.vercel.app">
 
-        <!-- 2. Font Display Swap: Biar teks muncul duluan pake font bawaan sebelum font Google keload -->
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
 		
-        <!-- SEO TAGS -->
+        <!-- SEO -->
 		<title>{title} | Catatan Pinggir</title>
         <meta name="title" content={`${title} | Catatan Pinggir`} />
         <meta name="description" content={description} />
         <link rel="canonical" href={canonicalURL} />
 
-        <!-- OPEN GRAPH -->
         <meta property="og:type" content="website" />
         <meta property="og:url" content={Astro.url} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={socialImageURL} />
 
-        <!-- TWITTER -->
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content={Astro.url} />
         <meta property="twitter:title" content={title} />
