@@ -19,9 +19,32 @@ const {
     image = "/images/og-default.png"
 } = Astro.props;
 
+// 1. Tentukan Base URL yang pasti (dari Astro.site atau origin)
 const siteBase = Astro.site ? Astro.site : Astro.url.origin;
 const canonicalURL = new URL(Astro.url.pathname, siteBase);
-const socialImageURL = new URL(image, Astro.url);
+
+// 2. LOGIC BARU: OG Image Optimizer
+// Sosmed (terutama WhatsApp) kadang benci WebP. Kita paksa convert ke JPG on-the-fly pake CDN.
+const getSocialImage = (imgDict: string) => {
+    // Kalau URL eksternal (https://...), biarin aja
+    if (imgDict.startsWith('http')) return imgDict;
+
+    // Gabungin jadi URL absolute (Wajib buat sosmed)
+    // Hapus slash di awal biar gak double (siteBase biasanya gak ada slash di akhir, tapi jaga-jaga)
+    const cleanPath = imgDict.startsWith('/') ? imgDict.slice(1) : imgDict;
+    const cleanBase = siteBase.toString().endsWith('/') ? siteBase.toString().slice(0, -1) : siteBase;
+    const fullUrl = `${cleanBase}/${cleanPath}`;
+
+    // Kalau di Production, pake wsrv.nl buat convert ke JPG (Safety net buat WA/FB)
+    if (import.meta.env.PROD) {
+        return `https://wsrv.nl/?url=${encodeURIComponent(fullUrl)}&w=1200&h=630&fit=cover&output=jpg`;
+    }
+
+    // Kalau localhost, balikin URL biasa
+    return fullUrl;
+}
+
+const socialImageURL = getSocialImage(image);
 ---
 
 <!doctype html>
@@ -33,25 +56,19 @@ const socialImageURL = new URL(image, Astro.url);
 		<meta name="generator" content={Astro.generator} />
         
         <!-- === PERFORMANCE OPTIMIZATIONS === -->
-        
-        <!-- 1. Resource Hints: Prioritas Koneksi -->
-        <!-- Grainy Gradient: Preconnect + Preload biar gak nunggu CSS -->
         <link rel="preconnect" href="https://grainy-gradients.vercel.app" crossorigin>
         <link rel="preload" as="image" href="https://grainy-gradients.vercel.app/noise.svg">
         
-        <!-- Google Fonts: Preconnect -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-        <!-- 2. Font Loading Strategy: Async + Swap -->
-        <!-- Preload stylesheet -->
+        <!-- Font Loading Strategy -->
 		<link 
             rel="preload" 
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;700;800&family=Patrick+Hand&display=swap" 
             as="style" 
             onload="this.onload=null;this.rel='stylesheet'"
         >
-        <!-- Fallback non-JS -->
         <noscript>
             <link 
                 href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;700;800&family=Patrick+Hand&display=swap" 
@@ -66,14 +83,20 @@ const socialImageURL = new URL(image, Astro.url);
         <meta name="description" content={description} />
         <link rel="canonical" href={canonicalURL} />
 
+        <!-- OPEN GRAPH (FB / WA / LINKEDIN) -->
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={Astro.url} />
+        <meta property="og:url" content={canonicalURL} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
+        <!-- Pake URL JPG hasil convert -->
         <meta property="og:image" content={socialImageURL} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/jpeg" />
 
+        <!-- TWITTER -->
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content={Astro.url} />
+        <meta property="twitter:url" content={canonicalURL} />
         <meta property="twitter:title" content={title} />
         <meta property="twitter:description" content={description} />
         <meta property="twitter:image" content={socialImageURL} />
@@ -112,7 +135,6 @@ const socialImageURL = new URL(image, Astro.url);
 
 		<script>
 			document.addEventListener('astro:page-load', () => {
-                // 1. Reading Progress Bar Logic
                 const bar = document.getElementById("reading-progress");
                 if (bar) {
                     let ticking = false;
@@ -130,7 +152,6 @@ const socialImageURL = new URL(image, Astro.url);
                     });
                 }
 
-                // 2. Toast Notification Logic
                 window.showToast = (msg) => {
                     const toast = document.getElementById('toast');
                     const msgEl = document.getElementById('toast-msg');
@@ -143,13 +164,10 @@ const socialImageURL = new URL(image, Astro.url);
                     }
                 };
 
-                // 3. GLOBAL BOOKMARK BADGE LOGIC (Fix Bookmark gak update)
-                // Kita taruh sini biar jalan di semua halaman (Layout-level)
+                // GLOBAL BOOKMARK BADGE
                 const updateBadge = () => {
-                    // Ambil data dari localStorage
                     const saved = JSON.parse(localStorage.getItem('myBookmarks') || '[]');
                     const count = saved.length;
-                    
                     const desktopBadge = document.getElementById('saved-count-desktop');
                     const mobileBadge = document.getElementById('saved-count-mobile');
 
@@ -167,9 +185,7 @@ const socialImageURL = new URL(image, Astro.url);
                     }
                 };
                 
-                // Jalanin pas load
                 updateBadge();
-                // Dengerin event custom 'bookmark-updated' dari komponen lain
                 window.addEventListener('bookmark-updated', updateBadge);
 			});
 		</script>

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Arahin crawler ke sitemap otomatis (URL Bersih)
+Sitemap: https://diam.blog/sitemap-index.xml
