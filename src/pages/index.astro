@@ -11,13 +11,34 @@ const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
 // Ambil 4 artikel awal
 const initialPosts = sortedPosts.slice(0, 4);
 
-const DEFAULT_IMG = "/images/og-default.webp"; 
+const DEFAULT_IMG = "/images/og-default.png"; 
 
+// Helper: Ambil URL gambar mentah
 const getPostImage = (post) => {
     const img = post.data.image || post.data.cover || post.data.heroImage;
     if (typeof img === 'string') return img;
     if (img && typeof img === 'object' && img.src) return img.src; 
     return DEFAULT_IMG;
+};
+
+// === OPTIMIZER HELPER (SERVER) ===
+// Pake layanan wsrv.nl buat resize gambar public secara otomatis
+const optimizeImage = (url, width = 600) => {
+    // Kalau URL-nya eksternal atau default, biarin aja
+    if (!url || url.startsWith('http') || url === DEFAULT_IMG) return url;
+    
+    // Deteksi environment (Production vs Local)
+    // wsrv.nl butuh URL publik. Kalau localhost, kita pake gambar asli aja.
+    const isProd = import.meta.env.PROD; 
+    const siteUrl = 'https://diam.blog'; // Pastiin ini domain lu
+
+    if (isProd) {
+        // Gabungin domain + path gambar, terus minta wsrv.nl buat resize & convert ke webp
+        const fullUrl = `${siteUrl}${url}`;
+        return `https://wsrv.nl/?url=${encodeURIComponent(fullUrl)}&w=${width}&output=webp&q=80`;
+    }
+
+    return url; // Fallback buat localhost
 };
 ---
 
@@ -29,14 +50,16 @@ const getPostImage = (post) => {
         <!-- Hero Section -->
         <section class="mb-20 text-center md:text-left flex flex-col md:flex-row items-center gap-8 animate-fade-in">
             <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-100 flex-shrink-0">
+                <!-- OPTIMIZED AVATAR: Resize ke 256px (retina ready buat 128px) -->
                 <img 
-                    src="/images/avatardiam.webp" 
+                    src={optimizeImage("/images/avatardiam.webp", 256)} 
                     alt="Avatar" 
                     width="128" 
                     height="128" 
                     class="w-full h-full object-cover"
                     loading="eager" 
                     fetchpriority="high"
+                    onerror="this.onerror=null; this.src='/images/avatardiam.webp';"
                 />
             </div>
             <div>
@@ -60,14 +83,15 @@ const getPostImage = (post) => {
             <!-- GRID CONTAINER -->
             <div id="post-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                 {initialPosts.map((post, index) => {
-                    const imageSrc = getPostImage(post);
+                    const rawImg = getPostImage(post);
+                    const optimizedImg = optimizeImage(rawImg, 600); // Resize ke 600px
                     const isLCP = index === 0;
                     
                     return (
                         <article class="group flex flex-col gap-4 border-b border-gray-100 dark:border-gray-800 pb-8 md:border-0 md:pb-0">
                             <a href={`/blog/${post.slug}`} class="block overflow-hidden rounded-2xl aspect-[16/9] bg-gray-100 dark:bg-gray-800 relative z-10" aria-label={`Baca: ${post.data.title}`}>
                                 <img 
-                                    src={imageSrc} 
+                                    src={optimizedImg} 
                                     alt="" 
                                     width="600"
                                     height="338"
@@ -75,7 +99,7 @@ const getPostImage = (post) => {
                                     loading={isLCP ? "eager" : "lazy"}
                                     fetchpriority={isLCP ? "high" : "auto"}
                                     decoding={isLCP ? "sync" : "async"} 
-                                    onerror={`this.onerror=null; this.src='${DEFAULT_IMG}';`}
+                                    onerror={`this.onerror=null; this.src='${rawImg}';`} 
                                 />
                             </a>
                             
@@ -127,13 +151,13 @@ const getPostImage = (post) => {
       let isDataFetched = false;
       let isLoading = false;
       const ITEMS_PER_LOAD = 4;
-      const DEFAULT_IMG = "/images/og-default.png";
+      const DEFAULT_IMG = "/images/og-default.webp";
+      const SITE_URL = 'https://diam.blog'; // Hardcode domain buat JS client-side
 
       const container = document.getElementById('post-container');
       const btn = document.getElementById('load-more-btn');
       const endMessage = document.getElementById('end-message');
 
-      // Kalau tombol gak ada (misal di halaman lain), stop script
       if (!btn) return;
 
       const getImageSrc = (post) => {
@@ -144,25 +168,41 @@ const getPostImage = (post) => {
         } else if (imgData && typeof imgData === 'object' && imgData.src) {
             src = imgData.src;
         }
-        return encodeURI(src);
+        return src; // Jangan encodeURI dulu disini, nanti double encode di optimizer
+      };
+
+      // === CLIENT SIDE OPTIMIZER ===
+      // Logic sama kayak di server, tapi jalan di browser
+      const optimizeImageClient = (url, width = 600) => {
+        if (!url || url.startsWith('http') || url === DEFAULT_IMG) return url;
+        
+        // Cek kalau kita lagi di localhost atau bukan (simple check)
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        
+        if (!isLocal) {
+             const fullUrl = `${SITE_URL}${url}`;
+             return `https://wsrv.nl/?url=${encodeURIComponent(fullUrl)}&w=${width}&output=webp&q=80`;
+        }
+        return url;
       };
 
       const createPostCard = (post) => {
         const dateStr = new Date(post.data.pubDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
         const isoDate = new Date(post.data.pubDate).toISOString();
-        const imageSrc = getImageSrc(post);
+        const rawImg = getImageSrc(post);
+        const optimizedImg = optimizeImageClient(rawImg, 600);
         
         const imageHtml = `
             <a href="/blog/${post.slug}" class="block overflow-hidden rounded-2xl aspect-[16/9] bg-gray-100 dark:bg-gray-800 relative z-10" aria-label="Baca: ${post.data.title}">
                 <img 
-                    src="${imageSrc}" 
+                    src="${optimizedImg}" 
                     alt="" 
                     loading="lazy" 
                     decoding="async"
                     width="600" 
                     height="338"
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    onerror="this.onerror=null; this.src='${DEFAULT_IMG}';"
+                    onerror="this.onerror=null; this.src='${rawImg}';"
                 />
             </a>
         `;
