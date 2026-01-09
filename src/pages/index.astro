@@ -2,23 +2,39 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import ArticleCard from '../components/ArticleCard.astro'; // Import Card Baru
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('blog')).sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+// === SERVER SIDE ===
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const initialPosts = sortedPosts.slice(0, 4);
+const DEFAULT_IMG = "/images/og-default.png"; 
+
+const getPostImage = (post) => {
+    const img = post.data.image || post.data.cover || post.data.heroImage;
+    if (typeof img === 'string') return img;
+    if (img && typeof img === 'object' && img.src) return img.src; 
+    return DEFAULT_IMG;
+};
 ---
 
 <BaseLayout title="Beranda">
     <Header />
     
-    <main class="max-w-6xl mx-auto px-6 pt-32 min-h-screen relative z-10">
+    <main class="max-w-6xl mx-auto px-6 pt-32 min-h-screen relative z-10 pb-20">
         
-        <!-- Hero Section -->
         <section class="mb-20 text-center md:text-left flex flex-col md:flex-row items-center gap-8 animate-fade-in">
             <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-100 flex-shrink-0">
-                <img src="/images/avatardiam.png" alt="Avatar" class="w-full h-full object-cover">
+                <img 
+                    src="/images/avatardiam.png" 
+                    alt="Avatar" 
+                    width="128" 
+                    height="128" 
+                    class="w-full h-full object-cover"
+                    loading="eager" 
+                    fetchpriority="high"
+                />
             </div>
             <div>
                 <h1 class="font-display font-bold text-3xl md:text-4xl mb-3 leading-tight">
@@ -31,20 +47,187 @@ const posts = (await getCollection('blog')).sort(
             </div>
         </section>
 
-        <!-- Article Grid -->
         <section>
             <div class="flex items-center gap-3 mb-8">
                 <h2 class="font-display font-bold text-xl">Tulisan Terbaru</h2>
                 <div class="h-px bg-gray-200 dark:bg-gray-800 flex-1"></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {posts.map((post) => (
-                    <ArticleCard post={post} />
-                ))}
+            <div id="post-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                {initialPosts.map((post, index) => {
+                    const imageSrc = getPostImage(post);
+                    // LCP OPTIMIZATION:
+                    // Kalau artikel pertama (index 0), paksa load langsung (eager) & prioritas tinggi.
+                    // Sisanya lazy load biar hemat bandwidth.
+                    const isLCP = index === 0;
+                    
+                    return (
+                        <article class="group flex flex-col gap-4 border-b border-gray-100 dark:border-gray-800 pb-8 md:border-0 md:pb-0">
+                            <a href={`/blog/${post.slug}`} class="block overflow-hidden rounded-2xl aspect-[16/9] bg-gray-100 dark:bg-gray-800 relative z-10">
+                                <img 
+                                    src={imageSrc} 
+                                    alt={post.data.title}
+                                    width="600"
+                                    height="338"
+                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    loading={isLCP ? "eager" : "lazy"}
+                                    fetchpriority={isLCP ? "high" : "auto"}
+                                    onerror={`this.onerror=null; this.src='${DEFAULT_IMG}';`}
+                                />
+                            </a>
+                            
+                            <div class="flex flex-col gap-2">
+                                <span class="text-sm text-gray-400 font-mono">
+                                    {new Date(post.data.pubDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                </span>
+                                <h2 class="text-2xl font-bold font-display group-hover:text-accent transition-colors leading-tight">
+                                    <a href={`/blog/${post.slug}`} class="before:absolute before:inset-0 md:before:static">
+                                        {post.data.title}
+                                    </a>
+                                </h2>
+                                <p class="text-gray-600 dark:text-gray-400 line-clamp-3 leading-relaxed">
+                                    {post.data.description}
+                                </p>
+                            </div>
+                        </article>
+                    );
+                })}
             </div>
+
+            <div class="text-center">
+                <button 
+                    id="load-more-btn" 
+                    class="group px-6 py-3 border border-dashed border-gray-400 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 hover:border-accent hover:text-accent transition-all duration-300 font-medium text-sm flex items-center gap-2 mx-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    <span>Lihat Artikel Lain</span>
+                    <i class="ph-bold ph-arrow-down group-hover:translate-y-1 transition-transform"></i>
+                </button>
+            </div>
+
+             <div id="end-message" class="hidden text-center py-8 text-gray-400 font-hand text-lg">
+                ~ Udah abis cuy, tidur sana ~
+            </div>
+
         </section>
     </main>
 
     <Footer />
 </BaseLayout>
+
+<script>
+  let allRemainingPosts = [];
+  let currentIndex = 0;
+  let isDataFetched = false;
+  let isLoading = false;
+  const ITEMS_PER_LOAD = 4;
+  const DEFAULT_IMG = "/images/og-default.png";
+
+  const container = document.getElementById('post-container');
+  const btn = document.getElementById('load-more-btn');
+  const endMessage = document.getElementById('end-message');
+
+  const getImageSrc = (post) => {
+    const imgData = post.data.image || post.data.cover || post.data.heroImage;
+    let src = DEFAULT_IMG;
+    if (typeof imgData === 'string') {
+        src = imgData;
+    } else if (imgData && typeof imgData === 'object' && imgData.src) {
+        src = imgData.src;
+    }
+    return encodeURI(src);
+  };
+
+  const createPostCard = (post) => {
+    const date = new Date(post.data.pubDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    const imageSrc = getImageSrc(post);
+    
+    // Client side load selalu lazy
+    const imageHtml = `
+        <a href="/blog/${post.slug}" class="block overflow-hidden rounded-2xl aspect-[16/9] bg-gray-100 dark:bg-gray-800 relative z-10">
+             <img 
+                src="${imageSrc}" 
+                alt="${post.data.title}" 
+                loading="lazy" 
+                width="600" 
+                height="338"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                onerror="this.onerror=null; this.src='${DEFAULT_IMG}';"
+             />
+        </a>
+    `;
+
+    return `
+      <article class="group flex flex-col gap-4 border-b border-gray-100 dark:border-gray-800 pb-8 md:border-0 md:pb-0 fade-in">
+        ${imageHtml}
+        <div class="flex flex-col gap-2">
+            <span class="text-sm text-gray-400 font-mono">${date}</span>
+            <h2 class="text-2xl font-bold font-display group-hover:text-accent transition-colors leading-tight">
+                <a href="/blog/${post.slug}" class="before:absolute before:inset-0 md:before:static">
+                ${post.data.title}
+                </a>
+            </h2>
+            <p class="text-gray-600 dark:text-gray-400 line-clamp-3 leading-relaxed">
+                ${post.data.description}
+            </p>
+        </div>
+      </article>
+    `;
+  };
+
+  const loadMorePosts = async () => {
+    if (isLoading) return;
+    isLoading = true;
+
+    const originalContent = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = `<span class="inline-block animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full"></span> Lagi nyari...`;
+
+    try {
+      if (!isDataFetched) {
+        const res = await fetch('/api/posts.json');
+        if (!res.ok) throw new Error('Gagal fetch');
+        allRemainingPosts = await res.json();
+        isDataFetched = true;
+      }
+
+      const nextBatch = allRemainingPosts.slice(currentIndex, currentIndex + ITEMS_PER_LOAD);
+
+      if (nextBatch.length === 0) {
+        btn.classList.add('hidden');
+        endMessage.classList.remove('hidden');
+      } else {
+        nextBatch.forEach(post => {
+          container.insertAdjacentHTML('beforeend', createPostCard(post));
+        });
+        currentIndex += ITEMS_PER_LOAD;
+        if (currentIndex >= allRemainingPosts.length) {
+          btn.classList.add('hidden');
+          endMessage.classList.remove('hidden');
+        } else {
+          btn.disabled = false;
+          btn.innerHTML = originalContent;
+        }
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      btn.disabled = false;
+      btn.innerText = "Gagal, coba lagi";
+    } finally {
+      isLoading = false;
+    }
+  };
+
+  if (btn) {
+    btn.addEventListener('click', loadMorePosts);
+  }
+</script>
+
+<style>
+  :global(.fade-in) {
+    animation: fadeIn 0.5s ease-in forwards;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
