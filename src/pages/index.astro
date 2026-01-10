@@ -10,9 +10,8 @@ const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
 
 const initialPosts = sortedPosts.slice(0, 4);
 
-const DEFAULT_IMG = "/images/og-default.webp"; 
+const DEFAULT_IMG = "/images/og-default.png"; 
 
-// Helper: Ambil URL gambar mentah
 const getPostImage = (post) => {
     const img = post.data.image || post.data.cover || post.data.heroImage;
     if (typeof img === 'string') return img;
@@ -21,20 +20,26 @@ const getPostImage = (post) => {
 };
 
 // === OPTIMIZER HELPER (SERVER) ===
-const optimizeImage = (url, width = 600) => {
+const getOptimizedUrl = (url, width) => {
     if (!url || url.startsWith('http') || url === DEFAULT_IMG) return url;
     const isProd = import.meta.env.PROD; 
     const siteUrl = 'https://diam.blog'; 
-
     if (isProd) {
         const fullUrl = `${siteUrl}${url}`;
         return `https://wsrv.nl/?url=${encodeURIComponent(fullUrl)}&w=${width}&output=webp&q=80`;
     }
-    return url; 
-};
+    return url;
+}
 
-// === SEO: SCHEMA MARKUP (JSON-LD) ===
-// Ini ngebantu Google paham struktur website lu
+const generateSrcset = (url) => {
+    if (!url || url.startsWith('http') || url === DEFAULT_IMG) return '';
+    const w400 = getOptimizedUrl(url, 400);
+    const w600 = getOptimizedUrl(url, 600);
+    const w800 = getOptimizedUrl(url, 800);
+    return `${w400} 400w, ${w600} 600w, ${w800} 800w`;
+}
+
+// === SEO: SCHEMA MARKUP ===
 const schemaData = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -55,10 +60,9 @@ const schemaData = {
 ---
 
 <BaseLayout 
-    title="Diam."
+    title="Beranda"
     description="Jurnal harian tentang kebingungan quarter-life crisis, cerita absurd, dan usaha menertawakan tagihan bulanan. Baca tulisan terbaru di Diam.blog."
 >
-    <!-- SEO: Inject Schema Markup -->
     <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
 
     <Header />
@@ -68,9 +72,10 @@ const schemaData = {
         <!-- Hero Section -->
         <section class="mb-20 text-center md:text-left flex flex-col md:flex-row items-center gap-8 animate-fade-in">
             <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-100 flex-shrink-0">
-                <!-- SEO: Alt text yang deskriptif -->
                 <img 
-                    src={optimizeImage("/images/avatardiam.webp", 256)} 
+                    src={getOptimizedUrl("/images/avatardiam.webp", 256)}
+                    srcset={generateSrcset("/images/avatardiam.webp")}
+                    sizes="(max-width: 768px) 96px, 128px"
                     alt="Avatar Penulis Diam.blog" 
                     width="128" 
                     height="128" 
@@ -102,7 +107,8 @@ const schemaData = {
             <div id="post-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                 {initialPosts.map((post, index) => {
                     const rawImg = getPostImage(post);
-                    const optimizedImg = optimizeImage(rawImg, 600);
+                    const optimizedImg = getOptimizedUrl(rawImg, 600);
+                    const srcSet = generateSrcset(rawImg);
                     const isLCP = index === 0;
                     const category = post.data.category || "Jurnal"; 
                     
@@ -110,9 +116,10 @@ const schemaData = {
                         <article class="group flex flex-col gap-4 border-b border-gray-100 dark:border-gray-800 pb-8 md:border-0 md:pb-0 relative">
                             <div class="relative overflow-hidden rounded-2xl aspect-[16/9] bg-gray-100 dark:bg-gray-800 z-10">
                                 <a href={`/blog/${post.slug}`} class="block w-full h-full" aria-label={`Baca: ${post.data.title}`}>
-                                    <!-- SEO: Alt text diisi judul artikel -->
                                     <img 
                                         src={optimizedImg} 
+                                        srcset={srcSet}
+                                        sizes="(max-width: 768px) 100vw, 600px" 
                                         alt={post.data.title} 
                                         width="600"
                                         height="338"
@@ -124,12 +131,10 @@ const schemaData = {
                                     />
                                 </a>
                                 
-                                <!-- KATEGORI JUDUL -->
                                 <span class="absolute top-3 left-3 bg-white/90 dark:bg-dark-card/90 backdrop-blur-sm text-xs font-bold px-3 py-1 rounded-full shadow-sm text-ink dark:text-white border border-gray-100 dark:border-gray-700">
                                     {category}
                                 </span>
 
-                                <!-- TOMBOL BOOKMARK -->
                                 <button 
                                     class="bookmark-btn absolute top-3 right-3 w-8 h-8 bg-white/90 dark:bg-dark-card/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-accent hover:text-white dark:hover:bg-accent dark:hover:text-white transition-all shadow-sm text-gray-400 dark:text-gray-400 border border-gray-100 dark:border-gray-700 z-20"
                                     data-slug={post.slug}
@@ -158,11 +163,13 @@ const schemaData = {
                 })}
             </div>
 
-            <!-- TOMBOL LOAD MORE -->
-            <div class="text-center pb-8 md:pb-0 relative z-30">
+            <!-- TOMBOL LOAD MORE (FIXED OVERLAP) -->
+            <!-- pb-32: Kasih jarak bawah LEBAR biar gak ketutupan nav mobile -->
+            <!-- z-40: Biar layer-nya di atas elemen background -->
+            <div class="text-center pb-32 md:pb-12 relative z-40">
                 <button 
                     id="load-more-btn" 
-                    class="group px-6 py-3 border border-dashed border-gray-400 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 hover:border-accent hover:text-accent transition-all duration-300 font-medium text-sm flex items-center gap-2 mx-auto disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-paper dark:bg-dark-bg"
+                    class="group px-6 py-3 border border-dashed border-gray-400 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 hover:border-accent hover:text-accent transition-all duration-300 font-medium text-sm flex items-center gap-2 mx-auto disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-paper dark:bg-dark-bg shadow-sm"
                 >
                     <span>Lihat Artikel Lain</span>
                     <i class="ph-bold ph-arrow-down group-hover:translate-y-1 transition-transform"></i>
@@ -264,11 +271,28 @@ const schemaData = {
         return url;
       };
 
+      const generateSrcsetClient = (url) => {
+         if (!url || url.startsWith('http') || url === DEFAULT_IMG) return '';
+         const w400 = optimizeImageClient(url, 400);
+         const w600 = optimizeImageClient(url, 600);
+         const w800 = optimizeImageClient(url, 800);
+         return `${w400} 400w, ${w600} 600w, ${w800} 800w`;
+      }
+
       const createPostCard = (post) => {
-        const dateStr = new Date(post.data.pubDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-        const isoDate = new Date(post.data.pubDate).toISOString();
+        let dateStr = "";
+        let isoDate = "";
+        try {
+             const d = new Date(post.data.pubDate);
+             dateStr = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+             isoDate = d.toISOString();
+        } catch (e) {
+             dateStr = "Tanggal tidak tersedia";
+        }
+
         const rawImg = getImageSrc(post);
         const optimizedImg = optimizeImageClient(rawImg, 600);
+        const srcSet = generateSrcsetClient(rawImg);
         const category = post.data.category || "Jurnal";
         
         const saved = JSON.parse(localStorage.getItem('myBookmarks') || '[]');
@@ -280,7 +304,9 @@ const schemaData = {
             <div class="relative overflow-hidden rounded-2xl aspect-[16/9] bg-gray-100 dark:bg-gray-800 z-10">
                 <a href="/blog/${post.slug}" class="block w-full h-full" aria-label="Baca: ${post.data.title}">
                     <img 
-                        src="${optimizedImg}" 
+                        src="${optimizedImg}"
+                        srcset="${srcSet}"
+                        sizes="(max-width: 768px) 100vw, 600px" 
                         alt="${post.data.title}"  
                         loading="lazy" 
                         decoding="async"
@@ -321,7 +347,8 @@ const schemaData = {
         `;
       };
 
-      const loadMorePosts = async () => {
+      const loadMorePosts = async (e) => {
+        if(e) e.preventDefault();
         if (isLoading) return;
         isLoading = true;
 
@@ -364,6 +391,8 @@ const schemaData = {
         }
       };
 
+      // Pastiin listener bersih
+      btn.removeEventListener('click', loadMorePosts);
       btn.addEventListener('click', loadMorePosts);
   });
 </script>
