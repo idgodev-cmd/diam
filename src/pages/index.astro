@@ -10,7 +10,7 @@ const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
 
 const initialPosts = sortedPosts.slice(0, 4);
 
-const DEFAULT_IMG = "/images/og-default.png"; 
+const DEFAULT_IMG = "/images/og-default.webp"; 
 
 const getPostImage = (post) => {
     const img = post.data.image || post.data.cover || post.data.heroImage;
@@ -59,7 +59,7 @@ const generateSrcset = (url) => {
       "author": {
         "@type": "Person",
         "name": "Admin Diam.blog",
-        "image": "https://diam.blog/images/avatardiam.png"
+        "image": "https://diam.blog/images/avatardiam.webp"
       }
     })} />
 
@@ -72,8 +72,8 @@ const generateSrcset = (url) => {
             <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-100 flex-shrink-0">
                 <!-- Avatar juga kita kasih srcset biar tajem di HP high-res -->
                 <img 
-                    src={getOptimizedUrl("/images/avatardiam.png", 256)}
-                    srcset={generateSrcset("/images/avatardiam.png")}
+                    src={getOptimizedUrl("/images/avatardiam.webp", 256)}
+                    srcset={generateSrcset("/images/avatardiam.webp")}
                     sizes="(max-width: 768px) 96px, 128px"
                     alt="Avatar Penulis Diam.blog" 
                     width="128" 
@@ -81,7 +81,7 @@ const generateSrcset = (url) => {
                     class="w-full h-full object-cover"
                     loading="eager" 
                     fetchpriority="high"
-                    onerror="this.onerror=null; this.src='/images/avatardiam.png';"
+                    onerror="this.onerror=null; this.src='/images/avatardiam.webp';"
                 />
             </div>
             <div>
@@ -164,7 +164,8 @@ const generateSrcset = (url) => {
             </div>
 
             <!-- TOMBOL LOAD MORE -->
-            <div class="text-center pb-8 md:pb-0 relative z-30">
+            <!-- FIX: Tambahin pb-24 biar gak ketutupan nav mobile, dan z-40 biar paling atas -->
+            <div class="text-center pb-24 md:pb-12 relative z-40">
                 <button 
                     id="load-more-btn" 
                     class="group px-6 py-3 border border-dashed border-gray-400 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 hover:border-accent hover:text-accent transition-all duration-300 font-medium text-sm flex items-center gap-2 mx-auto disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-paper dark:bg-dark-bg"
@@ -235,12 +236,13 @@ const generateSrcset = (url) => {
       }
 
       // === LOAD MORE LOGIC ===
+      // Reset state tiap navigasi
       let allRemainingPosts = [];
       let currentIndex = 0;
       let isDataFetched = false;
       let isLoading = false;
       const ITEMS_PER_LOAD = 4;
-      const DEFAULT_IMG = "/images/og-default.png";
+      const DEFAULT_IMG = "/images/og-default.webp";
       const SITE_URL = 'https://diam.blog'; 
 
       const btn = document.getElementById('load-more-btn');
@@ -280,11 +282,18 @@ const generateSrcset = (url) => {
       }
 
       const createPostCard = (post) => {
-        const dateStr = new Date(post.data.pubDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-        const isoDate = new Date(post.data.pubDate).toISOString();
+        // Fallback aman untuk tanggal
+        let dateStr = "";
+        let isoDate = "";
+        try {
+             const d = new Date(post.data.pubDate);
+             dateStr = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+             isoDate = d.toISOString();
+        } catch (e) {
+             dateStr = "Tanggal tidak tersedia";
+        }
+
         const rawImg = getImageSrc(post);
-        
-        // Pake logic responsive images juga buat item yang diload belakangan
         const optimizedImg = getOptimizedUrlClient(rawImg, 600);
         const srcSet = generateSrcsetClient(rawImg);
         const category = post.data.category || "Jurnal";
@@ -341,7 +350,9 @@ const generateSrcset = (url) => {
         `;
       };
 
-      const loadMorePosts = async () => {
+      const loadMorePosts = async (e) => {
+        if(e) e.preventDefault();
+        
         if (isLoading) return;
         isLoading = true;
 
@@ -383,7 +394,9 @@ const generateSrcset = (url) => {
             isLoading = false;
         }
       };
-
+      
+      // Hapus listener lama biar gak double
+      btn.removeEventListener('click', loadMorePosts);
       btn.addEventListener('click', loadMorePosts);
   });
 </script>
