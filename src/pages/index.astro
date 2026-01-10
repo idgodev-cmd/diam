@@ -10,9 +10,8 @@ const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
 
 const initialPosts = sortedPosts.slice(0, 4);
 
-const DEFAULT_IMG = "/images/og-default.webp"; 
+const DEFAULT_IMG = "/images/og-default.png"; 
 
-// Helper: Ambil URL gambar mentah
 const getPostImage = (post) => {
     const img = post.data.image || post.data.cover || post.data.heroImage;
     if (typeof img === 'string') return img;
@@ -21,45 +20,48 @@ const getPostImage = (post) => {
 };
 
 // === OPTIMIZER HELPER (SERVER) ===
-const optimizeImage = (url, width = 600) => {
+// Kita butuh helper buat generate satu URL spesifik
+const getOptimizedUrl = (url, width) => {
     if (!url || url.startsWith('http') || url === DEFAULT_IMG) return url;
     const isProd = import.meta.env.PROD; 
     const siteUrl = 'https://diam.blog'; 
-
     if (isProd) {
         const fullUrl = `${siteUrl}${url}`;
         return `https://wsrv.nl/?url=${encodeURIComponent(fullUrl)}&w=${width}&output=webp&q=80`;
     }
-    return url; 
-};
+    return url;
+}
 
-// === SEO: SCHEMA MARKUP (JSON-LD) ===
-// Ini ngebantu Google paham struktur website lu
-const schemaData = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "Diam.blog",
-  "url": "https://diam.blog",
-  "description": "Catatan kaki seorang pemalas yang mencoba memahami hidup.",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://diam.blog/search?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  },
-  "author": {
-    "@type": "Person",
-    "name": "Admin Diam.blog",
-    "image": "https://diam.blog/images/avatardiam.webp"
-  }
-};
+// Helper buat generate SRCSET (Daftar pilihan ukuran buat browser)
+const generateSrcset = (url) => {
+    if (!url || url.startsWith('http') || url === DEFAULT_IMG) return '';
+    // Kita kasih 3 opsi: 400px (HP), 600px (Tablet/Grid), 800px (Retina)
+    const w400 = getOptimizedUrl(url, 400);
+    const w600 = getOptimizedUrl(url, 600);
+    const w800 = getOptimizedUrl(url, 800);
+    
+    // Format: "URL_KECIL 400w, URL_SEDANG 600w, URL_BESAR 800w"
+    return `${w400} 400w, ${w600} 600w, ${w800} 800w`;
+}
 ---
 
 <BaseLayout 
-    title="Diam."
+    title="Beranda"
     description="Jurnal harian tentang kebingungan quarter-life crisis, cerita absurd, dan usaha menertawakan tagihan bulanan. Baca tulisan terbaru di Diam.blog."
 >
-    <!-- SEO: Inject Schema Markup -->
-    <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+    <!-- SEO: Schema Markup -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Diam.blog",
+      "url": "https://diam.blog",
+      "description": "Catatan kaki seorang pemalas yang mencoba memahami hidup.",
+      "author": {
+        "@type": "Person",
+        "name": "Admin Diam.blog",
+        "image": "https://diam.blog/images/avatardiam.png"
+      }
+    })} />
 
     <Header />
     
@@ -68,16 +70,18 @@ const schemaData = {
         <!-- Hero Section -->
         <section class="mb-20 text-center md:text-left flex flex-col md:flex-row items-center gap-8 animate-fade-in">
             <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-100 flex-shrink-0">
-                <!-- SEO: Alt text yang deskriptif -->
+                <!-- Avatar juga kita kasih srcset biar tajem di HP high-res -->
                 <img 
-                    src={optimizeImage("/images/avatardiam.webp", 256)} 
+                    src={getOptimizedUrl("/images/avatardiam.png", 256)}
+                    srcset={generateSrcset("/images/avatardiam.png")}
+                    sizes="(max-width: 768px) 96px, 128px"
                     alt="Avatar Penulis Diam.blog" 
                     width="128" 
                     height="128" 
                     class="w-full h-full object-cover"
                     loading="eager" 
                     fetchpriority="high"
-                    onerror="this.onerror=null; this.src='/images/avatardiam.webp';"
+                    onerror="this.onerror=null; this.src='/images/avatardiam.png';"
                 />
             </div>
             <div>
@@ -102,7 +106,8 @@ const schemaData = {
             <div id="post-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                 {initialPosts.map((post, index) => {
                     const rawImg = getPostImage(post);
-                    const optimizedImg = optimizeImage(rawImg, 600);
+                    const optimizedImg = getOptimizedUrl(rawImg, 600);
+                    const srcSet = generateSrcset(rawImg);
                     const isLCP = index === 0;
                     const category = post.data.category || "Jurnal"; 
                     
@@ -110,9 +115,11 @@ const schemaData = {
                         <article class="group flex flex-col gap-4 border-b border-gray-100 dark:border-gray-800 pb-8 md:border-0 md:pb-0 relative">
                             <div class="relative overflow-hidden rounded-2xl aspect-[16/9] bg-gray-100 dark:bg-gray-800 z-10">
                                 <a href={`/blog/${post.slug}`} class="block w-full h-full" aria-label={`Baca: ${post.data.title}`}>
-                                    <!-- SEO: Alt text diisi judul artikel -->
+                                    <!-- IMPLEMENTASI RESPONSIVE IMAGES -->
                                     <img 
-                                        src={optimizedImg} 
+                                        src={optimizedImg}
+                                        srcset={srcSet}
+                                        sizes="(max-width: 768px) 100vw, 600px" 
                                         alt={post.data.title} 
                                         width="600"
                                         height="338"
@@ -124,12 +131,10 @@ const schemaData = {
                                     />
                                 </a>
                                 
-                                <!-- KATEGORI JUDUL -->
                                 <span class="absolute top-3 left-3 bg-white/90 dark:bg-dark-card/90 backdrop-blur-sm text-xs font-bold px-3 py-1 rounded-full shadow-sm text-ink dark:text-white border border-gray-100 dark:border-gray-700">
                                     {category}
                                 </span>
 
-                                <!-- TOMBOL BOOKMARK -->
                                 <button 
                                     class="bookmark-btn absolute top-3 right-3 w-8 h-8 bg-white/90 dark:bg-dark-card/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-accent hover:text-white dark:hover:bg-accent dark:hover:text-white transition-all shadow-sm text-gray-400 dark:text-gray-400 border border-gray-100 dark:border-gray-700 z-20"
                                     data-slug={post.slug}
@@ -235,7 +240,7 @@ const schemaData = {
       let isDataFetched = false;
       let isLoading = false;
       const ITEMS_PER_LOAD = 4;
-      const DEFAULT_IMG = "/images/og-default.webp";
+      const DEFAULT_IMG = "/images/og-default.png";
       const SITE_URL = 'https://diam.blog'; 
 
       const btn = document.getElementById('load-more-btn');
@@ -254,7 +259,8 @@ const schemaData = {
         return src; 
       };
 
-      const optimizeImageClient = (url, width = 600) => {
+      // Helper buat generate URL satu ukuran di Client
+      const getOptimizedUrlClient = (url, width) => {
         if (!url || url.startsWith('http') || url === DEFAULT_IMG) return url;
         const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         if (!isLocal) {
@@ -264,11 +270,23 @@ const schemaData = {
         return url;
       };
 
+      // Helper buat generate SRCSET di Client
+      const generateSrcsetClient = (url) => {
+         if (!url || url.startsWith('http') || url === DEFAULT_IMG) return '';
+         const w400 = getOptimizedUrlClient(url, 400);
+         const w600 = getOptimizedUrlClient(url, 600);
+         const w800 = getOptimizedUrlClient(url, 800);
+         return `${w400} 400w, ${w600} 600w, ${w800} 800w`;
+      }
+
       const createPostCard = (post) => {
         const dateStr = new Date(post.data.pubDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
         const isoDate = new Date(post.data.pubDate).toISOString();
         const rawImg = getImageSrc(post);
-        const optimizedImg = optimizeImageClient(rawImg, 600);
+        
+        // Pake logic responsive images juga buat item yang diload belakangan
+        const optimizedImg = getOptimizedUrlClient(rawImg, 600);
+        const srcSet = generateSrcsetClient(rawImg);
         const category = post.data.category || "Jurnal";
         
         const saved = JSON.parse(localStorage.getItem('myBookmarks') || '[]');
@@ -280,7 +298,9 @@ const schemaData = {
             <div class="relative overflow-hidden rounded-2xl aspect-[16/9] bg-gray-100 dark:bg-gray-800 z-10">
                 <a href="/blog/${post.slug}" class="block w-full h-full" aria-label="Baca: ${post.data.title}">
                     <img 
-                        src="${optimizedImg}" 
+                        src="${optimizedImg}"
+                        srcset="${srcSet}"
+                        sizes="(max-width: 768px) 100vw, 600px" 
                         alt="${post.data.title}"  
                         loading="lazy" 
                         decoding="async"
