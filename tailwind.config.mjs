@@ -19,17 +19,6 @@ export default {
 					text: '#E4E4E7'
 				}
 			},
-			typography: (theme) => ({
-				// Konfigurasi typography plugin (kalau lu pake @tailwindcss/typography)
-				DEFAULT: {
-					css: {
-						color: theme('colors.ink'),
-						h1: { fontFamily: theme('fontFamily.display') },
-						h2: { fontFamily: theme('fontFamily.display') },
-						h3: { fontFamily: theme('fontFamily.display') },
-					}
-				}
-			})
 		},
 	},
 	plugins: [

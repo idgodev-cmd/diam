@@ -4,7 +4,7 @@
 
 <div
     id="bento-popup"
-    class="fixed bottom-24 right-6 md:bottom-6 md:right-auto md:left-1/2 md:-translate-x-1/2 z-[40] flex items-center gap-2 p-2 bg-white/80 dark:bg-dark-card/80 backdrop-blur-md rounded-2xl border border-gray-200 dark:border-gray-700 shadow-2xl transition-all duration-500 opacity-0 translate-y-20"
+    class="fixed bottom-24 right-6 md:bottom-6 md:right-auto md:left-1/2 md:-translate-x-1/2 z-[40] flex items-center gap-2 p-2 bg-white/80 dark:bg-dark-card/80 backdrop-blur-md rounded-2xl border border-gray-200 dark:border-gray-700 shadow-2xl transition-all duration-500 opacity-0 translate-y-20 text-ink dark:text-gray-200"
 >
     <!-- Status / Now Playing -->
     <div
@@ -40,6 +40,15 @@
     >
         <i class="ph-bold ph-sun dark:hidden"></i>
         <i class="ph-bold ph-moon hidden dark:block"></i>
+    </button>
+
+    <!-- PWA Install Button (Hidden by default) -->
+    <button
+        id="pwa-install-btn"
+        class="hidden p-3 bg-gray-900 dark:bg-white text-white dark:text-black rounded-xl hover:scale-105 active:scale-95 transition-all shadow-lg"
+        title="Install App"
+    >
+        <i class="ph-bold ph-download-simple"></i>
     </button>
 </div>
 
@@ -80,6 +89,34 @@
             document.documentElement.classList.toggle("dark");
             localStorage.setItem("theme", newTheme);
             window.dispatchEvent(new Event("theme-changed"));
+        });
+        // PWA Install Logic
+        let deferredPrompt: any;
+        const installBtn = document.getElementById("pwa-install-btn");
+
+        window.addEventListener("beforeinstallprompt", (e) => {
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            // Stash the event so it can be triggered later.
+            deferredPrompt = e;
+            // Update UI to notify the user they can add to home screen
+            installBtn?.classList.remove("hidden");
+        });
+
+        installBtn?.addEventListener("click", () => {
+            // Hide the app provided install promotion
+            installBtn.classList.add("hidden");
+            // Show the install prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice.then((choiceResult: any) => {
+                if (choiceResult.outcome === "accepted") {
+                    console.log("User accepted the A2HS prompt");
+                } else {
+                    console.log("User dismissed the A2HS prompt");
+                }
+                deferredPrompt = null;
+            });
         });
     });
 </script>
