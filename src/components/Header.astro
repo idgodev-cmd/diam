@@ -97,13 +97,7 @@ const isActive = (path: string) =>
                 class="absolute top-2 right-2 w-2 h-2 bg-accent rounded-full hidden"
             ></span>
         </a>
-        <a
-            href="/guestbook"
-            class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all ${isActive("/guestbook") ? "text-ink bg-gray-100 dark:bg-gray-800 dark:text-white" : "text-gray-400"}`}
-            aria-label="Buku Tamu"
-        >
-            <i class="ph-bold ph-chats-circle text-xl"></i>
-        </a>
+
         <div class="w-px h-6 bg-gray-200 mx-1"></div>
         <button
             id="theme-toggle-mobile"
