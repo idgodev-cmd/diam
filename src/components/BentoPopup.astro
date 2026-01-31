@@ -1,0 +1,85 @@
+---
+
+---
+
+<div
+    id="bento-popup"
+    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[50] flex items-center gap-2 p-2 bg-white/80 dark:bg-dark-card/80 backdrop-blur-md rounded-2xl border border-gray-200 dark:border-gray-700 shadow-2xl transition-all duration-500 opacity-0 translate-y-20"
+>
+    <!-- Status / Now Playing -->
+    <div
+        class="flex items-center gap-3 px-4 py-2 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-700"
+    >
+        <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+        <div class="flex flex-col">
+            <span
+                class="text-[10px] uppercase tracking-widest text-gray-400 font-bold leading-none mb-1"
+                >Status</span
+            >
+            <span class="text-xs font-medium truncate max-w-[120px]"
+                >Lagi ngoding...</span
+            >
+        </div>
+    </div>
+
+    <!-- Random Post Button -->
+    <button
+        id="random-post-btn"
+        class="p-3 bg-accent text-white rounded-xl hover:scale-105 active:scale-95 transition-all shadow-lg shadow-accent/20 group"
+        title="Baca Artikel Acak"
+    >
+        <i
+            class="ph-bold ph-shuffle group-hover:rotate-180 transition-transform duration-500"
+        ></i>
+    </button>
+
+    <!-- Theme Toggle (Mini) -->
+    <button
+        id="mini-theme-toggle"
+        class="p-3 bg-gray-50 dark:bg-gray-800 text-ink dark:text-white rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-all"
+    >
+        <i class="ph-bold ph-sun dark:hidden"></i>
+        <i class="ph-bold ph-moon hidden dark:block"></i>
+    </button>
+</div>
+
+<script>
+    document.addEventListener("astro:page-load", () => {
+        const popup = document.getElementById("bento-popup");
+        const randomBtn = document.getElementById("random-post-btn");
+        const miniThemeBtn = document.getElementById("mini-theme-toggle");
+
+        // Show popup after a bit of scroll
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 300) {
+                popup?.classList.remove("opacity-0", "translate-y-20");
+            } else {
+                popup?.classList.add("opacity-0", "translate-y-20");
+            }
+        });
+
+        // Random Post Logic
+        randomBtn?.addEventListener("click", async () => {
+            try {
+                const res = await fetch("/api/posts.json");
+                const posts = await res.json();
+                if (posts.length > 0) {
+                    const randomPost =
+                        posts[Math.floor(Math.random() * posts.length)];
+                    window.location.href = `/blog/${randomPost.slug}`;
+                }
+            } catch (e) {
+                console.error("Failed to fetch posts for randomizer");
+            }
+        });
+
+        // Mini Theme Toggle
+        miniThemeBtn?.addEventListener("click", () => {
+            const isDark = document.documentElement.classList.contains("dark");
+            const newTheme = isDark ? "light" : "dark";
+            document.documentElement.classList.toggle("dark");
+            localStorage.setItem("theme", newTheme);
+            window.dispatchEvent(new Event("theme-changed"));
+        });
+    });
+</script>

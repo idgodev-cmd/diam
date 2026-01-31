@@ -1,23 +1,24 @@
 ---
-import '../styles/global.css'; 
-import { ClientRouter } from 'astro:transitions';
+import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
+import BentoPopup from "../components/BentoPopup.astro";
 
 // Icons
-import '@phosphor-icons/web/bold';
-import '@phosphor-icons/web/fill';
-import '@phosphor-icons/web/regular';
+import "@phosphor-icons/web/bold";
+import "@phosphor-icons/web/fill";
+import "@phosphor-icons/web/regular";
 
 interface Props {
-	title: string;
+    title: string;
     description?: string;
     // Update: Support string URL atau Object gambar dari astro:assets
     image?: string | { src: string };
 }
 
-const { 
-    title, 
-    description = "Menulis untuk merayakan kebingungan quarter-life crisis dan mencari arti hidup.", 
-    image = "/images/og-default.webp"
+const {
+    title,
+    description = "Menulis untuk merayakan kebingungan quarter-life crisis dan mencari arti hidup.",
+    image = "/images/og-default.webp",
 } = Astro.props;
 
 // 1. Tentukan Base URL yang PASTI
@@ -28,25 +29,28 @@ const canonicalURL = new URL(Astro.url.pathname, siteBase);
 // 2. LOGIC BARU: OG Image Optimizer (Support Object & String)
 const getSocialImage = (imgInput: string | { src: string }) => {
     // A. Ekstrak URL kalau inputnya berupa Object (dari astro:assets)
-    const imgDict = (typeof imgInput === 'object' && imgInput !== null) ? imgInput.src : imgInput;
+    const imgDict =
+        typeof imgInput === "object" && imgInput !== null
+            ? imgInput.src
+            : imgInput;
 
     // B. Validasi: Pastikan imgDict adalah string valid
-    if (typeof imgDict !== 'string') return "/images/og-default.webp";
+    if (typeof imgDict !== "string") return "/images/og-default.webp";
 
     // C. Kalau URL eksternal, biarin
-    if (imgDict.startsWith('http')) return imgDict;
+    if (imgDict.startsWith("http")) return imgDict;
 
     // D. Buat Full URL yang Valid
     let fileUrl = "";
     try {
         fileUrl = new URL(imgDict, siteBase).href;
     } catch (e) {
-        const cleanPath = imgDict.startsWith('/') ? imgDict : `/${imgDict}`;
+        const cleanPath = imgDict.startsWith("/") ? imgDict : `/${imgDict}`;
         fileUrl = `${LIVE_DOMAIN}${cleanPath}`;
     }
 
     // E. Cek apakah URL ini localhost? Kalau iya, ganti ke domain asli
-    if (fileUrl.includes('localhost') || fileUrl.includes('127.0.0.1')) {
+    if (fileUrl.includes("localhost") || fileUrl.includes("127.0.0.1")) {
         fileUrl = fileUrl.replace(/http:\/\/localhost:\d+/, LIVE_DOMAIN);
         fileUrl = fileUrl.replace(/http:\/\/127.0.0.1:\d+/, LIVE_DOMAIN);
     }
@@ -57,43 +61,51 @@ const getSocialImage = (imgInput: string | { src: string }) => {
     }
 
     return fileUrl;
-}
+};
 
 const socialImageURL = getSocialImage(image);
 ---
 
 <!doctype html>
 <html lang="id" class="scroll-smooth">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-        
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+
         <!-- === PERFORMANCE OPTIMIZATIONS === -->
-        <link rel="preconnect" href="https://grainy-gradients.vercel.app" crossorigin>
-        <link rel="preload" as="image" href="https://grainy-gradients.vercel.app/noise.svg">
-        
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            rel="preconnect"
+            href="https://grainy-gradients.vercel.app"
+            crossorigin
+        />
+        <link
+            rel="preload"
+            as="image"
+            href="https://grainy-gradients.vercel.app/noise.svg"
+        />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
         <!-- Font Loading Strategy -->
-		<link 
-            rel="preload" 
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;700;800&family=Patrick+Hand&display=swap" 
-            as="style" 
+        <link
+            rel="preload"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;700;800&family=Patrick+Hand&display=swap"
+            as="style"
             onload="this.onload=null;this.rel='stylesheet'"
-        >
+        />
         <noscript>
-            <link 
-                href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;700;800&family=Patrick+Hand&display=swap" 
-                rel="stylesheet" 
+            <link
+                href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;700;800&family=Patrick+Hand&display=swap"
+                rel="stylesheet"
                 type="text/css"
-            >
+            />
         </noscript>
-		
+
         <!-- SEO -->
-		<title>{title} | Catatan Pinggir</title>
+        <title>{title} | Catatan Pinggir</title>
         <meta name="title" content={`${title} | Catatan Pinggir`} />
         <meta name="description" content={description} />
         <link rel="canonical" href={canonicalURL} />
@@ -115,49 +127,85 @@ const socialImageURL = getSocialImage(image);
         <meta property="twitter:title" content={title} />
         <meta property="twitter:description" content={description} />
         <meta property="twitter:image" content={socialImageURL} />
-        
-		<ClientRouter />
 
-		<script is:inline>
-			function setDarkMode() {
-				const theme = (() => {
-					if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-						return localStorage.getItem('theme');
-					}
-					if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-						return 'dark';
-					}
-					return 'light';
-				})();
-				document.documentElement.classList.toggle('dark', theme === 'dark');
-			}
-			setDarkMode();
-			document.addEventListener('astro:after-swap', setDarkMode);
-		</script>
-	</head>
-	<body class="bg-paper text-ink dark:bg-dark-bg dark:text-dark-text transition-colors duration-300 pb-32">
-		
-		<div class="fixed inset-0 pointer-events-none z-0 opacity-[0.04] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
-		<div id="reading-progress" class="fixed top-0 left-0 h-1 bg-accent z-50 w-0 transition-all duration-100"></div>
+        <ClientRouter />
+        <link rel="manifest" href="/manifest.webmanifest" />
 
-        <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white dark:bg-white dark:text-ink px-4 py-2 rounded-full text-sm font-bold shadow-xl transition-all duration-300 opacity-0 translate-y-10 pointer-events-none flex items-center gap-2">
-            <i class="ph-bold ph-check-circle text-accent"></i> <span id="toast-msg">Disimpan</span>
+        <script is:inline>
+            function setDarkMode() {
+                const theme = (() => {
+                    if (
+                        typeof localStorage !== "undefined" &&
+                        localStorage.getItem("theme")
+                    ) {
+                        return localStorage.getItem("theme");
+                    }
+                    if (
+                        window.matchMedia("(prefers-color-scheme: dark)")
+                            .matches
+                    ) {
+                        return "dark";
+                    }
+                    return "light";
+                })();
+                document.documentElement.classList.toggle(
+                    "dark",
+                    theme === "dark",
+                );
+            }
+            setDarkMode();
+            document.addEventListener("astro:after-swap", setDarkMode);
+        </script>
+
+        <script is:inline>
+            // Help TS understand showToast
+            window.showToast = (msg) => {
+                // This will be overridden by the script below
+            };
+        </script>
+    </head>
+    <body
+        class="bg-paper text-ink dark:bg-dark-bg dark:text-dark-text transition-colors duration-300 pb-32"
+    >
+        <div
+            class="fixed inset-0 pointer-events-none z-0 opacity-[0.04] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"
+        >
+        </div>
+        <div
+            id="reading-progress"
+            class="fixed top-0 left-0 h-1 bg-accent z-50 w-0 transition-all duration-100"
+        >
         </div>
 
-		<div transition:animate="fade">
-			<slot />
-		</div>
+        <div
+            id="toast"
+            class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] bg-ink text-white dark:bg-white dark:text-ink px-4 py-2 rounded-full text-sm font-bold shadow-xl transition-all duration-300 opacity-0 translate-y-10 pointer-events-none flex items-center gap-2"
+        >
+            <i class="ph-bold ph-check-circle text-accent"></i>
+            <span id="toast-msg">Disimpan</span>
+        </div>
 
-		<script>
-			document.addEventListener('astro:page-load', () => {
+        <div transition:animate="fade">
+            <slot />
+        </div>
+
+        <BentoPopup />
+
+        <script>
+            import "../pwa.ts";
+            document.addEventListener("astro:page-load", () => {
                 const bar = document.getElementById("reading-progress");
                 if (bar) {
                     let ticking = false;
-                    window.addEventListener('scroll', () => {
+                    window.addEventListener("scroll", () => {
                         if (!ticking) {
                             window.requestAnimationFrame(() => {
-                                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-                                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                                const winScroll =
+                                    document.body.scrollTop ||
+                                    document.documentElement.scrollTop;
+                                const height =
+                                    document.documentElement.scrollHeight -
+                                    document.documentElement.clientHeight;
                                 const scrolled = (winScroll / height) * 100;
                                 bar.style.width = scrolled + "%";
                                 ticking = false;
@@ -168,41 +216,46 @@ const socialImageURL = getSocialImage(image);
                 }
 
                 window.showToast = (msg) => {
-                    const toast = document.getElementById('toast');
-                    const msgEl = document.getElementById('toast-msg');
-                    if(toast && msgEl) {
+                    const toast = document.getElementById("toast");
+                    const msgEl = document.getElementById("toast-msg");
+                    if (toast && msgEl) {
                         msgEl.innerText = msg;
-                        toast.classList.remove('opacity-0', 'translate-y-10');
+                        toast.classList.remove("opacity-0", "translate-y-10");
                         setTimeout(() => {
-                            toast.classList.add('opacity-0', 'translate-y-10');
+                            toast.classList.add("opacity-0", "translate-y-10");
                         }, 2000);
                     }
                 };
 
                 // GLOBAL BOOKMARK BADGE
                 const updateBadge = () => {
-                    const saved = JSON.parse(localStorage.getItem('myBookmarks') || '[]');
+                    const saved = JSON.parse(
+                        localStorage.getItem("myBookmarks") || "[]",
+                    );
                     const count = saved.length;
-                    const desktopBadge = document.getElementById('saved-count-desktop');
-                    const mobileBadge = document.getElementById('saved-count-mobile');
+                    const desktopBadge = document.getElementById(
+                        "saved-count-desktop",
+                    );
+                    const mobileBadge =
+                        document.getElementById("saved-count-mobile");
 
-                    if(count > 0) {
-                        if(desktopBadge) { 
-                            desktopBadge.innerText = count.toString(); 
-                            desktopBadge.classList.remove('hidden'); 
+                    if (count > 0) {
+                        if (desktopBadge) {
+                            desktopBadge.innerText = count.toString();
+                            desktopBadge.classList.remove("hidden");
                         }
-                        if(mobileBadge) { 
-                            mobileBadge.classList.remove('hidden'); 
+                        if (mobileBadge) {
+                            mobileBadge.classList.remove("hidden");
                         }
                     } else {
-                        if(desktopBadge) desktopBadge.classList.add('hidden');
-                        if(mobileBadge) mobileBadge.classList.add('hidden');
+                        if (desktopBadge) desktopBadge.classList.add("hidden");
+                        if (mobileBadge) mobileBadge.classList.add("hidden");
                     }
                 };
-                
+
                 updateBadge();
-                window.addEventListener('bookmark-updated', updateBadge);
-			});
-		</script>
-	</body>
+                window.addEventListener("bookmark-updated", updateBadge);
+            });
+        </script>
+    </body>
 </html>

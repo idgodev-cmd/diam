@@ -3,6 +3,8 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import ReactionButton from '../../components/ReactionButton.astro';
+import Giscus from '../../components/Giscus.astro';
 
 // 1. Generate URL untuk setiap file markdown yang ada
 export async function getStaticPaths() {
@@ -82,6 +84,10 @@ const heroImage = post.data.heroImage || post.data.image || post.data.cover;
         <article class="prose prose-lg dark:prose-invert prose-headings:font-display prose-headings:font-bold prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-a:text-yellow-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-img:shadow-sm max-w-none">
             <Content />
         </article>
+
+        <!-- Interactions & Comments -->
+        <ReactionButton />
+        <Giscus />
 
     </main>
 
