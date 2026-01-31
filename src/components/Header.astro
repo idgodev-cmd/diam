@@ -1,28 +1,58 @@
 ---
 const pathname = new URL(Astro.request.url).pathname;
-const isActive = (path: string) => pathname === path || (path !== '/' && pathname.startsWith(path));
+const isActive = (path: string) =>
+    pathname === path || (path !== "/" && pathname.startsWith(path));
 ---
 
 <!-- DESKTOP HEADER -->
-<header class="fixed top-0 w-full z-40 bg-paper/90 dark:bg-dark-bg/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 transition-colors">
+<header
+    class="fixed top-0 w-full z-40 bg-paper/90 dark:bg-dark-bg/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 transition-colors"
+>
     <div class="max-w-6xl mx-auto px-6 h-16 flex justify-between items-center">
-        <a href="/" class="font-display font-bold text-lg tracking-tight hover:text-gray-600 dark:hover:text-gray-300 transition-colors" aria-label="Beranda Diam.blog">
+        <a
+            href="/"
+            class="font-display font-bold text-lg tracking-tight hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            aria-label="Beranda Diam.blog"
+        >
             Diam<span class="text-accent">.</span>
         </a>
 
         <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
-            <a href="/" class={`hover:text-ink dark:hover:text-white transition-colors ${isActive('/') ? 'text-ink font-bold dark:text-white' : 'text-gray-500'}`}>Jurnal</a>
-            <a href="/about" class={`hover:text-ink dark:hover:text-white transition-colors ${isActive('/about') ? 'text-ink font-bold dark:text-white' : 'text-gray-500'}`}>Tentang Saya</a>
-            <a href="/now" class={`hover:text-ink dark:hover:text-white transition-colors ${isActive('/now') ? 'text-ink font-bold dark:text-white' : 'text-gray-500'}`}>Now</a>
-            
-            <a href="/saved" class={`hover:text-ink dark:hover:text-white transition-colors flex items-center gap-1 ${isActive('/saved') ? 'text-ink font-bold dark:text-white' : 'text-gray-500'}`}>
+            <a
+                href="/"
+                class={`hover:text-ink dark:hover:text-white transition-colors ${isActive("/") ? "text-ink font-bold dark:text-white" : "text-gray-500"}`}
+                >Jurnal</a
+            >
+            <a
+                href="/about"
+                class={`hover:text-ink dark:hover:text-white transition-colors ${isActive("/about") ? "text-ink font-bold dark:text-white" : "text-gray-500"}`}
+                >Tentang Saya</a
+            >
+            <a
+                href="/now"
+                class={`hover:text-ink dark:hover:text-white transition-colors ${isActive("/now") ? "text-ink font-bold dark:text-white" : "text-gray-500"}`}
+                >Now</a
+            >
+
+            <a
+                href="/saved"
+                class={`hover:text-ink dark:hover:text-white transition-colors flex items-center gap-1 ${isActive("/saved") ? "text-ink font-bold dark:text-white" : "text-gray-500"}`}
+            >
                 <i class="ph-bold ph-bookmark-simple"></i> Tersimpan
-                <span id="saved-count-desktop" class="bg-accent/20 text-[10px] px-1.5 rounded-full hidden">0</span>
+                <span
+                    id="saved-count-desktop"
+                    class="bg-accent/20 text-[10px] px-1.5 rounded-full hidden"
+                    >0</span
+                >
             </a>
 
             <div class="w-px h-4 bg-gray-300 dark:bg-gray-700"></div>
 
-            <button id="theme-toggle-desktop" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-accent/20 transition-colors" aria-label="Ganti Tema">
+            <button
+                id="theme-toggle-desktop"
+                class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-accent/20 transition-colors"
+                aria-label="Ganti Tema"
+            >
                 <i class="ph-bold ph-sun hidden dark:block"></i>
                 <i class="ph-bold ph-moon block dark:hidden"></i>
             </button>
@@ -32,22 +62,54 @@ const isActive = (path: string) => pathname === path || (path !== '/' && pathnam
 
 <!-- MOBILE NAV DOCK -->
 <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
-    <div class="flex items-center gap-1 bg-white/90 dark:bg-dark-card/90 backdrop-blur-md border border-gray-200 dark:border-gray-700 p-2 rounded-full shadow-2xl ring-1 ring-black/5">
-        <a href="/" class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all ${isActive('/') ? 'text-ink bg-gray-100 dark:bg-gray-800 dark:text-white' : 'text-gray-400'}`} aria-label="Beranda">
+    <div
+        class="flex items-center gap-1 bg-white/90 dark:bg-dark-card/90 backdrop-blur-md border border-gray-200 dark:border-gray-700 p-2 rounded-full shadow-2xl ring-1 ring-black/5"
+    >
+        <a
+            href="/"
+            class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all ${isActive("/") ? "text-ink bg-gray-100 dark:bg-gray-800 dark:text-white" : "text-gray-400"}`}
+            aria-label="Beranda"
+        >
             <i class="ph-bold ph-book-open text-xl"></i>
         </a>
-        <a href="/about" class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all ${isActive('/about') ? 'text-ink bg-gray-100 dark:bg-gray-800 dark:text-white' : 'text-gray-400'}`} aria-label="Tentang Saya">
+        <a
+            href="/about"
+            class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all ${isActive("/about") ? "text-ink bg-gray-100 dark:bg-gray-800 dark:text-white" : "text-gray-400"}`}
+            aria-label="Tentang Saya"
+        >
             <i class="ph-bold ph-user text-xl"></i>
         </a>
-        <a href="/now" class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all ${isActive('/now') ? 'text-ink bg-gray-100 dark:bg-gray-800 dark:text-white' : 'text-gray-400'}`} aria-label="Halaman Now">
+        <a
+            href="/now"
+            class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all ${isActive("/now") ? "text-ink bg-gray-100 dark:bg-gray-800 dark:text-white" : "text-gray-400"}`}
+            aria-label="Halaman Now"
+        >
             <i class="ph-bold ph-lightning text-xl"></i>
         </a>
-        <a href="/saved" class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all relative ${isActive('/saved') ? 'text-ink bg-gray-100 dark:bg-gray-800 dark:text-white' : 'text-gray-400'}`} aria-label="Halaman Tersimpan">
+        <a
+            href="/saved"
+            class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all relative ${isActive("/saved") ? "text-ink bg-gray-100 dark:bg-gray-800 dark:text-white" : "text-gray-400"}`}
+            aria-label="Halaman Tersimpan"
+        >
             <i class="ph-bold ph-bookmark-simple text-xl"></i>
-            <span id="saved-count-mobile" class="absolute top-2 right-2 w-2 h-2 bg-accent rounded-full hidden"></span>
+            <span
+                id="saved-count-mobile"
+                class="absolute top-2 right-2 w-2 h-2 bg-accent rounded-full hidden"
+            ></span>
+        </a>
+        <a
+            href="/guestbook"
+            class={`w-12 h-12 flex flex-col items-center justify-center rounded-full transition-all ${isActive("/guestbook") ? "text-ink bg-gray-100 dark:bg-gray-800 dark:text-white" : "text-gray-400"}`}
+            aria-label="Buku Tamu"
+        >
+            <i class="ph-bold ph-chats-circle text-xl"></i>
         </a>
         <div class="w-px h-6 bg-gray-200 mx-1"></div>
-        <button id="theme-toggle-mobile" class="w-12 h-12 flex flex-col items-center justify-center rounded-full text-gray-400 hover:text-accent" aria-label="Ganti Tema">
+        <button
+            id="theme-toggle-mobile"
+            class="w-12 h-12 flex flex-col items-center justify-center rounded-full text-gray-400 hover:text-accent"
+            aria-label="Ganti Tema"
+        >
             <i class="ph-bold ph-sun hidden dark:block text-xl"></i>
             <i class="ph-bold ph-moon block dark:hidden text-xl"></i>
         </button>
@@ -56,34 +118,50 @@ const isActive = (path: string) => pathname === path || (path !== '/' && pathnam
 
 <script>
     // Logic Badge Bookmark & Theme Toggle
-    document.addEventListener('astro:page-load', () => {
+    document.addEventListener("astro:page-load", () => {
         // 1. Update Badge Count
         const updateBadge = () => {
-            const saved = JSON.parse(localStorage.getItem('myBookmarks') || '[]');
+            const saved = JSON.parse(
+                localStorage.getItem("myBookmarks") || "[]",
+            );
             const count = saved.length;
-            
-            const desktopBadge = document.getElementById('saved-count-desktop');
-            const mobileBadge = document.getElementById('saved-count-mobile');
 
-            if(count > 0) {
-                if(desktopBadge) { desktopBadge.innerText = count.toString(); desktopBadge.classList.remove('hidden'); }
-                if(mobileBadge) { mobileBadge.classList.remove('hidden'); }
+            const desktopBadge = document.getElementById("saved-count-desktop");
+            const mobileBadge = document.getElementById("saved-count-mobile");
+
+            if (count > 0) {
+                if (desktopBadge) {
+                    desktopBadge.innerText = count.toString();
+                    desktopBadge.classList.remove("hidden");
+                }
+                if (mobileBadge) {
+                    mobileBadge.classList.remove("hidden");
+                }
             } else {
-                if(desktopBadge) desktopBadge.classList.add('hidden');
-                if(mobileBadge) mobileBadge.classList.add('hidden');
+                if (desktopBadge) desktopBadge.classList.add("hidden");
+                if (mobileBadge) mobileBadge.classList.add("hidden");
             }
         };
-        
+
         updateBadge();
         // Dengerin event custom kalau ada perubahan bookmark
-        window.addEventListener('bookmark-updated', updateBadge);
+        window.addEventListener("bookmark-updated", updateBadge);
 
         // 2. Theme Toggle Logic
         const handleToggle = () => {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+            document.documentElement.classList.toggle("dark");
+            localStorage.setItem(
+                "theme",
+                document.documentElement.classList.contains("dark")
+                    ? "dark"
+                    : "light",
+            );
         };
-        document.getElementById('theme-toggle-desktop')?.addEventListener('click', handleToggle);
-        document.getElementById('theme-toggle-mobile')?.addEventListener('click', handleToggle);
+        document
+            .getElementById("theme-toggle-desktop")
+            ?.addEventListener("click", handleToggle);
+        document
+            .getElementById("theme-toggle-mobile")
+            ?.addEventListener("click", handleToggle);
     });
 </script>
