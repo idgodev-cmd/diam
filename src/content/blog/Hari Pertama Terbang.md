@@ -1,7 +1,7 @@
 ---
 title: "Hari Pertama Terbang"
 description: "Tentang ojol yang curhat, salah terminal, kuping sakit pas take-off, dan side quest hidup yang lebih berkesan dari tujuan."
-pubDate: "Sep 11 2025"
+pubDate: "Sep 10 2025"
 heroImage: "/images/blog/Hari Pertama Terbang.webp"
 tags: ["Cerpen", "Perjalanan", "Hidup"]
 ---
