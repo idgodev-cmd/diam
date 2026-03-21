@@ -1,5 +1,5 @@
 ---
-title: "Detox Social Media (Atau Gua Lagi Kabur?)"
+title: "Detox Social Media"
 description: "Tentang berhenti dari sosial media, tapi ternyata yang dihindari bukan orang lain."
 pubDate: "Mar 21 2026"
 heroImage: ""
