@@ -2,7 +2,7 @@
 title: "Detox Social Media (Atau Gua Lagi Kabur?)"
 description: "Tentang berhenti dari sosial media, tapi ternyata yang dihindari bukan orang lain."
 pubDate: "Mar 21 2026"
-heroImage: "/images/blog/detox-social-media.png"
+heroImage: ""
 tags: ["Refleksi", "Hidup", "Digital Life"]
 ---
 
