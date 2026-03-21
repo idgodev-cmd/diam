@@ -70,7 +70,10 @@ const totalPosts = allPosts.length;
                                         {new Date(post.data.pubDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
                                     </time>
                                     <div class="flex-1 min-w-0">
-                                        <h3 class="font-display font-bold text-base group-hover:text-accent transition-colors truncate">
+                                        <h3 
+                                            class="font-display font-bold text-base group-hover:text-accent transition-colors truncate"
+                                            style={`view-transition-name: post-title-${post.slug};`}
+                                        >
                                             {post.data.title}
                                         </h3>
                                         <div class="flex items-center gap-3 mt-1">
