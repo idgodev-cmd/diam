@@ -66,9 +66,9 @@ const postsJson = JSON.stringify(allPosts.map(p => ({
                 <article class="group cursor-pointer flex flex-col h-full relative border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:shadow-lg transition-all bg-white dark:bg-dark-card">
                     <a href="/blog/${post.slug}" class="block h-full">
                         <div class="aspect-video w-full bg-gray-200 dark:bg-gray-800 rounded-lg overflow-hidden mb-4 relative">
-                            ${post.heroImage ? `<img src="${post.heroImage}" class="w-full h-full object-cover" />` : ''}
+                            ${post.heroImage ? `<img src="${post.heroImage}" class="w-full h-full object-cover" style="view-transition-name: post-img-${post.slug};" />` : ''}
                         </div>
-                        <h3 class="font-display font-bold text-xl mb-2 group-hover:text-accent transition-colors">${post.title}</h3>
+                        <h3 class="font-display font-bold text-xl mb-2 group-hover:text-accent transition-colors" style="view-transition-name: post-title-${post.slug};">${post.title}</h3>
                         <p class="text-sm text-gray-500 line-clamp-2">${post.desc}</p>
                     </a>
                     

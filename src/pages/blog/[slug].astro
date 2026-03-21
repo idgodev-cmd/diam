@@ -79,7 +79,7 @@ const optimizedHero = heroImage ? getOptimizedHero(heroImage) : null;
                             </a>
                         ))}
                     </div>
-                    <h1 class="font-display font-extrabold text-3xl md:text-5xl leading-tight mb-4 text-ink dark:text-white">
+                    <h1 class="font-display font-extrabold text-3xl md:text-5xl leading-tight mb-4 text-ink dark:text-white" transition:name={`post-title-${post.slug}`}>
                         {post.data.title}
                     </h1>
                     <div class="flex items-center gap-3 text-sm text-gray-500">
@@ -109,6 +109,7 @@ const optimizedHero = heroImage ? getOptimizedHero(heroImage) : null;
                             class="w-full object-cover aspect-video" 
                             loading="eager"
                             fetchpriority="high"
+                            transition:name={`post-img-${post.slug}`}
                             onerror={`this.onerror=null; this.src='${heroImage}';`}
                         />
                     </div>
