@@ -35,9 +35,15 @@
 
         const miniThemeBtn = document.getElementById("mini-theme-toggle");
 
+        // Hide entirely if already installed/standalone
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true;
+        if (isStandalone && popup) {
+            popup.style.display = 'none';
+        }
+
         // Show popup after a bit of scroll
         window.addEventListener("scroll", () => {
-            if (window.scrollY > 300) {
+            if (window.scrollY > 300 && !isStandalone) {
                 popup?.classList.remove("opacity-0", "translate-y-20");
             } else {
                 popup?.classList.add("opacity-0", "translate-y-20");
@@ -59,7 +65,7 @@
         installBtn?.addEventListener("click", () => {
             if (!deferredPrompt) {
                 // Biar tetep ngasih tau user kalau emang belum/nggak support
-                window.showToast?.("Tekan tombol Share/Add to Homescreen di browser kamu");
+                if (window.showToast) window.showToast("Tekan tombol Share/Add to Homescreen di browser kamu");
                 return;
             }
             // Show the install prompt
@@ -73,6 +79,10 @@
                 }
                 deferredPrompt = null;
             });
+        });
+
+        window.addEventListener("appinstalled", () => {
+            if (popup) popup.style.display = 'none';
         });
     });
 </script>

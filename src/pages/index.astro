@@ -96,7 +96,7 @@ const schemaData = {
             <div>
                 <h1 class="font-display font-bold text-3xl md:text-4xl mb-3 leading-tight">
                     <span class="text-gray-400 block text-lg font-medium mb-1 hero-reveal" style="--delay: 0s">Halo,</span>
-                    <span class="hero-reveal" style="--delay: 0.2s">Saya cuma </span><span class="bg-gradient-to-r from-accent/50 to-accent/50 bg-[length:100%_40%] bg-bottom bg-no-repeat"><span id="typewriter" class="hero-reveal" style="--delay: 0.4s"></span></span><span class="hero-reveal" style="--delay: 0.4s"> hidup.</span>
+                    <span class="hero-reveal inline-block" style="--delay: 0.2s">Saya cuma </span><span class="bg-gradient-to-r from-accent/50 to-accent/50 bg-[length:100%_40%] bg-bottom bg-no-repeat inline-block"><span id="typewriter" class="hero-reveal inline-block" style="--delay: 0.4s"></span></span><span class="hero-reveal inline-block" style="--delay: 0.4s"> hidup.</span>
                 </h1>
                 <p class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed max-w-lg hero-reveal" style="--delay: 0.6s">
                     Menulis untuk merayakan kebingungan quarter-life crisis, menertawakan tagihan bulanan, dan mencari arti di balik bubur ayam yang diaduk.
@@ -200,11 +200,13 @@ const schemaData = {
             </div>
 
             <!-- TOMBOL LOAD MORE (FIXED OVERLAP) -->
-            <!-- pb-32: Kasih jarak bawah LEBAR biar gak ketutupan nav mobile -->
-            <!-- z-40: Biar layer-nya di atas elemen background -->
-            <div class="text-center pb-32 md:pb-12 relative z-40">
+            <!-- pb-40: Kasih jarak bawah LEBAR biar gak ketutupan nav mobile -->
+            <!-- z-[60]: Biar layer-nya di atas elemen background & dock -->
+            <div class="text-center pb-40 md:pb-12 relative z-[60] pointer-events-auto flex items-center justify-center">
                 <button 
                     id="load-more-btn" 
+                    type="button"
+                    style="touch-action: manipulation;"
                     class="group px-6 py-3 border border-dashed border-gray-400 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 hover:border-accent hover:text-accent transition-all duration-300 font-medium text-sm flex items-center gap-2 mx-auto disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-paper dark:bg-dark-bg shadow-sm"
                 >
                     <span>Lihat Artikel Lain</span>

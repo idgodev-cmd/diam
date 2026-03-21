@@ -10,25 +10,7 @@ const postsData = JSON.stringify(allPosts.map(p => ({
 })));
 ---
 
-<!-- Search Trigger Button (Keyboard shortcut hint) -->
-<button 
-    id="search-trigger"
-    class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 rounded-lg text-sm text-gray-400 hover:text-ink dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-200 dark:border-gray-700"
-    aria-label="Cari tulisan"
->
-    <i class="ph-bold ph-magnifying-glass text-xs"></i>
-    <span class="text-xs">Cari...</span>
-    <kbd class="text-[10px] bg-white dark:bg-gray-900 px-1.5 py-0.5 rounded border border-gray-300 dark:border-gray-600 font-mono ml-2">⌘K</kbd>
-</button>
 
-<!-- Mobile Search Button -->
-<button 
-    id="search-trigger-mobile"
-    class="md:hidden w-12 h-12 flex flex-col items-center justify-center rounded-full text-gray-400 hover:text-accent transition-all"
-    aria-label="Cari tulisan"
->
-    <i class="ph-bold ph-magnifying-glass text-xl"></i>
-</button>
 
 <!-- Search Overlay -->
 <div 
@@ -76,8 +58,8 @@ const postsData = JSON.stringify(allPosts.map(p => ({
         const input = document.getElementById('search-input');
         const results = document.getElementById('search-results');
         const emptyState = document.getElementById('search-empty');
-        const triggerDesktop = document.getElementById('search-trigger');
-        const triggerMobile = document.getElementById('search-trigger-mobile');
+        const triggerDesktop = document.getElementById('search-trigger-desktop');
+        const triggerMobile = document.getElementById('search-trigger-mobile-dock');
 
         if (!overlay || !input || !results) return;
 
