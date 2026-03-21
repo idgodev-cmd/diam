@@ -3,105 +3,206 @@
 ---
 
 <!-- Reading Controls Bar -->
-<div id="reading-controls" class="sticky top-16 z-30 bg-paper/95 dark:bg-dark-bg/95 backdrop-blur-sm border-b border-gray-100 dark:border-gray-800 py-2 px-4 flex items-center justify-between gap-4 text-sm -mx-6 mb-6">
-    
+<div
+    id="reading-controls"
+    class="sticky top-16 z-30 bg-paper/95 dark:bg-dark-bg/95 backdrop-blur-sm border-b border-gray-100 dark:border-gray-800 py-2 px-4 flex items-center justify-between gap-4 text-sm -mx-6 mb-6"
+>
     <!-- Font Size -->
     <div class="flex items-center gap-3">
-        <span class="text-gray-400 text-xs font-medium hidden sm:inline">Ukuran</span>
-        <div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-0.5">
-            <button data-size="sm" class="font-size-btn px-2 py-1 rounded-md text-xs font-medium text-gray-500 hover:text-ink dark:hover:text-white transition-colors" title="Kecil">A</button>
-            <button data-size="md" class="font-size-btn px-2 py-1 rounded-md text-xs font-bold text-gray-500 hover:text-ink dark:hover:text-white transition-colors" title="Sedang">A</button>
-            <button data-size="lg" class="font-size-btn px-2.5 py-1 rounded-md text-sm font-bold text-gray-500 hover:text-ink dark:hover:text-white transition-colors" title="Besar">A</button>
-            <button data-size="xl" class="font-size-btn px-2.5 py-1 rounded-md text-base font-bold text-gray-500 hover:text-ink dark:hover:text-white transition-colors" title="Ekstra Besar">A</button>
+        <span class="text-gray-400 text-xs font-medium hidden sm:inline"
+            >Ukuran</span
+        >
+        <div
+            class="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-0.5"
+        >
+            <button
+                data-size="sm"
+                class="font-size-btn px-2 py-1 rounded-md text-xs font-medium text-gray-500 hover:text-ink dark:hover:text-white transition-colors"
+                title="Kecil">A</button
+            >
+            <button
+                data-size="md"
+                class="font-size-btn px-2 py-1 rounded-md text-xs font-bold text-gray-500 hover:text-ink dark:hover:text-white transition-colors"
+                title="Sedang">A</button
+            >
+            <button
+                data-size="lg"
+                class="font-size-btn px-2.5 py-1 rounded-md text-sm font-bold text-gray-500 hover:text-ink dark:hover:text-white transition-colors"
+                title="Besar">A</button
+            >
+            <button
+                data-size="xl"
+                class="font-size-btn px-2.5 py-1 rounded-md text-base font-bold text-gray-500 hover:text-ink dark:hover:text-white transition-colors"
+                title="Ekstra Besar">A</button
+            >
         </div>
     </div>
 
     <!-- Fokus Mode Toggle -->
-    <button 
-        id="fokus-toggle" 
+    <button
+        id="fokus-toggle"
         class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-500 hover:text-ink dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
     >
         <i class="ph-bold ph-eye"></i>
-        <span class="hidden sm:inline">Fokus</span>
+        <span class="hidden sm:inline">Baca Otomatis</span>
     </button>
 </div>
 
 <script>
-    document.addEventListener('astro:page-load', () => {
-        const article = document.querySelector('article.prose');
+    document.addEventListener("astro:page-load", () => {
+        const article = document.querySelector("article.prose");
         if (!article) return;
 
         // === FONT SIZE ===
         const sizeMap: Record<string, string> = {
-            sm: 'prose-sm',
-            md: 'prose-lg',
-            lg: 'prose-xl',
-            xl: 'prose-2xl'
+            sm: "prose-sm",
+            md: "prose-lg",
+            lg: "prose-xl",
+            xl: "prose-2xl",
         };
-        
-        const saved = localStorage.getItem('fontSize') || 'md';
-        
+
+        const saved = localStorage.getItem("fontSize") || "md";
+
         const applySize = (size: string) => {
-            Object.values(sizeMap).forEach(cls => article.classList.remove(cls));
+            Object.values(sizeMap).forEach((cls) =>
+                article.classList.remove(cls),
+            );
             article.classList.add(sizeMap[size]);
-            localStorage.setItem('fontSize', size);
-            
+            localStorage.setItem("fontSize", size);
+
             // Update button states
-            document.querySelectorAll('.font-size-btn').forEach(btn => {
+            document.querySelectorAll(".font-size-btn").forEach((btn) => {
                 const btnSize = (btn as HTMLElement).dataset.size;
                 if (btnSize === size) {
-                    btn.classList.add('bg-white', 'dark:bg-gray-700', 'text-ink', 'dark:text-white', 'shadow-sm');
-                    btn.classList.remove('text-gray-500');
+                    btn.classList.add(
+                        "bg-white",
+                        "dark:bg-gray-700",
+                        "text-ink",
+                        "dark:text-white",
+                        "shadow-sm",
+                    );
+                    btn.classList.remove("text-gray-500");
                 } else {
-                    btn.classList.remove('bg-white', 'dark:bg-gray-700', 'text-ink', 'dark:text-white', 'shadow-sm');
-                    btn.classList.add('text-gray-500');
+                    btn.classList.remove(
+                        "bg-white",
+                        "dark:bg-gray-700",
+                        "text-ink",
+                        "dark:text-white",
+                        "shadow-sm",
+                    );
+                    btn.classList.add("text-gray-500");
                 }
             });
         };
 
         applySize(saved);
 
-        document.querySelectorAll('.font-size-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const size = (btn as HTMLElement).dataset.size || 'md';
+        document.querySelectorAll(".font-size-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const size = (btn as HTMLElement).dataset.size || "md";
                 applySize(size);
             });
         });
 
-        // === FOKUS MODE ===
-        const fokusBtn = document.getElementById('fokus-toggle');
-        let fokusActive = false;
+        // === FOKUS / AUTO-READ MODE ===
+        const fokusBtn = document.getElementById("fokus-toggle");
+        let isRunning = false;
+        let currentIndex = -1;
+        let timer: ReturnType<typeof setTimeout> | null = null;
         let styleEl: HTMLStyleElement | null = null;
 
-        fokusBtn?.addEventListener('click', () => {
-            fokusActive = !fokusActive;
+        const stopAutoRead = () => {
+            isRunning = false;
+            if (timer) clearTimeout(timer);
+            fokusBtn?.classList.remove('bg-accent/20', 'text-accent');
+            const icon = fokusBtn?.querySelector('i');
+            if (icon) icon.className = 'ph-bold ph-eye';
+            const span = fokusBtn?.querySelector('span');
+            if (span) span.textContent = 'Baca Otomatis';
+            
+            // Cleanup highlights
+            const children = article.children;
+            for (let i = 0; i < children.length; i++) {
+                children[i].classList.remove('fokus-highlight', 'fokus-dim');
+            }
+            document.getElementById('fokus-style')?.remove();
+            styleEl = null;
+        };
 
-            if (fokusActive) {
-                fokusBtn.classList.add('bg-accent/20', 'text-accent');
-                fokusBtn.querySelector('span')!.textContent = 'Fokus ON';
-                
-                // Add focus mode styles
+        const startAutoRead = () => {
+            isRunning = true;
+            fokusBtn?.classList.add('bg-accent/20', 'text-accent');
+            const icon = fokusBtn?.querySelector('i');
+            if (icon) icon.className = 'ph-bold ph-pause';
+            const span = fokusBtn?.querySelector('span');
+            if (span) span.textContent = 'Berhenti';
+
+            // Add basic styles
+            if (!document.getElementById('fokus-style')) {
                 styleEl = document.createElement('style');
                 styleEl.id = 'fokus-style';
                 styleEl.textContent = `
-                    article.prose > *:not(:hover) {
-                        opacity: 0.3;
-                        transition: opacity 0.3s ease;
+                    .fokus-dim { opacity: 0.15; transition: opacity 0.5s ease; filter: blur(1px); }
+                    .fokus-highlight { 
+                        opacity: 1 !important; 
+                        filter: none !important;
+                        transition: all 0.3s ease; 
+                        transform: scale(1.02);
+                        transform-origin: left;
+                        background: rgba(255, 255, 0, 0.05);
+                        border-left: 4px solid #facc15;
+                        padding-left: 1rem;
+                        color: #000 !important;
                     }
-                    article.prose > *:hover {
-                        opacity: 1;
-                        transition: opacity 0.15s ease;
+                    .dark .fokus-highlight { 
+                        color: #fff !important; 
+                        background: rgba(255, 255, 255, 0.05);
                     }
                 `;
                 document.head.appendChild(styleEl);
-            } else {
-                fokusBtn.classList.remove('bg-accent/20', 'text-accent');
-                const spanEl = fokusBtn.querySelector('span');
-                if (spanEl) spanEl.textContent = 'Fokus';
-                
-                // Remove focus styles
-                document.getElementById('fokus-style')?.remove();
             }
+
+            const children = Array.from(article.children).filter(el => 
+                ['P', 'H2', 'H3', 'LI', 'BLOCKQUOTE'].includes(el.tagName)
+            );
+
+            const next = () => {
+                if (!isRunning) return;
+                currentIndex++;
+                
+                if (currentIndex >= children.length) {
+                    stopAutoRead();
+                    return;
+                }
+
+                // Global dim
+                children.forEach(el => {
+                    el.classList.remove('fokus-highlight');
+                    el.classList.add('fokus-dim');
+                });
+
+                const currentEl = children[currentIndex] as HTMLElement;
+                currentEl.classList.remove('fokus-dim');
+                currentEl.classList.add('fokus-highlight');
+
+                // Scroll to center
+                currentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Calculate time based on words (WPM = 180)
+                const text = currentEl.innerText || "";
+                const words = text.split(/\s+/).length;
+                const delay = Math.max(2500, (words / 180) * 60000);
+
+                timer = setTimeout(next, delay);
+            };
+
+            currentIndex = -1;
+            next();
+        };
+
+        fokusBtn?.addEventListener("click", () => {
+            if (isRunning) stopAutoRead();
+            else startAutoRead();
         });
     });
 </script>
