@@ -1,0 +1,222 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const totalPosts = allPosts.length;
+const totalWords = allPosts.reduce((sum, p) => sum + (p.body?.split(/\s+/).length || 0), 0);
+const firstYear = allPosts
+    .map(p => new Date(p.data.pubDate).getFullYear())
+    .sort((a, b) => a - b)[0] || 2011;
+
+const interests = ["Kopi Hitam ☕", "Rebahan 🛋️", "Overthinking 🧠", "Menulis ✍️", "Debugging Hidup 🐛", "Nonton 2AM 🌙"];
+
+const resume = [
+    { year: "2011", role: "Anak SMK yang Gabut Nulis Blog", desc: "Nulis pertama kali di blogspot yang lupa password sekarang." },
+    { year: "2013", role: "Pelajar & Pengamat Kantin", desc: "Mulai ngamatin kehidupan sekitar. Kantin kampus jadi laboratorium observasi." },
+    { year: "2025", role: "Quarter-Life Crisis Survivor", desc: "Pindah ke internet. Blog jadi terapi gratis tanpa perlu bayar psikolog." },
+    { year: "2026", role: "Pura-Pura Paham Hidup", desc: "Masih nulis. Masih bingung. Tapi setidaknya sekarang ada yang baca." },
+];
+---
+
+<BaseLayout title="Tentang Saya" description="Bukan CV, cuma cerita dari orang yang kebanyakan mikir tapi jarang ngomong.">
+    <Header />
+
+    <!-- Page gradient (same as other pages) -->
+    <div class="fixed inset-0 pointer-events-none z-0 bg-gradient-to-br from-accent/5 via-transparent to-pink-500/5 dark:from-accent/3 dark:to-purple-900/5"></div>
+
+    <main class="max-w-6xl mx-auto px-6 pt-32 pb-20 min-h-screen relative z-10">
+        
+        <!-- GRID: Sidebar + Content (same as blog posts) -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 animate-fade-in">
+
+            <!-- SIDEBAR (Sticky) -->
+            <aside class="md:col-span-4 md:sticky md:top-32 h-fit text-center md:text-left">
+                
+                <!-- Animated gradient ring avatar -->
+                <div class="relative w-40 h-40 mx-auto md:mx-0 mb-6">
+                    <div class="absolute inset-0 rounded-full bg-gradient-conic animate-spin-slow" style="padding: 3px;">
+                        <div class="w-full h-full rounded-full bg-paper dark:bg-dark-bg"></div>
+                    </div>
+                    <div class="absolute inset-[4px] rounded-full overflow-hidden">
+                        <img 
+                            src="/images/avatardiam.webp" 
+                            alt="Foto profil penulis Diam.blog" 
+                            width="160" height="160" 
+                            class="object-cover w-full h-full"
+                        >
+                    </div>
+                    <div class="absolute bottom-2 right-2 w-5 h-5 bg-green-500 border-4 border-paper dark:border-dark-bg rounded-full" title="Online (tapi males bales chat)"></div>
+                </div>
+
+                <!-- Name + Typing Bio -->
+                <h1 class="font-display font-bold text-2xl text-ink dark:text-white mb-1">Penulis Iseng</h1>
+                <p id="typing-bio" class="text-sm text-gray-500 dark:text-gray-400 h-5 mb-6"></p>
+
+                <!-- Interest Tags -->
+                <div class="flex flex-wrap justify-center md:justify-start gap-2 mb-8">
+                    {interests.map(item => (
+                        <span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-gray-100 dark:bg-gray-800 text-gray-500 rounded-md border border-gray-200 dark:border-gray-700">
+                            {item}
+                        </span>
+                    ))}
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="text-center stat-card" data-target={totalPosts}>
+                        <div class="text-2xl font-bold font-display text-accent stat-number">0</div>
+                        <div class="text-[10px] text-gray-400 uppercase tracking-wider">Tulisan</div>
+                    </div>
+                    <div class="text-center stat-card" data-target={Math.round(totalWords / 1000)} data-suffix="K+">
+                        <div class="text-2xl font-bold font-display text-accent stat-number">0</div>
+                        <div class="text-[10px] text-gray-400 uppercase tracking-wider">Kata</div>
+                    </div>
+                    <div class="text-center stat-card" data-target={firstYear} data-raw="true">
+                        <div class="text-2xl font-bold font-display text-accent stat-number">0</div>
+                        <div class="text-[10px] text-gray-400 uppercase tracking-wider">Sejak</div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- MAIN CONTENT -->
+            <article class="md:col-span-8">
+                <div class="prose prose-lg dark:prose-invert prose-headings:font-display prose-p:text-gray-600 dark:prose-p:text-gray-400 prose-p:leading-8 prose-blockquote:border-accent prose-blockquote:bg-gray-50 dark:prose-blockquote:bg-gray-800/30 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg max-w-none">
+                    
+                    <h2 class="text-3xl md:text-4xl font-bold mb-8 text-ink dark:text-white">
+                        Bukan CV, cuma cerita.
+                    </h2>
+
+                    <p>
+                        Hai. Saya orang biasa yang nulis di internet. Umur sudah mendekati kepala tiga, 
+                        pinggang mulai protes kalau duduk kelamaan, dan sampai sekarang masih suka mikir 
+                        <span class="px-1 font-medium text-ink dark:text-white bg-accent/20 rounded">"sebenarnya gua mau jadi apa?"</span>.
+                    </p>
+
+                    <p>
+                        Blog ini bukan portofolio, bukan personal branding, dan jelas bukan CV. 
+                        Ini cuma kumpulan catatan orang yang kebanyakan mikir tapi jarang ngomong. 
+                        Kalau dipendem terus, kepala berisik. Jadi ditulis.
+                    </p>
+
+                    <blockquote>
+                        "Menulis adalah cara terbaik berbicara tanpa harus diinterupsi."
+                    </blockquote>
+
+                    <p>
+                        Saya nulis soal hidup yang kadang lucu, sering absurd, dan sesekali capek. 
+                        Soal <em>quarter-life crisis</em>, kopi dingin, penghasilan yang pas-pasan tapi masih 
+                        bersyukur, dan pertanyaan-pertanyaan kecil yang biasanya muncul jam dua pagi.
+                    </p>
+
+                    <p>
+                        Kalau kamu nemu tulisan yang terasa "kok ini gua banget", tenang, 
+                        kita sama-sama lagi pura-pura paham hidup. 
+                        Bedanya, saya ngetiknya di sini.
+                    </p>
+                </div>
+
+                <!-- Resume Kehidupan -->
+                <div class="mt-16 pt-8 border-t border-gray-100 dark:border-gray-800">
+                    <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-8">📄 Resume Kehidupan</h3>
+                    <div class="space-y-6">
+                        {resume.map(item => (
+                            <div class="flex gap-4 md:gap-6 group">
+                                <div class="flex-shrink-0 w-14 md:w-16 text-right">
+                                    <span class="text-sm font-bold font-mono text-accent">{item.year}</span>
+                                </div>
+                                <div class="relative pl-6 border-l-2 border-gray-200 dark:border-gray-700 group-hover:border-accent transition-colors pb-1">
+                                    <div class="absolute left-[-5px] top-1.5 w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600 group-hover:bg-accent transition-colors"></div>
+                                    <h4 class="font-display font-bold text-sm text-ink dark:text-white mb-1">{item.role}</h4>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{item.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <!-- Signature -->
+                <div class="mt-12 pt-8 border-t border-gray-100 dark:border-gray-800">
+                    <p class="font-hand text-2xl text-gray-400 rotate-[-2deg]">
+                        Salam hangat, <span class="text-accent underline decoration-wavy">Si Penulis.</span>
+                    </p>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <Footer />
+</BaseLayout>
+
+<style>
+    .bg-gradient-conic {
+        background: conic-gradient(#F4D03F, #ff6b6b, #a855f7, #3b82f6, #10b981, #F4D03F);
+    }
+    @keyframes spin-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+        animation: spin-slow 4s linear infinite;
+    }
+</style>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        // Typing Bio
+        const bioEl = document.getElementById('typing-bio');
+        if (bioEl && !bioEl.dataset.init) {
+            bioEl.dataset.init = 'true';
+            const titles = [
+                "Penulis iseng ✍️",
+                "Tukang kopi ☕",
+                "Profesional rebahan 🛋️",
+                "Debugger kehidupan 🐛",
+                "Survivor quarter-life crisis 💀",
+                "Manusia biasa yang punya kuota 📱"
+            ];
+            let titleIdx = 0, charIdx = 0, deleting = false, pause = 0;
+            const tick = () => {
+                const cur = titles[titleIdx];
+                if (!deleting) {
+                    bioEl.textContent = cur.slice(0, charIdx + 1);
+                    charIdx++;
+                    pause = charIdx >= cur.length ? (deleting = true, 2000) : 60 + Math.random() * 30;
+                } else {
+                    bioEl.textContent = cur.slice(0, charIdx);
+                    charIdx--;
+                    if (charIdx < 0) { deleting = false; charIdx = 0; titleIdx = (titleIdx + 1) % titles.length; pause = 300; }
+                    else pause = 30;
+                }
+                setTimeout(tick, pause);
+            };
+            setTimeout(tick, 600);
+        }
+
+        // Animated Stats
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (!e.isIntersecting) return;
+                const card = e.target as HTMLElement;
+                const numEl = card.querySelector('.stat-number');
+                const target = parseInt(card.dataset.target || '0');
+                const suffix = card.dataset.suffix || '';
+                const isRaw = card.dataset.raw === 'true';
+                if (numEl && !card.dataset.counted) {
+                    card.dataset.counted = 'true';
+                    let cur = 0;
+                    const step = Math.max(1, Math.floor(target / 40));
+                    const iv = setInterval(() => {
+                        cur += step;
+                        if (cur >= target) { cur = target; clearInterval(iv); }
+                        numEl.textContent = isRaw ? cur.toString() : cur + suffix;
+                    }, 30);
+                }
+                obs.unobserve(card);
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('.stat-card').forEach(c => obs.observe(c));
+    });
+</script>

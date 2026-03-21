@@ -1,0 +1,75 @@
+---
+
+---
+
+<div id="reading-streak" class="hidden fixed bottom-24 left-6 md:bottom-8 md:left-8 z-30 bg-white/95 dark:bg-dark-card/95 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 px-4 py-3 flex items-center gap-3 animate-slide-up">
+    <div class="text-2xl" id="streak-emoji">🔥</div>
+    <div>
+        <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">Reading Streak</div>
+        <div class="text-sm font-bold text-ink dark:text-white">
+            <span id="streak-count">0</span> hari berturut-turut!
+        </div>
+    </div>
+    <button id="streak-close" class="ml-2 text-gray-400 hover:text-ink dark:hover:text-white transition-colors">
+        <i class="ph-bold ph-x text-xs"></i>
+    </button>
+</div>
+
+<style>
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-slide-up {
+        animation: slideUp 0.4s ease-out;
+    }
+</style>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        const container = document.getElementById('reading-streak');
+        const countEl = document.getElementById('streak-count');
+        const emojiEl = document.getElementById('streak-emoji');
+        const closeBtn = document.getElementById('streak-close');
+        
+        if (!container || !countEl || !emojiEl) return;
+
+        // Only show on blog pages
+        if (!window.location.pathname.startsWith('/blog/')) return;
+
+        const today = new Date().toDateString();
+        const streakData = JSON.parse(localStorage.getItem('readingStreak') || '{}');
+
+        // Update streak
+        if (streakData.lastRead === today) {
+            // Already counted today
+        } else {
+            const yesterday = new Date(Date.now() - 86400000).toDateString();
+            if (streakData.lastRead === yesterday) {
+                streakData.count = (streakData.count || 0) + 1;
+            } else {
+                streakData.count = 1;
+            }
+            streakData.lastRead = today;
+            localStorage.setItem('readingStreak', JSON.stringify(streakData));
+        }
+
+        const streak = streakData.count || 1;
+        countEl.textContent = streak.toString();
+
+        // Emoji based on streak
+        if (streak >= 7) emojiEl.textContent = '🏆';
+        else if (streak >= 5) emojiEl.textContent = '⚡';
+        else if (streak >= 3) emojiEl.textContent = '🔥';
+        else emojiEl.textContent = '📖';
+
+        // Show only if streak >= 2
+        if (streak >= 2) {
+            setTimeout(() => container.classList.remove('hidden'), 2000);
+        }
+
+        closeBtn?.addEventListener('click', () => {
+            container.classList.add('hidden');
+        });
+    });
+</script>

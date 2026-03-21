@@ -1,0 +1,62 @@
+---
+interface Props {
+    currentSlug: string;
+    currentTags: string[];
+    allPosts: any[];
+}
+
+const { currentSlug, currentTags, allPosts } = Astro.props;
+
+// Cari artikel yang punya tag yang sama
+const relatedPosts = allPosts
+    .filter(p => p.slug !== currentSlug) // Exclude artikel yang sedang dibaca
+    .map(p => {
+        // Hitung berapa tag yang match
+        const matchCount = p.data.tags?.filter((t: string) => currentTags.includes(t)).length || 0;
+        return { ...p, matchCount };
+    })
+    .sort((a, b) => {
+        // Sort by match count (desc), then by date (desc)
+        if (b.matchCount !== a.matchCount) return b.matchCount - a.matchCount;
+        return new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf();
+    })
+    .slice(0, 3); // Ambil 3 artikel teratas
+---
+
+{relatedPosts.length > 0 && (
+    <section class="mt-16 pt-10 border-t border-gray-100 dark:border-gray-800">
+        <h3 class="font-display font-bold text-xl mb-6 flex items-center gap-2">
+            <i class="ph-bold ph-books text-accent"></i>
+            Baca Juga
+        </h3>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {relatedPosts.map(post => (
+                <a href={`/blog/${post.slug}`} class="group block">
+                    <article class="flex flex-col gap-3">
+                        {post.data.heroImage && (
+                            <div class="aspect-[16/9] rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
+                                <img 
+                                    src={post.data.heroImage}
+                                    alt={post.data.title}
+                                    width="300"
+                                    height="169"
+                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    loading="lazy"
+                                />
+                            </div>
+                        )}
+                        <div>
+                            <h4 class="font-display font-bold text-sm leading-tight group-hover:text-accent transition-colors line-clamp-2">
+                                {post.data.title}
+                            </h4>
+                            <time class="text-xs text-gray-400 mt-1 block">
+                                {new Date(post.data.pubDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                            </time>
+                        </div>
+                    </article>
+                </a>
+            ))}
+        </div>
+    </section>
+)}

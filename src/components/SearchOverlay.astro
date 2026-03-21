@@ -1,0 +1,213 @@
+---
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const postsData = JSON.stringify(allPosts.map(p => ({
+    slug: p.slug,
+    title: p.data.title,
+    description: p.data.description,
+    tags: p.data.tags || [],
+})));
+---
+
+<!-- Search Trigger Button (Keyboard shortcut hint) -->
+<button 
+    id="search-trigger"
+    class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 rounded-lg text-sm text-gray-400 hover:text-ink dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-200 dark:border-gray-700"
+    aria-label="Cari tulisan"
+>
+    <i class="ph-bold ph-magnifying-glass text-xs"></i>
+    <span class="text-xs">Cari...</span>
+    <kbd class="text-[10px] bg-white dark:bg-gray-900 px-1.5 py-0.5 rounded border border-gray-300 dark:border-gray-600 font-mono ml-2">⌘K</kbd>
+</button>
+
+<!-- Mobile Search Button -->
+<button 
+    id="search-trigger-mobile"
+    class="md:hidden w-12 h-12 flex flex-col items-center justify-center rounded-full text-gray-400 hover:text-accent transition-all"
+    aria-label="Cari tulisan"
+>
+    <i class="ph-bold ph-magnifying-glass text-xl"></i>
+</button>
+
+<!-- Search Overlay -->
+<div 
+    id="search-overlay" 
+    class="fixed inset-0 z-[100] hidden"
+>
+    <!-- Backdrop -->
+    <div id="search-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+    
+    <!-- Search Panel -->
+    <div class="relative max-w-2xl mx-auto mt-[15vh] px-4">
+        <div class="bg-white dark:bg-dark-card rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <!-- Input -->
+            <div class="flex items-center gap-3 px-5 border-b border-gray-100 dark:border-gray-800">
+                <i class="ph-bold ph-magnifying-glass text-gray-400"></i>
+                <input 
+                    id="search-input"
+                    type="text"
+                    placeholder="Cari tulisan..."
+                    class="flex-1 py-4 text-lg bg-transparent outline-none text-ink dark:text-white placeholder-gray-400"
+                    autocomplete="off"
+                    autocorrect="off"
+                    spellcheck="false"
+                />
+                <kbd class="text-xs text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded border border-gray-200 dark:border-gray-700 font-mono">ESC</kbd>
+            </div>
+
+            <!-- Results -->
+            <div id="search-results" class="max-h-[50vh] overflow-y-auto">
+                <!-- Filled by JS -->
+                <div id="search-empty" class="p-8 text-center text-gray-400">
+                    <i class="ph-duotone ph-magnifying-glass text-3xl mb-2 block"></i>
+                    <p class="text-sm">Ketik untuk mencari tulisan...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script define:vars={{ postsData }}>
+    document.addEventListener('astro:page-load', () => {
+        const posts = JSON.parse(postsData);
+        const overlay = document.getElementById('search-overlay');
+        const backdrop = document.getElementById('search-backdrop');
+        const input = document.getElementById('search-input');
+        const results = document.getElementById('search-results');
+        const emptyState = document.getElementById('search-empty');
+        const triggerDesktop = document.getElementById('search-trigger');
+        const triggerMobile = document.getElementById('search-trigger-mobile');
+
+        if (!overlay || !input || !results) return;
+
+        let selectedIndex = -1;
+
+        const openSearch = () => {
+            overlay.classList.remove('hidden');
+            input.value = '';
+            input.focus();
+            selectedIndex = -1;
+            showEmpty();
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeSearch = () => {
+            overlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        };
+
+        const showEmpty = () => {
+            if (emptyState) {
+                results.innerHTML = '';
+                results.appendChild(emptyState);
+                emptyState.classList.remove('hidden');
+            }
+        };
+
+        const search = (query) => {
+            if (!query.trim()) {
+                showEmpty();
+                return;
+            }
+
+            const q = query.toLowerCase();
+            const matched = posts.filter(p => 
+                p.title.toLowerCase().includes(q) || 
+                p.description.toLowerCase().includes(q) ||
+                p.tags.some(t => t.toLowerCase().includes(q))
+            );
+
+            selectedIndex = -1;
+
+            if (matched.length === 0) {
+                results.innerHTML = `
+                    <div class="p-8 text-center text-gray-400">
+                        <i class="ph-duotone ph-ghost text-3xl mb-2 block"></i>
+                        <p class="text-sm">Nggak ketemu nih. Coba kata kunci lain?</p>
+                    </div>
+                `;
+                return;
+            }
+
+            results.innerHTML = matched.map((post, i) => `
+                <a href="/blog/${post.slug}" class="search-result-item flex items-start gap-4 px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50 dark:border-gray-800/50 last:border-0" data-index="${i}">
+                    <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <i class="ph-bold ph-article text-accent"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-display font-bold text-sm text-ink dark:text-white truncate">${post.title}</h4>
+                        <p class="text-xs text-gray-400 truncate mt-0.5">${post.description}</p>
+                        ${post.tags.length > 0 ? `
+                            <div class="flex gap-1 mt-1.5">
+                                ${post.tags.slice(0, 3).map(t => `<span class="text-[10px] px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-gray-500">${t}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                    <i class="ph-bold ph-arrow-right text-gray-300 mt-1.5"></i>
+                </a>
+            `).join('');
+        };
+
+        const updateSelection = () => {
+            const items = results.querySelectorAll('.search-result-item');
+            items.forEach((item, i) => {
+                if (i === selectedIndex) {
+                    item.classList.add('bg-gray-50', 'dark:bg-gray-800/50');
+                } else {
+                    item.classList.remove('bg-gray-50', 'dark:bg-gray-800/50');
+                }
+            });
+            // Scroll selected into view
+            if (selectedIndex >= 0 && items[selectedIndex]) {
+                items[selectedIndex].scrollIntoView({ block: 'nearest' });
+            }
+        };
+
+        // Event Listeners
+        triggerDesktop?.addEventListener('click', openSearch);
+        triggerMobile?.addEventListener('click', openSearch);
+        backdrop?.addEventListener('click', closeSearch);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // CMD+K or CTRL+K
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                if (overlay.classList.contains('hidden')) {
+                    openSearch();
+                } else {
+                    closeSearch();
+                }
+            }
+            // ESC
+            if (e.key === 'Escape' && !overlay.classList.contains('hidden')) {
+                closeSearch();
+            }
+        });
+
+        // Search input
+        input.addEventListener('input', (e) => {
+            search(e.target.value);
+        });
+
+        // Keyboard navigation in results
+        input.addEventListener('keydown', (e) => {
+            const items = results.querySelectorAll('.search-result-item');
+            if (items.length === 0) return;
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+                updateSelection();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedIndex = Math.max(selectedIndex - 1, -1);
+                updateSelection();
+            } else if (e.key === 'Enter' && selectedIndex >= 0) {
+                e.preventDefault();
+                items[selectedIndex].click();
+            }
+        });
+    });
+</script>

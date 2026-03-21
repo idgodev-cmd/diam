@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+// Generate paths for every unique tag
+export async function getStaticPaths() {
+    const allPosts = await getCollection('blog');
+    
+    // Kumpulkan semua tag unik
+    const allTags = new Set<string>();
+    allPosts.forEach(post => {
+        post.data.tags?.forEach(tag => allTags.add(tag));
+    });
+
+    return Array.from(allTags).map(tag => ({
+        params: { tag: tag.toLowerCase().replace(/\s+/g, '-') },
+        props: { 
+            tag,
+            posts: allPosts
+                .filter(p => p.data.tags?.includes(tag))
+                .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+        }
+    }));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout title={`Tag: ${tag}`} description={`Semua tulisan dengan tag "${tag}" di Diam.blog`}>
+    <Header />
+
+    <main class="max-w-6xl mx-auto px-6 pt-32 min-h-screen relative z-10 pb-20">
+        
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-sm text-gray-500 mb-8">
+            <a href="/" class="hover:text-ink dark:hover:text-white transition-colors">Beranda</a>
+            <i class="ph-bold ph-caret-right text-xs"></i>
+            <span>Tags</span>
+            <i class="ph-bold ph-caret-right text-xs"></i>
+            <span class="text-ink dark:text-white font-bold">{tag}</span>
+        </nav>
+
+        <!-- Header -->
+        <div class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="px-4 py-2 bg-accent/20 text-yellow-700 dark:text-yellow-400 text-sm font-bold rounded-full uppercase tracking-wider">
+                    <i class="ph-bold ph-tag mr-1"></i> {tag}
+                </span>
+                <span class="text-gray-400 text-sm">{posts.length} tulisan</span>
+            </div>
+            <h1 class="font-display font-bold text-3xl md:text-4xl text-ink dark:text-white">
+                Tulisan tentang "{tag}"
+            </h1>
+        </div>
+
+        <!-- Post Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {posts.map((post) => (
+                <article class="group flex flex-col gap-4 border-b border-gray-100 dark:border-gray-800 pb-8 md:border-0 md:pb-0 relative">
+                    {post.data.heroImage && (
+                        <div class="relative overflow-hidden rounded-2xl aspect-[16/9] bg-gray-100 dark:bg-gray-800">
+                            <a href={`/blog/${post.slug}`} class="block w-full h-full" aria-label={`Baca: ${post.data.title}`}>
+                                <img 
+                                    src={post.data.heroImage}
+                                    alt={post.data.title}
+                                    width="600"
+                                    height="338"
+                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    loading="lazy"
+                                />
+                            </a>
+                        </div>
+                    )}
+                    <div class="flex flex-col gap-2">
+                        <div class="flex items-center gap-3">
+                            <time datetime={new Date(post.data.pubDate).toISOString()} class="text-sm text-gray-500 dark:text-gray-400 font-mono">
+                                {new Date(post.data.pubDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                            </time>
+                            <span class="text-gray-300 dark:text-gray-700">·</span>
+                            <span class="text-sm text-gray-400">{Math.ceil(post.body?.split(/\s+/).length / 200) || 1} menit baca</span>
+                        </div>
+                        <h2 class="text-2xl font-bold font-display group-hover:text-accent transition-colors leading-tight">
+                            <a href={`/blog/${post.slug}`} class="before:absolute before:inset-0 md:before:static">
+                                {post.data.title}
+                            </a>
+                        </h2>
+                        <p class="text-gray-600 dark:text-gray-400 line-clamp-3 leading-relaxed">
+                            {post.data.description}
+                        </p>
+                        {post.data.tags && (
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                {post.data.tags.map(t => (
+                                    <a 
+                                        href={`/tags/${t.toLowerCase().replace(/\s+/g, '-')}`}
+                                        class={`text-xs px-2 py-1 rounded-md font-medium transition-colors ${t === tag ? 'bg-accent/20 text-yellow-700 dark:text-yellow-400' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 hover:text-ink dark:hover:text-white'}`}
+                                    >
+                                        {t}
+                                    </a>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </article>
+            ))}
+        </div>
+
+        {posts.length === 0 && (
+            <div class="text-center py-20">
+                <i class="ph-duotone ph-ghost text-4xl text-gray-300 mb-4"></i>
+                <p class="text-gray-500">Belum ada tulisan dengan tag ini.</p>
+            </div>
+        )}
+    </main>
+
+    <Footer />
+</BaseLayout>

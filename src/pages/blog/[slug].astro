@@ -1,0 +1,150 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ReactionButton from '../../components/ReactionButton.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import NextPost from '../../components/NextPost.astro';
+import ReadingControls from '../../components/ReadingControls.astro';
+import HighlightQuote from '../../components/HighlightQuote.astro';
+import ReadingStreak from '../../components/ReadingStreak.astro';
+
+// 1. Generate URL untuk setiap file markdown yang ada
+export async function getStaticPaths() {
+    const posts = await getCollection('blog');
+    return posts.map((post) => ({
+        params: { slug: post.slug },
+        props: { post, allPosts: posts },
+    }));
+}
+
+// 2. Ambil data artikel yang sedang dibuka
+const { post, allPosts } = Astro.props;
+const { Content, headings } = await post.render();
+
+// Helper: Ambil gambar prioritas (heroImage > image > cover)
+const heroImage = post.data.heroImage;
+
+// Reading time calculation
+const wordCount = post.body?.split(/\s+/).length || 0;
+const readingTime = Math.ceil(wordCount / 200);
+
+// Image optimization helper
+const LIVE_DOMAIN = Astro.site?.toString().replace(/\/$/, '') || 'https://diam.blog';
+const getOptimizedHero = (url: string) => {
+    if (!url || url.startsWith('http')) return url;
+    if (import.meta.env.PROD) {
+        const fullUrl = `${LIVE_DOMAIN}${url}`;
+        return `https://wsrv.nl/?url=${encodeURIComponent(fullUrl)}&w=1020&output=webp&q=85`;
+    }
+    return url;
+};
+
+const optimizedHero = heroImage ? getOptimizedHero(heroImage) : null;
+---
+
+<BaseLayout 
+    title={post.data.title} 
+    description={post.data.description} 
+    image={heroImage}
+>
+    <Header />
+    
+    <!-- Page gradient -->
+    <div class="fixed inset-0 pointer-events-none z-0 bg-gradient-to-br from-purple-500/5 via-transparent to-accent/5 dark:from-purple-900/5 dark:to-accent/3"></div>
+
+    <main class="max-w-6xl mx-auto px-6 pt-32 min-h-screen relative z-10">
+        <!-- Back Button -->
+        <div class="mb-8">
+            <a href="/" class="text-sm font-bold text-gray-500 hover:text-ink dark:hover:text-white transition-colors inline-flex items-center gap-2">
+                &larr; Kembali
+            </a>
+        </div>
+
+        <div class="flex gap-12">
+            <!-- Main Content Column -->
+            <div class="flex-1 max-w-3xl">
+                <!-- Article Header -->
+                <header class="mb-10">
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        {post.data.tags && post.data.tags.map(tag => (
+                            <a 
+                                href={`/tags/${tag.toLowerCase().replace(/\s+/g, '-')}`}
+                                class="px-2 py-1 bg-accent/20 text-yellow-800 dark:text-yellow-200 text-xs font-bold rounded-md uppercase tracking-wide hover:bg-accent/30 transition-colors"
+                            >
+                                {tag}
+                            </a>
+                        ))}
+                    </div>
+                    <h1 class="font-display font-extrabold text-3xl md:text-5xl leading-tight mb-4 text-ink dark:text-white">
+                        {post.data.title}
+                    </h1>
+                    <div class="flex items-center gap-3 text-sm text-gray-500">
+                        <time datetime={post.data.pubDate.toISOString()}>
+                            {post.data.pubDate.toLocaleDateString('id-ID', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                            })}
+                        </time>
+                        <span class="text-gray-300 dark:text-gray-700">·</span>
+                        <span class="inline-flex items-center gap-1">
+                            <i class="ph-bold ph-clock"></i>
+                            {readingTime} menit baca
+                        </span>
+                    </div>
+                </header>
+
+                <!-- Featured Image -->
+                {optimizedHero && (
+                    <div class="mb-10 rounded-xl overflow-hidden shadow-sm">
+                        <img 
+                            width={1020} 
+                            height={510} 
+                            src={optimizedHero}
+                            alt={post.data.title} 
+                            class="w-full object-cover aspect-video" 
+                            loading="eager"
+                            fetchpriority="high"
+                            onerror={`this.onerror=null; this.src='${heroImage}';`}
+                        />
+                    </div>
+                )}
+
+                <!-- Reading Controls -->
+                <ReadingControls />
+
+                <!-- CONTENT AREA (Prose / Typography) -->
+                <article class="prose prose-lg dark:prose-invert prose-headings:font-display prose-headings:font-bold prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-a:text-yellow-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-img:shadow-sm max-w-none">
+                    <Content />
+                </article>
+
+                <!-- Interactions -->
+                <ReactionButton />
+                <ShareButtons title={post.data.title} />
+                
+                <!-- Related Posts -->
+                <RelatedPosts currentSlug={post.slug} currentTags={post.data.tags || []} allPosts={allPosts} />
+                
+                <!-- Next/Previous Post -->
+                <NextPost currentSlug={post.slug} allPosts={allPosts} />
+            </div>
+
+            <!-- Sidebar: TOC (Desktop only) -->
+            <aside class="hidden lg:block w-64 flex-shrink-0">
+                <TableOfContents headings={headings} />
+            </aside>
+        </div>
+    </main>
+
+    <Footer />
+
+    <!-- Text Selection Share -->
+    <HighlightQuote />
+    
+    <!-- Reading Streak -->
+    <ReadingStreak />
+</BaseLayout>

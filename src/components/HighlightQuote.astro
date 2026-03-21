@@ -1,0 +1,99 @@
+---
+
+---
+
+<!-- Highlight/Quote Popup (Hidden by default, positioned by JS) -->
+<div 
+    id="highlight-popup" 
+    class="fixed z-[80] hidden bg-ink dark:bg-white rounded-xl shadow-2xl px-1 py-1 flex items-center gap-1"
+    style="transform: translateX(-50%)"
+>
+    <button id="hl-twitter" class="px-3 py-2 text-white dark:text-ink hover:bg-white/10 dark:hover:bg-black/10 rounded-lg transition-colors flex items-center gap-1.5 text-xs font-medium">
+        <i class="ph-bold ph-x-logo"></i> Tweet
+    </button>
+    <div class="w-px h-5 bg-white/20 dark:bg-black/20"></div>
+    <button id="hl-whatsapp" class="px-3 py-2 text-white dark:text-ink hover:bg-white/10 dark:hover:bg-black/10 rounded-lg transition-colors flex items-center gap-1.5 text-xs font-medium">
+        <i class="ph-bold ph-whatsapp-logo"></i> WA
+    </button>
+    <div class="w-px h-5 bg-white/20 dark:bg-black/20"></div>
+    <button id="hl-copy" class="px-3 py-2 text-white dark:text-ink hover:bg-white/10 dark:hover:bg-black/10 rounded-lg transition-colors flex items-center gap-1.5 text-xs font-medium">
+        <i class="ph-bold ph-copy"></i> Copy
+    </button>
+</div>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        const popup = document.getElementById('highlight-popup');
+        if (!popup) return;
+
+        // Only enable on blog pages
+        const article = document.querySelector('article.prose');
+        if (!article) return;
+
+        let selectedText = '';
+
+        const showPopup = (x: number, y: number, text: string) => {
+            selectedText = text;
+            popup.style.left = `${x}px`;
+            popup.style.top = `${y - 50}px`;
+            popup.classList.remove('hidden');
+        };
+
+        const hidePopup = () => {
+            popup.classList.add('hidden');
+            selectedText = '';
+        };
+
+        // Listen for text selection
+        document.addEventListener('mouseup', (e) => {
+            const selection = window.getSelection();
+            const text = selection?.toString().trim();
+            
+            if (text && text.length > 5 && article.contains(selection?.anchorNode || null)) {
+                const range = selection!.getRangeAt(0);
+                const rect = range.getBoundingClientRect();
+                showPopup(rect.left + rect.width / 2, rect.top + window.scrollY, text);
+            } else if (!(e.target as HTMLElement)?.closest('#highlight-popup')) {
+                hidePopup();
+            }
+        });
+
+        // Twitter share
+        document.getElementById('hl-twitter')?.addEventListener('click', () => {
+            const url = window.location.href;
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`"${selectedText}" — Diam.blog`)}&url=${encodeURIComponent(url)}`, '_blank');
+            hidePopup();
+        });
+
+        // WhatsApp share
+        document.getElementById('hl-whatsapp')?.addEventListener('click', () => {
+            const url = window.location.href;
+            window.open(`https://wa.me/?text=${encodeURIComponent(`"${selectedText}"\n\n— Diam.blog\n${url}`)}`, '_blank');
+            hidePopup();
+        });
+
+        // Copy quote
+        document.getElementById('hl-copy')?.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(`"${selectedText}" — Diam.blog`);
+                const copyBtn = document.getElementById('hl-copy');
+                if (copyBtn) {
+                    copyBtn.innerHTML = '<i class="ph-bold ph-check"></i> OK!';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '<i class="ph-bold ph-copy"></i> Copy';
+                    }, 1500);
+                }
+            } catch {
+                // Fallback
+            }
+            hidePopup();
+        });
+
+        // Hide on scroll
+        let scrollTimeout: any;
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(hidePopup, 100);
+        });
+    });
+</script>

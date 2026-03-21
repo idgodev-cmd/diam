@@ -1,0 +1,76 @@
+---
+
+---
+
+<div
+    class="reaction-container flex items-center gap-4 my-10 bg-gray-50 dark:bg-gray-800/30 p-6 rounded-3xl border border-gray-100 dark:border-gray-700"
+>
+    <div class="flex-1">
+        <h4 class="font-bold text-lg mb-1">Suka tulisan ini?</h4>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+            Kasih tepuk tangan biar admin semangat!
+        </p>
+    </div>
+
+    <button
+        id="clap-btn"
+        class="relative group flex items-center gap-2 px-6 py-3 bg-white dark:bg-dark-card rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-accent hover:shadow-xl transition-all active:scale-90"
+    >
+        <i
+            class="ph-fill ph-hands-clapping text-2xl text-gray-400 group-hover:text-accent group-[.clapped]:text-accent transition-colors"
+        ></i>
+        <span id="clap-count" class="font-bold text-lg text-ink dark:text-white"
+            >0</span
+        >
+
+        <!-- Animation Particles Placeholder -->
+        <div id="clap-particles" class="absolute inset-0 pointer-events-none">
+        </div>
+    </button>
+</div>
+
+<script>
+    document.addEventListener("astro:page-load", () => {
+        const btn = document.getElementById("clap-btn");
+        const countEl = document.getElementById("clap-count");
+        const slug = window.location.pathname.split("/").pop();
+
+        if (!btn || !countEl || !slug) return;
+
+        // Local Storage Mock for Claps
+        let claps = parseInt(localStorage.getItem(`claps-${slug}`) || "0");
+        countEl.innerText = claps.toString();
+        if (claps > 0) btn.classList.add("clapped");
+
+        btn.addEventListener("click", () => {
+            claps++;
+            localStorage.setItem(`claps-${slug}`, claps.toString());
+            countEl.innerText = claps.toString();
+            btn.classList.add("clapped");
+
+            // Minimal feedback
+            if (window.showToast)
+                window.showToast("Terima kasih tepuk tangannya!");
+
+            // Simple animation trigger
+            const icon = btn.querySelector("i");
+            icon?.classList.add("animate-bounce");
+            setTimeout(() => icon?.classList.remove("animate-bounce"), 500);
+        });
+    });
+</script>
+
+<style>
+    @keyframes bounce {
+        0%,
+        100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.2) translateY(-5px);
+        }
+    }
+    .animate-bounce {
+        animation: bounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+</style>

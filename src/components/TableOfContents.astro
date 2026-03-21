@@ -1,0 +1,88 @@
+---
+interface Props {
+    headings: { depth: number; slug: string; text: string }[];
+}
+const { headings } = Astro.props;
+
+// Filter hanya h2 dan h3
+const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
+---
+
+{tocHeadings.length > 0 && (
+    <nav class="toc-sidebar sticky top-28">
+        <div class="border border-gray-100 dark:border-gray-800 rounded-2xl p-5 bg-white/50 dark:bg-dark-card/50 backdrop-blur-sm">
+            <h3 class="font-display font-bold text-sm uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
+                <i class="ph-bold ph-list-bullets"></i>
+                Daftar Isi
+            </h3>
+            <ol class="space-y-1 list-none p-0 m-0">
+                {tocHeadings.map(heading => (
+                    <li>
+                        <a 
+                            href={`#${heading.slug}`} 
+                            class={`toc-link block py-1.5 text-sm transition-all duration-200 hover:text-accent border-l-2 border-transparent hover:border-accent ${heading.depth === 3 ? 'pl-6 text-gray-400' : 'pl-3 text-gray-500 font-medium'}`}
+                            data-heading={heading.slug}
+                        >
+                            {heading.text}
+                        </a>
+                    </li>
+                ))}
+            </ol>
+        </div>
+    </nav>
+)}
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        const tocLinks = document.querySelectorAll('.toc-link');
+        if (tocLinks.length === 0) return;
+
+        // Intersection Observer for active heading highlight
+        const headingElements = Array.from(tocLinks).map(link => {
+            const slug = (link as HTMLElement).dataset.heading;
+            return slug ? document.getElementById(slug) : null;
+        }).filter(Boolean) as HTMLElement[];
+
+        if (headingElements.length === 0) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Remove active from all
+                        tocLinks.forEach(link => {
+                            link.classList.remove('text-accent', 'border-accent', 'font-bold');
+                            link.classList.add('border-transparent');
+                        });
+                        // Add active to current
+                        const activeLink = document.querySelector(`.toc-link[data-heading="${entry.target.id}"]`);
+                        if (activeLink) {
+                            activeLink.classList.add('text-accent', 'border-accent', 'font-bold');
+                            activeLink.classList.remove('border-transparent');
+                        }
+                    }
+                });
+            },
+            {
+                rootMargin: '-80px 0px -70% 0px',
+                threshold: 0.1,
+            }
+        );
+
+        headingElements.forEach(el => observer.observe(el));
+
+        // Smooth scroll on click
+        tocLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const slug = (link as HTMLElement).dataset.heading;
+                const target = slug ? document.getElementById(slug) : null;
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Update URL hash without jumping
+                    history.pushState(null, '', `#${slug}`);
+                }
+            });
+        });
+    });
+</script>

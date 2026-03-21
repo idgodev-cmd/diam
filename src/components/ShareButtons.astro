@@ -1,0 +1,91 @@
+---
+interface Props {
+    title: string;
+}
+const { title } = Astro.props;
+---
+
+<div class="share-container my-10 py-6 border-t border-b border-gray-100 dark:border-gray-800">
+    <h4 class="font-bold text-sm text-gray-400 uppercase tracking-wider mb-4">
+        <i class="ph-bold ph-share-network mr-1"></i> Bagikan
+    </h4>
+    <div class="flex flex-wrap gap-3">
+        <!-- Copy Link -->
+        <button 
+            id="share-copy"
+            class="group inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-xl hover:bg-ink hover:text-white dark:hover:bg-white dark:hover:text-ink transition-all text-sm font-medium"
+        >
+            <i class="ph-bold ph-link text-base group-hover:rotate-12 transition-transform"></i>
+            <span id="copy-text">Salin Link</span>
+        </button>
+
+        <!-- Twitter/X -->
+        <a 
+            id="share-twitter"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-xl hover:bg-black hover:text-white transition-all text-sm font-medium"
+        >
+            <i class="ph-bold ph-x-logo text-base group-hover:scale-110 transition-transform"></i>
+            Twitter / X
+        </a>
+
+        <!-- WhatsApp -->
+        <a 
+            id="share-whatsapp"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-xl hover:bg-[#25D366] hover:text-white transition-all text-sm font-medium"
+        >
+            <i class="ph-bold ph-whatsapp-logo text-base group-hover:scale-110 transition-transform"></i>
+            WhatsApp
+        </a>
+    </div>
+</div>
+
+<script define:vars={{ title }}>
+    document.addEventListener('astro:page-load', () => {
+        const url = window.location.href;
+        const text = `${title} — Diam.blog`;
+
+        // Copy Link
+        const copyBtn = document.getElementById('share-copy');
+        const copyText = document.getElementById('copy-text');
+        copyBtn?.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(url);
+                if (copyText) {
+                    copyText.innerText = 'Tersalin! ✓';
+                    setTimeout(() => { copyText.innerText = 'Salin Link'; }, 2000);
+                }
+                if (window.showToast) window.showToast('Link berhasil disalin!');
+            } catch {
+                // Fallback
+                const input = document.createElement('input');
+                input.value = url;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                input.remove();
+                if (copyText) {
+                    copyText.innerText = 'Tersalin! ✓';
+                    setTimeout(() => { copyText.innerText = 'Salin Link'; }, 2000);
+                }
+            }
+        });
+
+        // Twitter/X
+        const twitterLink = document.getElementById('share-twitter');
+        if (twitterLink) {
+            twitterLink.setAttribute('href', `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`);
+        }
+
+        // WhatsApp
+        const waLink = document.getElementById('share-whatsapp');
+        if (waLink) {
+            waLink.setAttribute('href', `https://wa.me/?text=${encodeURIComponent(`${text}\n${url}`)}`);
+        }
+    });
+</script>

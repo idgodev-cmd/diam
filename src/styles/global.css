@@ -1,0 +1,11 @@
+/* Panggil 3 Dewa Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Style Tambahan (Opsional) */
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}

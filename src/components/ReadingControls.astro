@@ -1,0 +1,107 @@
+---
+
+---
+
+<!-- Reading Controls Bar -->
+<div id="reading-controls" class="sticky top-16 z-30 bg-paper/95 dark:bg-dark-bg/95 backdrop-blur-sm border-b border-gray-100 dark:border-gray-800 py-2 px-4 flex items-center justify-between gap-4 text-sm -mx-6 mb-6">
+    
+    <!-- Font Size -->
+    <div class="flex items-center gap-3">
+        <span class="text-gray-400 text-xs font-medium hidden sm:inline">Ukuran</span>
+        <div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-0.5">
+            <button data-size="sm" class="font-size-btn px-2 py-1 rounded-md text-xs font-medium text-gray-500 hover:text-ink dark:hover:text-white transition-colors" title="Kecil">A</button>
+            <button data-size="md" class="font-size-btn px-2 py-1 rounded-md text-xs font-bold text-gray-500 hover:text-ink dark:hover:text-white transition-colors" title="Sedang">A</button>
+            <button data-size="lg" class="font-size-btn px-2.5 py-1 rounded-md text-sm font-bold text-gray-500 hover:text-ink dark:hover:text-white transition-colors" title="Besar">A</button>
+            <button data-size="xl" class="font-size-btn px-2.5 py-1 rounded-md text-base font-bold text-gray-500 hover:text-ink dark:hover:text-white transition-colors" title="Ekstra Besar">A</button>
+        </div>
+    </div>
+
+    <!-- Fokus Mode Toggle -->
+    <button 
+        id="fokus-toggle" 
+        class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-500 hover:text-ink dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+    >
+        <i class="ph-bold ph-eye"></i>
+        <span class="hidden sm:inline">Fokus</span>
+    </button>
+</div>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        const article = document.querySelector('article.prose');
+        if (!article) return;
+
+        // === FONT SIZE ===
+        const sizeMap: Record<string, string> = {
+            sm: 'prose-sm',
+            md: 'prose-lg',
+            lg: 'prose-xl',
+            xl: 'prose-2xl'
+        };
+        
+        const saved = localStorage.getItem('fontSize') || 'md';
+        
+        const applySize = (size: string) => {
+            Object.values(sizeMap).forEach(cls => article.classList.remove(cls));
+            article.classList.add(sizeMap[size]);
+            localStorage.setItem('fontSize', size);
+            
+            // Update button states
+            document.querySelectorAll('.font-size-btn').forEach(btn => {
+                const btnSize = (btn as HTMLElement).dataset.size;
+                if (btnSize === size) {
+                    btn.classList.add('bg-white', 'dark:bg-gray-700', 'text-ink', 'dark:text-white', 'shadow-sm');
+                    btn.classList.remove('text-gray-500');
+                } else {
+                    btn.classList.remove('bg-white', 'dark:bg-gray-700', 'text-ink', 'dark:text-white', 'shadow-sm');
+                    btn.classList.add('text-gray-500');
+                }
+            });
+        };
+
+        applySize(saved);
+
+        document.querySelectorAll('.font-size-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const size = (btn as HTMLElement).dataset.size || 'md';
+                applySize(size);
+            });
+        });
+
+        // === FOKUS MODE ===
+        const fokusBtn = document.getElementById('fokus-toggle');
+        let fokusActive = false;
+        let styleEl: HTMLStyleElement | null = null;
+
+        fokusBtn?.addEventListener('click', () => {
+            fokusActive = !fokusActive;
+
+            if (fokusActive) {
+                fokusBtn.classList.add('bg-accent/20', 'text-accent');
+                fokusBtn.querySelector('span')!.textContent = 'Fokus ON';
+                
+                // Add focus mode styles
+                styleEl = document.createElement('style');
+                styleEl.id = 'fokus-style';
+                styleEl.textContent = `
+                    article.prose > *:not(:hover) {
+                        opacity: 0.3;
+                        transition: opacity 0.3s ease;
+                    }
+                    article.prose > *:hover {
+                        opacity: 1;
+                        transition: opacity 0.15s ease;
+                    }
+                `;
+                document.head.appendChild(styleEl);
+            } else {
+                fokusBtn.classList.remove('bg-accent/20', 'text-accent');
+                const spanEl = fokusBtn.querySelector('span');
+                if (spanEl) spanEl.textContent = 'Fokus';
+                
+                // Remove focus styles
+                document.getElementById('fokus-style')?.remove();
+            }
+        });
+    });
+</script>

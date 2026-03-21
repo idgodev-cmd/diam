@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="Halaman Tidak Ditemukan">
+    <Header />
+
+    <main class="max-w-3xl mx-auto px-6 pt-32 min-h-screen relative z-10 flex flex-col items-center justify-center text-center">
+        
+        <!-- Ghost Icon -->
+        <div class="relative mb-8">
+            <div class="w-32 h-32 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center animate-float">
+                <i class="ph-duotone ph-ghost text-6xl text-gray-300 dark:text-gray-600"></i>
+            </div>
+            <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-20 h-3 bg-gray-100 dark:bg-gray-800 rounded-full blur-sm"></div>
+        </div>
+
+        <!-- Text -->
+        <h1 class="font-display font-bold text-5xl md:text-7xl mb-4 text-ink dark:text-white">
+            404
+        </h1>
+        <p class="font-hand text-2xl text-gray-400 mb-2">
+            Halaman ini kabur dari rumah.
+        </p>
+        <p class="text-gray-500 dark:text-gray-400 mb-10 max-w-md leading-relaxed">
+            Mungkin lagi quarter-life crisis juga. Atau mungkin URL-nya salah. 
+            Yang jelas, yang kamu cari nggak ada di sini.
+        </p>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row gap-4">
+            <a href="/" class="px-6 py-3 bg-accent text-ink font-bold rounded-full hover:shadow-lg hover:shadow-accent/20 transition-all hover:-translate-y-0.5">
+                <i class="ph-bold ph-house mr-2"></i>
+                Balik ke Beranda
+            </a>
+            <button 
+                id="random-404-btn"
+                class="px-6 py-3 border border-dashed border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all font-medium"
+            >
+                <i class="ph-bold ph-shuffle mr-2"></i>
+                Baca Artikel Random
+            </button>
+        </div>
+
+    </main>
+
+    <Footer />
+</BaseLayout>
+
+<style>
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-15px); }
+    }
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
+    }
+</style>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        const btn = document.getElementById('random-404-btn');
+        btn?.addEventListener('click', async () => {
+            try {
+                const res = await fetch('/api/posts.json');
+                const posts = await res.json();
+                if (posts.length > 0) {
+                    const randomPost = posts[Math.floor(Math.random() * posts.length)];
+                    window.location.href = `/blog/${randomPost.slug}`;
+                } else {
+                    window.location.href = '/';
+                }
+            } catch {
+                window.location.href = '/';
+            }
+        });
+    });
+</script>

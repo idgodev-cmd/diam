@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Group by year
+const postsByYear: Record<string, typeof sortedPosts> = {};
+sortedPosts.forEach(post => {
+    const year = new Date(post.data.pubDate).getFullYear().toString();
+    if (!postsByYear[year]) postsByYear[year] = [];
+    postsByYear[year].push(post);
+});
+
+const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
+const totalPosts = allPosts.length;
+---
+
+<BaseLayout title="Arsip" description="Semua tulisan di Diam.blog, dari awal sampai sekarang.">
+    <Header />
+
+    <!-- Page gradient -->
+    <div class="fixed inset-0 pointer-events-none z-0 bg-gradient-to-br from-blue-500/5 via-transparent to-accent/5 dark:from-blue-900/5 dark:to-accent/3"></div>
+
+    <main class="max-w-4xl mx-auto px-6 pt-32 min-h-screen relative z-10 pb-20">
+        
+        <!-- Header -->
+        <div class="mb-16 text-center">
+            <h1 class="font-display font-bold text-4xl md:text-5xl text-ink dark:text-white mb-4">
+                Arsip Tulisan
+            </h1>
+            <p class="text-gray-500 dark:text-gray-400 text-lg">
+                {totalPosts} catatan dari perjalanan hidup yang absurd.
+            </p>
+        </div>
+
+        <!-- Timeline -->
+        <div class="relative">
+            <!-- Timeline line -->
+            <div class="absolute left-4 md:left-8 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-800"></div>
+
+            {years.map(year => (
+                <div class="mb-12">
+                    <!-- Year marker -->
+                    <div class="flex items-center gap-4 mb-6 relative">
+                        <div class="w-8 md:w-16 flex-shrink-0 flex items-center justify-center">
+                            <div class="w-4 h-4 rounded-full bg-accent border-4 border-paper dark:border-dark-bg relative z-10"></div>
+                        </div>
+                        <h2 class="font-display font-bold text-3xl text-ink dark:text-white">
+                            {year}
+                        </h2>
+                        <span class="text-sm text-gray-400 font-medium">
+                            {postsByYear[year].length} tulisan
+                        </span>
+                    </div>
+
+                    <!-- Posts in this year -->
+                    <div class="space-y-1 ml-8 md:ml-16 pl-4 md:pl-8">
+                        {postsByYear[year].map(post => {
+                            const readTime = Math.ceil((post.body?.split(/\s+/).length || 0) / 200);
+                            return (
+                                <a 
+                                    href={`/blog/${post.slug}`} 
+                                    class="group flex items-start gap-4 py-3 px-4 -mx-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+                                >
+                                    <time class="text-sm text-gray-400 font-mono flex-shrink-0 w-16 pt-0.5">
+                                        {new Date(post.data.pubDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+                                    </time>
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="font-display font-bold text-base group-hover:text-accent transition-colors truncate">
+                                            {post.data.title}
+                                        </h3>
+                                        <div class="flex items-center gap-3 mt-1">
+                                            <span class="text-xs text-gray-400">{readTime} min</span>
+                                            {post.data.tags && post.data.tags.slice(0, 2).map(tag => (
+                                                <span class="text-[10px] px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-gray-500">{tag}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <i class="ph-bold ph-arrow-right text-gray-300 group-hover:text-accent transition-colors pt-1 flex-shrink-0"></i>
+                                </a>
+                            );
+                        })}
+                    </div>
+                </div>
+            ))}
+        </div>
+    </main>
+
+    <Footer />
+</BaseLayout>
