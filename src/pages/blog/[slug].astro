@@ -44,6 +44,34 @@ const getOptimizedHero = (url: string) => {
 };
 
 const optimizedHero = heroImage ? getOptimizedHero(heroImage) : null;
+
+// SEO: JSON-LD BlogPosting
+const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.data.title,
+    "description": post.data.description,
+    "image": optimizedHero || `${LIVE_DOMAIN}/images/og-default.webp`,
+    "datePublished": post.data.pubDate.toISOString(),
+    "dateModified": post.data.updatedDate?.toISOString() || post.data.pubDate.toISOString(),
+    "author": {
+        "@type": "Person",
+        "name": "Admin Diam.blog",
+        "url": LIVE_DOMAIN
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Diam.blog",
+        "logo": {
+            "@type": "ImageObject",
+            "url": `${LIVE_DOMAIN}/favicon.svg`
+        }
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": `${LIVE_DOMAIN}/blog/${post.slug}`
+    }
+};
 ---
 
 <BaseLayout 
@@ -51,6 +79,10 @@ const optimizedHero = heroImage ? getOptimizedHero(heroImage) : null;
     description={post.data.description} 
     image={heroImage}
 >
+    <!-- Schema.org Article -->
+    <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+    <meta property="og:type" content="article" slot="head" />
+
     <Header />
     
     <!-- Page gradient -->

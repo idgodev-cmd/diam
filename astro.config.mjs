@@ -19,7 +19,8 @@ export default defineConfig({
       manifest: {
         name: 'Diam.blog',
         short_name: 'Diam',
-        theme_color: '#ffffff',
+        theme_color: '#0a0a0a',
+        background_color: '#fcfcf9',
         icons: [
           {
             src: 'pwa-192x192.png',
