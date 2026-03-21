@@ -2,11 +2,7 @@
 title: "Detox Social Media"
 description: "Tentang berhenti dari sosial media, tapi ternyata yang dihindari bukan orang lain."
 pubDate: "Mar 21 2026"
-<<<<<<< HEAD
-heroImage: "/images/blog/default.webp"
-=======
 heroImage: "/images/blog/sosialmedia.webp"
->>>>>>> e7e8c84 (update siteee)
 tags: ["Refleksi", "Hidup", "Digital Life"]
 ---
 
