@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { ViewTransitions } from "astro:transitions";
+import BentoPopup from "../components/BentoPopup.astro";
 import BackToTop from "../components/BackToTop.astro";
 
 // Icons
@@ -189,6 +190,7 @@ const socialImageURL = getSocialImage(image);
             <slot />
         </div>
 
+        <BentoPopup />
         <BackToTop />
 
         <script>
@@ -226,6 +228,35 @@ const socialImageURL = getSocialImage(image);
                         }, 2000);
                     }
                 };
+
+                // GLOBAL BOOKMARK BADGE
+                const updateBadge = () => {
+                    const saved = JSON.parse(
+                        localStorage.getItem("myBookmarks") || "[]",
+                    );
+                    const count = saved.length;
+                    const desktopBadge = document.getElementById(
+                        "saved-count-desktop",
+                    );
+                    const mobileBadge =
+                        document.getElementById("saved-count-mobile");
+
+                    if (count > 0) {
+                        if (desktopBadge) {
+                            desktopBadge.innerText = count.toString();
+                            desktopBadge.classList.remove("hidden");
+                        }
+                        if (mobileBadge) {
+                            mobileBadge.classList.remove("hidden");
+                        }
+                    } else {
+                        if (desktopBadge) desktopBadge.classList.add("hidden");
+                        if (mobileBadge) mobileBadge.classList.add("hidden");
+                    }
+                };
+
+                updateBadge();
+                window.addEventListener("bookmark-updated", updateBadge);
             });
         </script>
     </body>
