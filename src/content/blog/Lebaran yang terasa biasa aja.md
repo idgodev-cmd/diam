@@ -2,7 +2,7 @@
 title: "Lebaran yang Terasa Biasa Aja"
 description: "Tentang lebaran yang sunyi, harapan yang ditunda, dan mimpi kecil punya keluarga sendiri."
 pubDate: "Mar 21 2026"
-heroImage: "/images/blog/lebaran.webp"
+heroImage: "/images/blog/lebaran2026.webp"
 tags: ["Refleksi", "Hidup", "Lebaran"]
 ---
 

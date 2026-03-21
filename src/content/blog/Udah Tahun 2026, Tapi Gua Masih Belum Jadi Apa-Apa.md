@@ -2,7 +2,7 @@
 title: "Udah Tahun 2026, Tapi Gua Masih Belum Jadi Apa-Apa"
 description: "Catatan orang dewasa yang kelihatannya jalan di tempat, padahal muter jauh."
 pubDate: "Feb 01 2026"
-heroImage: "/images/blog/2026.webp"
+heroImage: "/images/blog/Tahun2026.webp"
 tags: ["Refleksi", "Hidup", "Quarter Life"]
 ---
 
