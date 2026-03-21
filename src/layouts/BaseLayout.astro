@@ -80,8 +80,7 @@ const socialImageURL = getSocialImage(image);
         <meta name="googlebot" content="index, follow" />
 
         <!-- PWA Status Bar & Theme Color -->
-        <meta name="theme-color" content="#fcfcf9" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+        <meta name="theme-color" id="theme-color-meta" content="#fcfcf9" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
@@ -163,6 +162,12 @@ const socialImageURL = getSocialImage(image);
                     "dark",
                     theme === "dark",
                 );
+
+                // Update theme-color meta tag dynamically
+                const metaTheme = document.getElementById("theme-color-meta");
+                if (metaTheme) {
+                    metaTheme.setAttribute("content", theme === "dark" ? "#0a0a0a" : "#fcfcf9");
+                }
             }
             setDarkMode();
             document.addEventListener("astro:after-swap", setDarkMode);
