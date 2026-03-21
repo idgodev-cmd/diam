@@ -9,9 +9,11 @@
     <!-- Install App Button -->
     <button
         id="pwa-install-btn"
-        class="hidden items-center gap-3 px-4 py-2 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all text-left group"
+        class="flex items-center gap-3 px-4 py-2 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all text-left group"
     >
-        <div class="w-2 h-2 rounded-full bg-accent animate-pulse group-hover:scale-125 transition-transform"></div>
+        <div class="flex items-center justify-center w-8 h-8 rounded-full bg-accent/10 text-accent group-hover:scale-110 transition-transform">
+            <i class="ph-bold ph-download-simple text-lg"></i>
+        </div>
         <div class="flex flex-col">
             <span
                 class="text-[10px] uppercase tracking-widest text-gray-400 font-bold leading-none mb-1"
@@ -74,16 +76,14 @@
             e.preventDefault();
             // Stash the event so it can be triggered later.
             deferredPrompt = e;
-            // Update UI to notify the user they can add to home screen
-            if (installBtn) {
-                installBtn.classList.remove("hidden");
-                installBtn.classList.add("flex");
-            }
         });
 
         installBtn?.addEventListener("click", () => {
-            // Hide the app provided install promotion
-            installBtn.classList.add("hidden");
+            if (!deferredPrompt) {
+                // Biar tetep ngasih tau user kalau emang belum/nggak support
+                window.showToast?.("Tekan tombol Share/Add to Homescreen di browser kamu");
+                return;
+            }
             // Show the install prompt
             deferredPrompt.prompt();
             // Wait for the user to respond to the prompt
