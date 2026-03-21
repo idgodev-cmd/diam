@@ -2,7 +2,7 @@
 title: "Cerita Tentang Gua"
 description: "Catatan hidup absurd tentang lahir di Arab, jatuh dari kereta bayi, dan keinginan sederhana untuk di-install ulang."
 pubDate: "Jan 05 2026"
-heroImage: "/images/blog/Cerita Tentang Gua.webp"
+heroImage: "/images/blog/Cerita.webp"
 tags: ["Cerita", "Personal", "Absurd"]
 ---
 
