@@ -59,7 +59,7 @@ const schemaData = {
   "author": {
     "@type": "Person",
     "name": "Admin Diam.blog",
-    "image": "https://diam.blog/images/avatardiam.webp"
+    "image": "https://diam.blog/images/avatardiam1.webp"
   }
 };
 ---
@@ -81,8 +81,8 @@ const schemaData = {
         <section class="mb-20 text-center md:text-left flex flex-col md:flex-row items-center gap-8 animate-fade-in">
             <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-100 flex-shrink-0">
                 <img 
-                    src={getOptimizedUrl("/images/avatardiam.webp", 256)}
-                    srcset={generateSrcset("/images/avatardiam.webp")}
+                    src={getOptimizedUrl("/images/avatardiam1.webp", 256)}
+                    srcset={generateSrcset("/images/avatardiam1.webp")}
                     sizes="(max-width: 768px) 96px, 128px"
                     alt="Avatar Penulis Diam.blog" 
                     width="128" 
@@ -90,7 +90,7 @@ const schemaData = {
                     class="w-full h-full object-cover"
                     loading="eager" 
                     fetchpriority="high"
-                    onerror="this.onerror=null; this.src='/images/avatardiam.webp';"
+                    onerror="this.onerror=null; this.src='/images/avatardiam1.webp';"
                 />
             </div>
             <div>
@@ -281,7 +281,7 @@ const schemaData = {
       let isDataFetched = false;
       let isLoading = false;
       const ITEMS_PER_LOAD = 4;
-      const DEFAULT_IMG = "/images/og-default.webp";
+      const DEFAULT_IMG = "/images/og-default1.webp";
       const SITE_URL = window.location.origin;
 
       const btn = document.getElementById('load-more-btn');
