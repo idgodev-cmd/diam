@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import { ClientRouter } from "astro:transitions";
+import { ViewTransitions } from "astro:transitions";
 import BackToTop from "../components/BackToTop.astro";
 
 // Icons
@@ -128,7 +128,7 @@ const socialImageURL = getSocialImage(image);
         <meta property="twitter:description" content={description} />
         <meta property="twitter:image" content={socialImageURL} />
 
-        <ClientRouter />
+        <ViewTransitions />
         <link rel="manifest" href="/manifest.webmanifest" />
 
         <script is:inline>
