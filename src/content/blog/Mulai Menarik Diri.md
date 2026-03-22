@@ -2,7 +2,7 @@
 title: "Mulai Menarik Diri"
 description: "Tentang capeknya pertemanan yang penuh drama, dan belajar memilih siapa yang benar-benar tinggal."
 pubDate: "Mar 22 2026"
-heroImage: "/images/blog/menarik-diri.webp"
+heroImage: "/images/blog/menarik.webp"
 tags: ["Refleksi", "Hidup", "Pertemanan"]
 ---
 
