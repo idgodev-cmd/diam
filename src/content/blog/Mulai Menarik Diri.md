@@ -86,6 +86,40 @@ Dan itu bukan karena ada masalah.
 
 Tapi karena hidup jalan.
 
+## Bahkan Saudara yang Tidak Lagi Dekat
+
+Dan makin ke sini, gua juga mulai sadar…
+
+Hal yang sama ternyata terjadi,  
+bahkan ke saudara.
+
+Sepupu.  
+Om.  
+Tante.
+
+Yang dulu sering ketemu,  
+sekarang cuma ketemu setahun sekali.
+
+Yang dulu masih ada obrolan,  
+sekarang cuma basa-basi.
+
+Kadang cuma sekadar:
+- “apa kabar”
+- “sehat?”
+- terus selesai
+
+Bukan karena ada masalah.
+
+Cuma… memang sudah tidak sedekat dulu.
+
+Masing-masing sudah punya dunia sendiri.
+
+Dan hubungan yang dulu terasa dekat,  
+pelan-pelan berubah jadi… sekadar kenal.
+
+Dan anehnya,  
+itu juga mulai terasa wajar.
+
 ## Semua Orang Sibuk Dengan Hidupnya
 
 Semakin dewasa, gua lihat pola yang sama:
@@ -135,8 +169,8 @@ Mungkin itu memang waktunya selesai.
 
 Dan sekarang…
 
-Gua lagi belajar,
+Gua lagi belajar,  
 bahwa dewasa itu bukan soal nambah orang.
 
-Tapi soal:
+Tapi soal:  
 **tau siapa yang ga perlu lagi diperjuangkan.**
