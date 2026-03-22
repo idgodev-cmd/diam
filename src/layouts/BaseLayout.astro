@@ -203,6 +203,13 @@ const socialImageURL = getSocialImage(image);
             <span id="toast-msg">Disimpan</span>
         </div>
 
+        <div id="afk-stain" class="fixed inset-0 z-[40] pointer-events-none flex items-center justify-center opacity-0 transition-opacity duration-[2000ms]">
+            <div class="relative w-96 h-96 opacity-30 dark:opacity-20 flex flex-col items-center justify-center -rotate-6">
+                <i class="ph-duotone ph-coffee text-[12rem] text-amber-900 dark:text-amber-700"></i>
+                <p class="font-hand text-2xl text-amber-900 dark:text-amber-700 mt-4 text-center">Ngopi ngapa ngopi,<br/>ngelamun aja liatin layar kosong.</p>
+            </div>
+        </div>
+
         <slot />
 
         <LateNightPopup />
@@ -233,7 +240,7 @@ const socialImageURL = getSocialImage(image);
                     });
                 }
 
-                window.showToast = (msg) => {
+                (window as any).showToast = (msg: string) => {
                     const toast = document.getElementById("toast");
                     const msgEl = document.getElementById("toast-msg");
                     if (toast && msgEl) {
@@ -244,6 +251,30 @@ const socialImageURL = getSocialImage(image);
                         }, 2000);
                     }
                 };
+
+                // AFK Kopi & Anti-Copas
+                const afkStain = document.getElementById('afk-stain');
+                let afkTimer: any;
+                const resetAfk = () => {
+                    clearTimeout(afkTimer);
+                    if (afkStain) afkStain.classList.remove('opacity-100');
+                    if (afkStain) afkStain.classList.add('opacity-0');
+                    afkTimer = setTimeout(() => {
+                        if (afkStain) afkStain.classList.remove('opacity-0');
+                        if (afkStain) afkStain.classList.add('opacity-100');
+                    }, 30000); // 30 detik
+                };
+
+                window.addEventListener('mousemove', resetAfk);
+                window.addEventListener('keydown', resetAfk);
+                window.addEventListener('scroll', resetAfk);
+                resetAfk();
+
+                document.addEventListener('copy', () => {
+                   if ((window as any).showToast) {
+                       (window as any).showToast("Dicopy doang, dipahamin kagak.");
+                   } 
+                });
             });
         </script>
     </body>
