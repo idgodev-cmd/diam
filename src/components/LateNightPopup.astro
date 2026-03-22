@@ -1,0 +1,49 @@
+---
+---
+<div id="late-night-popup" class="fixed inset-0 z-[200] hidden items-center justify-center pointer-events-none">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-md pointer-events-auto" id="late-night-backdrop"></div>
+    <div class="relative bg-white dark:bg-dark-card text-ink dark:text-white border border-gray-200 dark:border-gray-700 p-8 rounded-3xl shadow-2xl max-w-sm mx-4 text-center transform scale-95 opacity-0 transition-all duration-500 pointer-events-auto" id="late-night-content">
+        <div class="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="ph-duotone ph-moon-stars text-3xl text-yellow-500 dark:text-yellow-400"></i>
+        </div>
+        <h3 class="text-xl font-display font-bold mb-2">Udah Jam Segini, Tidur!</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed text-sm">Udah lewat tengah malem. Lo baca tulisan galau nggak bakal nyelesain cicilan lo besok pagi. Mending lu tidur.</p>
+        <button id="close-late-night" class="w-full py-3 bg-gray-100 dark:bg-white text-ink font-bold rounded-xl hover:bg-gray-200 dark:hover:bg-gray-200 transition-colors">Iya, cerewet</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        const hour = new Date().getHours();
+        const popup = document.getElementById('late-night-popup');
+        const content = document.getElementById('late-night-content');
+        const btn = document.getElementById('close-late-night');
+        
+        // Cek sessionStorage biar ga spam terus tiap pindah halaman
+        const hasSeen = sessionStorage.getItem('seenLateNightPopup');
+
+        // Muncul antara jam 01.00 sampai 03.59
+        if (hour >= 1 && hour < 4 && popup && !hasSeen) {
+            popup.classList.remove('hidden');
+            popup.classList.add('flex');
+            
+            // Animasi masuk
+            setTimeout(() => {
+                content?.classList.remove('scale-95', 'opacity-0');
+                content?.classList.add('scale-100', 'opacity-100');
+            }, 50);
+
+            const closePopup = () => {
+                content?.classList.remove('scale-100', 'opacity-100');
+                content?.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    popup.classList.add('hidden');
+                    popup.classList.remove('flex');
+                    sessionStorage.setItem('seenLateNightPopup', 'true');
+                }, 300);
+            };
+
+            btn?.addEventListener('click', closePopup);
+        }
+    });
+</script>

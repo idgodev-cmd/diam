@@ -2,7 +2,7 @@
 title: "Motorku Sayang, Motorku Malang"
 description: "Cerita tentang pulang nebeng, panik motor hilang, dan kenyataan pahit bahwa masalah hidup kadang cuma karena lupa."
 pubDate: "Jan 23 2011"
-heroImage: "/images/blog/motor.webp"
+heroImage: "/images/blog/motorku.webp"
 tags: ["Cerita", "Komedi", "Absurd"]
 ---
 

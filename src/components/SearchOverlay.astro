@@ -93,7 +93,25 @@ const postsData = JSON.stringify(allPosts.map(p => ({
                 return;
             }
 
-            const q = query.toLowerCase();
+            const q = query.toLowerCase().trim();
+
+            const easterEggs = {
+                'mantan': 'Hasil pencarian "mantan" tidak ditemukan, seperti perasaan dia ke kamu.',
+                'kaya': 'Hasil pencarian "kaya" tidak ditemukan. Mending turu, besok kerja.',
+                'bahagia': 'Hasil pencarian "bahagia" tidak ditemukan. Sedang dalam perbaikan (entah sampai kapan).'
+            };
+
+            if (easterEggs[q]) {
+                selectedIndex = -1;
+                results.innerHTML = `
+                    <div class="p-8 text-center text-accent">
+                        <i class="ph-duotone ph-warning-circle text-4xl mb-3 block"></i>
+                        <p class="text-base font-medium">${easterEggs[q]}</p>
+                    </div>
+                `;
+                return;
+            }
+
             const matched = posts.filter(p => 
                 p.title.toLowerCase().includes(q) || 
                 p.description.toLowerCase().includes(q) ||
