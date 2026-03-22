@@ -2,7 +2,7 @@
 title: "Gagal Pedekate Versi Digital"
 description: "Tentang dating apps, chat absurd, dan match yang hilang sebelum sempat dimulai."
 pubDate: "Aug 12 2025"
-heroImage: "/images/blog/Gagal Pedekate Versi Digital.webp"
+heroImage: "/images/blog/pedekate.webp"
 tags: ["Cerpen", "Satir", "Quarter Life"]
 ---
 

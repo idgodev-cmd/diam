@@ -2,7 +2,7 @@
 title: "Apa Salahku, Ibu Kantin?"
 description: "Kisah mahasiswa, kantin kampus, dan misteri emosi yang datang tanpa sebab yang jelas."
 pubDate: "Jan 29 2013"
-heroImage: "/images/blog/Apa Salahku, Ibu Kantin.webp"
+heroImage: "/images/blog/kantin.webp"
 tags: ["Cerita", "Kampus", "Slice of Life"]
 ---
 

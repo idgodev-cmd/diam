@@ -2,7 +2,7 @@
 title: "Nanasien, Hahayamen, Pilauken"
 description: "Tentang bahasa ciptaan sendiri, teori konspirasi receh, dan cara absurd manusia bertahan hidup."
 pubDate: "Feb 24 2025"
-heroImage: "/images/blog/nanasien.webp"
+heroImage: "/images/blog/hahayamen.webp"
 tags: ["Absurd", "Satir", "Hidup Sehari-hari"]
 ---
 

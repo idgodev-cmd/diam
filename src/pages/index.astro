@@ -277,7 +277,7 @@ const schemaData = {
 
       // === LOAD MORE LOGIC ===
       let allRemainingPosts = [];
-      let currentIndex = 4; // Start from 4 because 0-3 are already rendered by SSR
+      let currentIndex = 0; // The API already sliced the first 4, so start from 0 for the remaining items
       let isDataFetched = false;
       let isLoading = false;
       const ITEMS_PER_LOAD = 4;

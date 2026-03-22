@@ -2,7 +2,7 @@
 title: "Hidayah Ujian Kalkulus"
 description: "Cerpen kampus tentang ujian, kepanikan, dan hidayah yang datang dari arah tak terduga."
 pubDate: "Feb 21 2013"
-heroImage: "/images/blog/Hidayah Ujian Kalkulus.webp"
+heroImage: "/images/blog/hidayah.webp"
 tags: ["Cerpen", "Kampus", "Satir"]
 ---
 
