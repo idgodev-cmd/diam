@@ -2,7 +2,7 @@
 title: "Negara Server Rusak"
 description: "Ketika negara terasa seperti game online, rakyat jadi NPC, dan adminnya kebanyakan pakai cheat."
 pubDate: "Aug 28 2025"
-heroImage: "/images/blog/Negara Server Rusak.webp"
+heroImage: "/images/blog/gm.webp"
 tags: ["Satir", "Sosial", "Absurd"]
 ---
 
