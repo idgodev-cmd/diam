@@ -26,6 +26,27 @@ export async function getStaticPaths() {
 }
 
 const { tag, posts } = Astro.props;
+
+const tagRoasts: Record<string, string> = {
+    "Refleksi": "Sesekali ngaca emang bagus, tapi kalo keseringan jatuhnya pusing sendiri.",
+    "Hidup": "Berat bang? Sama.",
+    "Quarter Life": "Tanda-tanda lo mulai tua tapi dompet masih muda.",
+    "Satir": "Ketawa sih, tapi aslinya ngenes.",
+    "Sosial": "Sok kritis doang, padahal di tongkrongan juga cuma nyimak.",
+    "Absurd": "Saking anehnya hidup lu sampe dibikin kategori sendiri.",
+    "Cerita": "Gabut banget lu nyari cerita orang.",
+    "Komedi": "Ketawain aja kengerian hidup ini.",
+    "Pendidikan": "Sekolah tinggi-tinggi ujungnya overthinking doang.",
+    "Lebaran": "Momen di mana lo diinterogasi keluarga besar.",
+    "Cerpen": "Cerita pendek. Kepanjangan ntar lo bosan.",
+    "Kampus": "Kenangan masa-masa di mana tugas numpuk jadi alasan begadang.",
+    "Perjalanan": "Pergi jauh-jauh ujungnya nyasar juga ke diri sendiri.",
+    "Digital Life": "Kurang-kurangin main sosmed biar ga gila.",
+    "Personal": "Duh, private banget nih. Jangan bilang siapa-siapa yak.",
+    "Slice of Life": "Potongan hidup yang banyakan paitnya daripada manisnya."
+};
+
+const roastingText = tagRoasts[tag] || "Kumpulan tulisan random yang nggak masuk kategori mana-mana.";
 ---
 
 <BaseLayout title={`Tag: ${tag}`} description={`Semua tulisan dengan tag "${tag}" di Diam.blog`}>
@@ -50,9 +71,10 @@ const { tag, posts } = Astro.props;
                 </span>
                 <span class="text-gray-400 text-sm">{posts.length} tulisan</span>
             </div>
-            <h1 class="font-display font-bold text-3xl md:text-4xl text-ink dark:text-white">
+            <h1 class="font-display font-bold text-3xl md:text-4xl text-ink dark:text-white mb-4">
                 Tulisan tentang "{tag}"
             </h1>
+            <p class="text-gray-500 dark:text-gray-400 text-lg border-l-4 border-accent pl-4 italic">"{roastingText}"</p>
         </div>
 
         <!-- Post Grid -->
