@@ -2,7 +2,7 @@
 title: "Challenge Diri Sendiri"
 description: "Tentang makan sendiri, ngopi sendiri, dan nonton bioskop sendiri—hal kecil yang ternyata butuh keberanian."
 pubDate: "Sep 05 2025"
-heroImage: "/images/blog/Challenge Diri Sendiri.webp"
+heroImage: "/images/blog/diri.webp"
 tags: ["Refleksi", "Quarter Life", "Hidup"]
 ---
 
