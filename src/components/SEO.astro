@@ -1,0 +1,104 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string | { src: string };
+  url?: string;
+  type?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+}
+
+const {
+  title: propTitle,
+  description = "Menulis untuk merayakan kebingungan quarter-life crisis dan mencari arti hidup.",
+  image = "/images/og-default1.webp",
+  url = Astro.url.href,
+  type = "website",
+  publishedTime,
+  modifiedTime,
+  author = "Diam",
+} = Astro.props;
+
+const siteData = {
+  name: "Diam.blog",
+  twitterHandle: "@diamblog", // Ganti kalau ada
+};
+
+const title = propTitle ? `${propTitle} | ${siteData.name}` : siteData.name;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || url).href;
+
+// Logic ganti URL gambar jadi absolute & optimasi (mirip di BaseLayout)
+const getSocialImage = (imgInput: string | { src: string }) => {
+  const imgUrl = typeof imgInput === "object" ? imgInput.src : imgInput;
+  if (imgUrl.startsWith("http")) return imgUrl;
+  
+  const siteBase = Astro.site?.toString().replace(/\/$/, "") || "https://diam.blog";
+  const fullUrl = new URL(imgUrl, siteBase).href;
+
+  if (import.meta.env.PROD) {
+    return `https://wsrv.nl/?url=${encodeURIComponent(fullUrl)}&w=1200&h=630&fit=cover&output=jpg`;
+  }
+  return fullUrl;
+};
+
+const socialImageURL = getSocialImage(image);
+
+// JSON-LD Schema
+const schema = type === "article" 
+  ? {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": title,
+      "description": description,
+      "image": [socialImageURL],
+      "datePublished": publishedTime,
+      "dateModified": modifiedTime || publishedTime,
+      "author": [{
+          "@type": "Person",
+          "name": author,
+          "url": canonicalURL // Ataupun link profile
+        }]
+    }
+  : {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": siteData.name,
+      "description": description,
+      "url": canonicalURL
+    };
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={socialImageURL} />
+{publishedTime && <meta property="article:published_time" content={publishedTime} />}
+{modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalURL} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={socialImageURL} />
+
+<!-- Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

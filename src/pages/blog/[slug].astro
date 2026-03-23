@@ -45,43 +45,21 @@ const getOptimizedHero = (url: string) => {
 
 const optimizedHero = heroImage ? getOptimizedHero(heroImage) : null;
 
-// SEO: JSON-LD BlogPosting
-const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": post.data.title,
-    "description": post.data.description,
-    "image": optimizedHero || `${LIVE_DOMAIN}/images/og-default.webp`,
-    "datePublished": post.data.pubDate.toISOString(),
-    "dateModified": post.data.updatedDate?.toISOString() || post.data.pubDate.toISOString(),
-    "author": {
-        "@type": "Person",
-        "name": "Admin Diam.blog",
-        "url": LIVE_DOMAIN
-    },
-    "publisher": {
-        "@type": "Organization",
-        "name": "Diam.blog",
-        "logo": {
-            "@type": "ImageObject",
-            "url": `${LIVE_DOMAIN}/favicon.svg`
-        }
-    },
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": `${LIVE_DOMAIN}/blog/${post.slug}`
-    }
-};
+// SEO Data
+const publishedTime = post.data.pubDate.toISOString();
+const modifiedTime = post.data.updatedDate?.toISOString();
+const author = "Diam"; // Bisa diambil dari post.data jika ada
 ---
 
 <BaseLayout 
     title={post.data.title} 
     description={post.data.description} 
     image={heroImage}
+    type="article"
+    publishedTime={publishedTime}
+    modifiedTime={modifiedTime}
+    author={author}
 >
-    <!-- Schema.org Article -->
-    <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
-    <meta property="og:type" content="article" slot="head" />
 
     <Header />
     

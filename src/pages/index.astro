@@ -44,31 +44,13 @@ const generateSrcset = (url) => {
     return `${w400} 400w, ${w600} 600w, ${w800} 800w`;
 }
 
-// === SEO: SCHEMA MARKUP ===
-const schemaData = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "Diam.blog",
-  "url": "https://diam.blog",
-  "description": "Catatan kaki seorang pemalas yang mencoba memahami hidup.",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://diam.blog/search?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  },
-  "author": {
-    "@type": "Person",
-    "name": "Admin Diam.blog",
-    "image": "https://diam.blog/images/avatardiam1.webp"
-  }
-};
+// SEO Data - Managed by SEO.astro via BaseLayout
 ---
 
 <BaseLayout 
     title="Beranda"
     description="Jurnal harian tentang kebingungan quarter-life crisis, cerita absurd, dan usaha menertawakan tagihan bulanan. Baca tulisan terbaru di Diam.blog."
 >
-    <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
 
     <Header />
     
