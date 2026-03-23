@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import DailyInsight from '../components/DailyInsight.astro';
+import MemoryFeed from '../components/MemoryFeed.astro';
 import { getCollection } from 'astro:content';
 
 // === SERVER SIDE ===
@@ -85,6 +87,9 @@ const generateSrcset = (url) => {
                 </p>
             </div>
         </section>
+        
+        <DailyInsight />
+        <MemoryFeed />
 
         <!-- Stats Section -->
         <section class="mb-16 flex flex-wrap items-center justify-center md:justify-start gap-6 text-center md:text-left">

@@ -3,6 +3,7 @@ title: "Minder Lulusan SMK"
 description: "Cerita tentang minder pendidikan, usaha yang gagal satu-satu, dan belajar ketawa sama diri sendiri."
 pubDate: "Mar 13 2025"
 heroImage: "/images/blog/sismk.webp"
+category: "Refleksi"
 tags: ["Refleksi", "Hidup", "Pendidikan"]
 ---
 

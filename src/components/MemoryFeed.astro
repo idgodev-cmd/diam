@@ -1,0 +1,74 @@
+---
+// src/components/MemoryFeed.astro
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+---
+
+<div id="memory-feed" class="hidden mb-12 animate-fade-in">
+    <div class="flex items-center gap-3 mb-6">
+        <h2 class="font-display font-black text-xl text-accent" id="memory-title text-accent">Lagi mikirin...</h2>
+        <div class="h-px bg-accent/20 flex-1"></div>
+    </div>
+    
+    <div id="memory-posts" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Filled by JS -->
+    </div>
+</div>
+
+<script define:vars={{ allPosts: allPosts.map(p => ({ slug: p.slug, title: p.data.title, description: p.data.description, category: p.data.category || 'Jurnal' })) }}>
+    document.addEventListener('astro:page-load', () => {
+        const feed = document.getElementById('memory-feed');
+        const container = document.getElementById('memory-posts');
+        const titleEl = document.getElementById('memory-title');
+
+        if (!feed || !container) return;
+
+        // Get favorite category
+        const history = JSON.parse(localStorage.getItem('pwa-category-history') || '{}');
+        const categories = Object.keys(history);
+        
+        if (categories.length === 0) return;
+
+        const favoriteCategory = categories.reduce((a, b) => history[a] > history[b] ? a : b);
+        const count = history[favoriteCategory];
+
+        // Only show if user has "significant" history (e.g. read at least 2 posts in a category)
+        if (count < 2) return;
+
+        // Get last read slug to avoid recommending the same one
+        const lastRead = JSON.parse(localStorage.getItem('pwa-last-read') || '{}');
+
+        // Filter recommendations
+        const recommendations = allPosts
+            .filter(p => p.category === favoriteCategory && p.slug !== lastRead.slug)
+            .sort(() => 0.5 - Math.random()) // Shuffle
+            .slice(0, 2);
+
+        if (recommendations.length === 0) return;
+
+        // Dynamic Title
+        const titles = {
+            'Jurnal': `Lagi galau soal hidup? Nih lanjutin...`,
+            'Cerita': `Suka cerita absurd gue ya? Cek ini...`,
+            'Tutorial': `Mau belajar lagi? Nih ada lagi...`,
+            'default': `Kayaknya lu suka topik ${favoriteCategory}...`
+        };
+        if (titleEl) titleEl.innerText = titles[favoriteCategory] || titles['default'];
+
+        // Build Cards (Simple version for Memory Feed)
+        container.innerHTML = recommendations.map(post => `
+            <a href="/blog/${post.slug}" class="group flex gap-4 p-4 bg-white dark:bg-dark-card rounded-2xl border border-gray-100 dark:border-gray-700 hover:border-accent hover:shadow-lg transition-all">
+                <div class="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                    <i class="ph-bold ph-sparkle text-accent text-xl"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-bold text-sm text-ink dark:text-white truncate">${post.title}</h3>
+                    <p class="text-xs text-gray-400 mt-1 truncate">${post.description}</p>
+                </div>
+            </a>
+        `).join('');
+
+        feed.classList.remove('hidden');
+    });
+</script>

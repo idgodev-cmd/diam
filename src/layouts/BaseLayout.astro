@@ -5,6 +5,7 @@ import BentoPopup from "../components/BentoPopup.astro";
 import BackToTop from "../components/BackToTop.astro";
 import LateNightPopup from "../components/LateNightPopup.astro";
 import SEO from "../components/SEO.astro";
+import Onboarding from "../components/Onboarding.astro";
 
 // Icons
 import "@phosphor-icons/web/bold";
@@ -127,6 +128,7 @@ const {
 
         <LateNightPopup />
         <BentoPopup />
+        <Onboarding />
         <BackToTop />
 
         <script>
@@ -188,6 +190,27 @@ const {
                        (window as any).showToast("Dicopy doang, dipahamin kagak.");
                    } 
                 });
+
+                // === MEMORY SYSTEM: TRACKING ===
+                const path = window.location.pathname;
+                if (path.startsWith('/blog/')) {
+                    const slug = path.split('/').filter(Boolean).pop();
+                    // We need the category. Since we are in the client, we can look for the hidden span
+                    const categoryEl = document.getElementById('post-category');
+                    const category = categoryEl ? categoryEl.textContent.trim() : 'Jurnal';
+
+                    // Track category frequency
+                    let history = JSON.parse(localStorage.getItem('pwa-category-history') || '{}');
+                    history[category] = (history[category] || 0) + 1;
+                    localStorage.setItem('pwa-category-history', JSON.stringify(history));
+
+                    // Track last read
+                    localStorage.setItem('pwa-last-read', JSON.stringify({
+                        slug,
+                        title: document.title.split('|')[0].trim(),
+                        time: Date.now()
+                    }));
+                }
             });
         </script>
     </body>

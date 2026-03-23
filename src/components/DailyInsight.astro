@@ -1,0 +1,111 @@
+---
+// src/components/DailyInsight.astro
+---
+
+<div 
+    id="daily-insight" 
+    class="hidden mb-16 opacity-0 translate-y-4 transition-all duration-700 ease-out"
+>
+    <div class="bg-gray-50 dark:bg-gray-800/30 border border-gray-100 dark:border-gray-700 rounded-3xl p-6 md:p-8 relative overflow-hidden group">
+        <!-- Decoration -->
+        <div class="absolute -top-6 -right-6 w-24 h-24 bg-accent/5 rounded-full blur-2xl group-hover:bg-accent/10 transition-colors"></div>
+        
+        <div class="relative z-10">
+            <div class="flex items-center gap-2 mb-4">
+                <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                    <i class="ph-bold ph-lightbulb-filament text-accent"></i>
+                </div>
+                <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Insight Hari Ini</span>
+            </div>
+            
+            <blockquote class="text-xl md:text-2xl font-display font-bold leading-tight mb-4 text-ink dark:text-white">
+                "<span id="insight-text">...</span>"
+            </blockquote>
+            
+            <div class="flex items-center justify-between">
+                <p id="insight-author" class="text-sm text-gray-500 italic">— Anonim, mungkin</p>
+                <div class="flex gap-2">
+                     <button id="insight-refresh" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-400" title="Ganti Quote (Debug)">
+                        <i class="ph-bold ph-arrows-clockwise"></i>
+                    </button>
+                    <button id="insight-share" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-400" title="Share Insight">
+                        <i class="ph-bold ph-share-network"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const insights = [
+        { text: "Hidup itu kayak bubur ayam, diaduk atau nggak diaduk tetep aja ntar ujungnya... ya gitu.", author: "Filosofi Bubur" },
+        { text: "Jangan terlalu keras sama diri sendiri. Cicilan belum lunas aja udah bikin stres, jangan ditambah pikiran.", author: "HRD Kehidupan" },
+        { text: "Overthinking itu hobi yang gak dibayar tapi paling banyak menyita waktu lembur otak.", author: "Dinas Kesehatan Mental" },
+        { text: "Masa depan itu misteri, masa lalu itu memori, masa kini itu... kok saldo rekening gini-gini aja?", author: "Mantan Akuntan" },
+        { text: "Gak apa-apa pelan, yang penting... ya nyampe. Kalau gak nyampe ya berarti salah jalan.", author: "GPS Rusak" },
+        { text: "Kebahagiaan itu sederhana. Yang susah itu ngebahagiain orang yang standar bahagianya ketinggian.", author: "Pengamat Sosial" },
+        { text: "Dunia gak bakal kiamat cuma gara-gara lu telat bales chat. Tapi kalau telat bayar kosan, itu beda cerita.", author: "Ibu Kost" },
+        { text: "Kuliah itu investasi masa depan. Kalau masa depan lu suram, mungkin lu salah milih reksadana.", author: "Dosen Pembimbing" },
+        { text: "Quarter-life crisis itu normal. Yang gak normal itu kalau udah 25 tahun tapi masih nungguin wangsit buat kerja.", author: "Kating Abadi" }
+    ];
+
+    document.addEventListener('astro:page-load', () => {
+        const insightEl = document.getElementById('daily-insight');
+        const textEl = document.getElementById('insight-text');
+        const authorEl = document.getElementById('insight-author');
+        const refreshBtn = document.getElementById('insight-refresh');
+        const shareBtn = document.getElementById('insight-share');
+
+        if (!insightEl || !textEl || !authorEl) return;
+
+        const updateInsight = (force = false) => {
+            const today = new Date().toDateString();
+            const savedDate = localStorage.getItem('insightDate');
+            let index = parseInt(localStorage.getItem('insightIndex') || '0');
+
+            if (force || savedDate !== today) {
+                // Change quote
+                if (force) {
+                    index = (index + 1) % insights.length;
+                } else {
+                    // Random but consistent for the day
+                    index = Math.floor(Math.random() * insights.length);
+                }
+                localStorage.setItem('insightDate', today);
+                localStorage.setItem('insightIndex', index.toString());
+            }
+
+            const insight = insights[index];
+            textEl.innerText = insight.text;
+            authorEl.innerText = `— ${insight.author}`;
+            
+            // Animation
+            insightEl.classList.remove('hidden');
+            setTimeout(() => {
+                insightEl.classList.remove('opacity-0', 'translate-y-4');
+            }, 100);
+        };
+
+        updateInsight();
+
+        refreshBtn?.addEventListener('click', () => {
+             updateInsight(true);
+             if (window.showToast) window.showToast("Quote diganti!");
+        });
+
+        shareBtn?.addEventListener('click', () => {
+            const text = `"${textEl.innerText}" ${authorEl.innerText} | Diam.blog`;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Insight Pagi Ini',
+                    text: text,
+                    url: window.location.href,
+                });
+            } else {
+                navigator.clipboard.writeText(text);
+                if (window.showToast) window.showToast("Quote disalin ke clipboard!");
+            }
+        });
+    });
+</script>
