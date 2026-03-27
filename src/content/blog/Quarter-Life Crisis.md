@@ -2,7 +2,7 @@
 title: "Quarter-Life Crisis"
 description: "Tentang umur kepala tiga, usaha yang jalan, dan rasa hampa yang datang tanpa undangan."
 pubDate: "Sep 01 2025"
-heroImage: "/images/blog-qlc.webp"
+heroImage: "/images/quarter.webp"
 category: "Refleksi"
 tags: ["Refleksi", "Hidup", "Quarter Life"]
 ---
