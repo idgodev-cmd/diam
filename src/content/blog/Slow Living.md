@@ -122,19 +122,68 @@ Sama ekspektasi yang kadang terlalu tinggi.
 
 ---
 
-Karena gua nggak mau nanti…
+Dan jujur aja…
 
-gua bawa semua itu ke dalam hubungan.
-
----
-
-Nikah bukan garis finish.
-
-Bukan tempat pelarian.
+hidup gua sekarang juga nggak kosong.
 
 ---
 
-Dan gua nggak lagi hidup buat “nanti”.
+Gua masih pengen nemenin ibu.
+
+Satu-satunya orang tua yang gua punya  
+sejak bokap gua nggak ada  
+waktu gua masih kelas 6 SD.
+
+---
+
+Nggak ada yang mewah.
+
+Cuma hal-hal kecil:
+
+ngobrol di rumah,  
+makan bareng,  
+hal-hal yang dulu mungkin gua anggap biasa…
+
+sekarang jadi penting.
+
+---
+
+Di sela itu,  
+gua juga ngurus kucing.
+
+Yang kadang…  
+boker sembarangan.
+
+---
+
+Nyebelin?
+
+Iya.
+
+Tapi anehnya…
+
+itu juga bagian dari hidup yang gua jalanin sekarang.
+
+Nggak sempurna.
+
+Tapi nyata.
+
+---
+
+Dan mungkin…
+
+ini yang orang lain nggak liat.
+
+---
+
+Mereka liat gua “belum ke mana-mana”.
+
+Padahal gua lagi ada di suatu tempat  
+yang buat gua berarti.
+
+---
+
+Gua nggak lagi hidup buat “nanti”.
 
 ---
 
