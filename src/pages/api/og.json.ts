@@ -33,7 +33,7 @@ export async function GET() {
                 <rect x="0" y="590" width="1200" height="40" fill="#F4D03F" opacity="0.9"/>
                 <circle cx="100" cy="100" r="200" fill="#F4D03F" opacity="0.05"/>
                 <circle cx="1100" cy="530" r="150" fill="#F4D03F" opacity="0.05"/>
-                <text x="80" y="80" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#F4D03F" letter-spacing="3">DIAM.BLOG</text>
+                <text x="80" y="80" font-family="system-ui, sans-serif" font-size="20" font-weight="600" fill="#F4D03F" letter-spacing="3">PADLI</text>
                 <text x="80" y="280" font-family="system-ui, sans-serif" font-size="52" font-weight="800" fill="#FFFFFF" width="1040">
                     ${esc(truncTitle)}
                 </text>
@@ -42,7 +42,7 @@ export async function GET() {
                 </text>
                 <text x="80" y="450" font-family="system-ui, sans-serif" font-size="18" fill="#64748b">${esc(date)}</text>
                 ${tags.slice(0, 3).map((tag, i) => `<rect x="${80 + i * 120}" y="480" width="110" height="30" rx="15" fill="#F4D03F" opacity="0.15"/><text x="${135 + i * 120}" y="500" font-family="system-ui, sans-serif" font-size="14" fill="#F4D03F" text-anchor="middle">${esc(tag)}</text>`).join('')}
-                <text x="1120" y="618" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#1a1a2e" text-anchor="end">diam.blog</text>
+                <text x="1120" y="618" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#1a1a2e" text-anchor="end">padli</text>
             </svg>`;
 
             return {

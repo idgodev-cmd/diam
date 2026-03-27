@@ -51,7 +51,7 @@ const generateSrcset = (url) => {
 
 <BaseLayout 
     title="Beranda"
-    description="Jurnal harian tentang kebingungan quarter-life crisis, cerita absurd, dan usaha menertawakan tagihan bulanan. Baca tulisan terbaru di Diam.blog."
+    description="Pria berkacamata yang terjebak dalam sebuah mesin cuci. Baca tulisan terbaru di Padli."
 >
 
     <Header />
@@ -68,7 +68,7 @@ const generateSrcset = (url) => {
                     src={getOptimizedUrl("/images/avatardiam1.webp", 256)}
                     srcset={generateSrcset("/images/avatardiam1.webp")}
                     sizes="(max-width: 768px) 96px, 128px"
-                    alt="Avatar Penulis Diam.blog" 
+                    alt="Avatar Penulis Padli" 
                     width="128" 
                     height="128" 
                     class="w-full h-full object-cover"
@@ -78,12 +78,10 @@ const generateSrcset = (url) => {
                 />
             </div>
             <div>
-                <h1 class="font-display font-bold text-3xl md:text-4xl mb-3 leading-tight">
-                    <span class="text-gray-400 block text-lg font-medium mb-1 hero-reveal" style="--delay: 0s">Halo,</span>
-                    <span class="hero-reveal inline-block" style="--delay: 0.2s">Saya cuma </span><span class="bg-gradient-to-r from-accent/50 to-accent/50 bg-[length:100%_40%] bg-bottom bg-no-repeat inline-block"><span id="typewriter" class="hero-reveal inline-block" style="--delay: 0.4s"></span></span><span class="hero-reveal inline-block" style="--delay: 0.4s"> hidup.</span>
+                    <span class="hero-reveal inline-block" style="--delay: 0.2s">Halo, Saya </span><span class="bg-gradient-to-r from-accent/50 to-accent/50 bg-[length:100%_40%] bg-bottom bg-no-repeat inline-block"><span id="typewriter" class="hero-reveal inline-block" style="--delay: 0.4s"></span></span>
                 </h1>
                 <p class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed max-w-lg hero-reveal" style="--delay: 0.6s">
-                    Menulis untuk merayakan kebingungan quarter-life crisis, menertawakan tagihan bulanan, dan mencari arti di balik bubur ayam yang diaduk.
+                    Pria berkacamata yang terjebak dalam sebuah mesin cuci.
                 </p>
             </div>
         </section>
@@ -481,7 +479,7 @@ const generateSrcset = (url) => {
     const el = document.getElementById('typewriter');
     if (!el || el.dataset.typed) return;
     el.dataset.typed = 'true';
-    const text = 'pura-pura paham';
+    const text = 'Padli';
     let i = 0;
     const type = () => {
       if (i < text.length) {

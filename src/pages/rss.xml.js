@@ -10,8 +10,8 @@ export async function GET(context) {
     const siteUrl = context.site ?? 'https://diam.blog';
 
 	return rss({
-		title: 'Catatan Pinggir',
-		description: 'Menulis untuk merayakan kebingungan quarter-life crisis.',
+		title: 'Catatan Padli',
+		description: 'Pria berkacamata yang terjebak dalam sebuah mesin cuci.',
 		site: siteUrl,
 		items: posts.map((post) => ({
 			title: post.data.title,

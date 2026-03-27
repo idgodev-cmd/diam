@@ -12,17 +12,17 @@ interface Props {
 
 const {
   title: propTitle,
-  description = "Menulis untuk merayakan kebingungan quarter-life crisis dan mencari arti hidup.",
+  description = "Pria berkacamata yang terjebak dalam sebuah mesin cuci",
   image = "/images/og-default1.webp",
   url = Astro.url.href,
   type = "website",
   publishedTime,
   modifiedTime,
-  author = "Diam",
+  author = "Padli",
 } = Astro.props;
 
 const siteData = {
-  name: "Diam.blog",
+  name: "Padli",
   twitterHandle: "@diamblog", // Ganti kalau ada
 };
 
@@ -73,7 +73,7 @@ const schema = type === "article"
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" href="/pwa-192x192.png" />
 <meta name="generator" content={Astro.generator} />
 
 <!-- Canonical URL -->

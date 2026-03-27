@@ -17,8 +17,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
-        name: 'Diam.blog',
-        short_name: 'Diam',
+        name: 'Padli',
+        short_name: 'Padli',
         start_url: '/',
         display: 'standalone',
         theme_color: '#0a0a0a',

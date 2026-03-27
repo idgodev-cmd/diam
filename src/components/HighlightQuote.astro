@@ -61,21 +61,21 @@
         // Twitter share
         document.getElementById('hl-twitter')?.addEventListener('click', () => {
             const url = window.location.href;
-            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`"${selectedText}" — Diam.blog`)}&url=${encodeURIComponent(url)}`, '_blank');
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`"${selectedText}" — Padli`)}&url=${encodeURIComponent(url)}`, '_blank');
             hidePopup();
         });
 
         // WhatsApp share
         document.getElementById('hl-whatsapp')?.addEventListener('click', () => {
             const url = window.location.href;
-            window.open(`https://wa.me/?text=${encodeURIComponent(`"${selectedText}"\n\n— Diam.blog\n${url}`)}`, '_blank');
+            window.open(`https://wa.me/?text=${encodeURIComponent(`"${selectedText}"\n\n— Padli\n${url}`)}`, '_blank');
             hidePopup();
         });
 
         // Copy quote
         document.getElementById('hl-copy')?.addEventListener('click', async () => {
             try {
-                await navigator.clipboard.writeText(`"${selectedText}" — Diam.blog`);
+                await navigator.clipboard.writeText(`"${selectedText}" — Padli`);
                 const copyBtn = document.getElementById('hl-copy');
                 if (copyBtn) {
                     copyBtn.innerHTML = '<i class="ph-bold ph-check"></i> OK!';
