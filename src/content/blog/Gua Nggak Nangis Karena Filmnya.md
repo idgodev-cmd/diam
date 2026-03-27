@@ -1,6 +1,6 @@
 ---
-title: "Gue Nangis. Mungkin Karena Gue Juga Lagi Nunggu"
-description: "Filmnya tentang nunggu sukses. Gue nangis karena sadar, gue juga lagi di fase itu."
+title: "Gua Nangis. Mungkin Karena Gua Juga Lagi Nunggu"
+description: "Filmnya tentang nunggu sukses. Gua nangis karena sadar, gua juga lagi di fase itu."
 pubDate: "Mar 26 2026"
 heroImage: "/images/blog/nonton.webp"
 category: "Refleksi"
@@ -8,7 +8,7 @@ tags: ["Refleksi", "Emosi", "Sarkas", "Quarter Life"]
 ---
 
 Tanggal 26 Maret 2026,  
-gue duduk di bioskop.
+gua duduk di bioskop.
 
 Nonton film yang judulnya kurang lebih bilang:  
 “Tunggu aku sukses nanti.”
@@ -20,7 +20,7 @@ berat juga ya.
 
 ---
 
-Niat awal gue biasa aja.
+Niat awal gua biasa aja.
 
 Nonton.  
 Hiburan.  
@@ -33,7 +33,7 @@ Nggak ada agenda mikir hidup.
 
 Sampai ada satu scene…
 
-yang bikin gue tiba-tiba diem.
+yang bikin gua tiba-tiba diem.
 
 Bukan karena dramanya berisik.
 
@@ -45,16 +45,16 @@ Tentang orang yang lagi berjuang.
 Tentang janji ke diri sendiri.  
 Tentang keyakinan kalau “nanti bakal ada waktunya”.
 
-Dan di situ gue mulai mikir:
+Dan di situ gua mulai mikir:
 
-> “Ini film… atau ini gue?”
+> “Ini film… atau ini gua?”
 
 ---
 
 Beberapa menit kemudian,  
-mata gue mulai basah.
+mata gua mulai basah.
 
-Gue langsung denial:
+Gua langsung denial:
 
 > “Ini pasti efek sound system bioskop.”
 
@@ -79,7 +79,7 @@ tapi nempel.
 ---
 
 Di tengah gelapnya bioskop,  
-gue ngerasa kayak lagi ngeliat versi lain dari diri gue sendiri.
+gua ngerasa kayak lagi ngeliat versi lain dari diri gua sendiri.
 
 Versi yang:
 
@@ -93,7 +93,7 @@ Lucu ya.
 
 Kita sering bilang:
 
-> “Nanti aja kalau gue udah sukses…”
+> “Nanti aja kalau gua udah sukses…”
 
 Seolah-olah semua hal baik  
 harus nunggu versi “lebih layak” dari diri kita.
@@ -112,22 +112,22 @@ Scene demi scene lewat.
 Dan makin ke sini,  
 yang kebuka bukan cerita filmnya…
 
-tapi pikiran gue sendiri.
+tapi pikiran gua sendiri.
 
 ---
 
 Tentang:
 
-- ekspektasi yang gue taruh ke diri sendiri  
-- tekanan yang nggak pernah gue omongin  
-- dan kebiasaan bilang “gue gapapa” padahal enggak  
+- ekspektasi yang gua taruh ke diri gua sendiri  
+- tekanan yang nggak pernah gua omongin  
+- dan kebiasaan bilang “gua gapapa” padahal enggak  
 
 ---
 
 Yang paling nyebelin?
 
-Gue baru sadar semua itu  
-setelah air mata gue jalan duluan.
+Gua baru sadar semua itu  
+setelah air mata gua jalan duluan.
 
 Nggak ada notifikasi.  
 Langsung update.
@@ -166,25 +166,25 @@ Lampu bioskop nyala.
 
 Orang-orang berdiri, keluar, lanjut hidup masing-masing.
 
-Gue masih duduk.
+Gua masih duduk.
 
 ---
 
 Bukan karena sedih.
 
-Tapi karena gue lagi mikir:
+Tapi karena gua lagi mikir:
 
 selama ini…
 
-gue hidup buat sekarang,  
+gua hidup buat sekarang,  
 atau cuma nunggu “nanti”?
 
 ---
 
 Dan untuk pertama kalinya,  
-gue agak jujur sama diri sendiri:
+gua agak jujur sama diri sendiri:
 
-gue capek nunggu.
+gua capek nunggu.
 
 ---
 
@@ -192,7 +192,7 @@ Jadi kalau ada yang nanya:
 
 “Filmnya sedih ya?”
 
-Gue jawab:
+Gua jawab:
 
 Iya.
 
@@ -200,4 +200,4 @@ Iya.
 
 Tapi yang bikin berat itu…
 
-ternyata gue juga lagi ada di cerita yang sama.
+ternyata gua juga lagi ada di cerita yang sama.

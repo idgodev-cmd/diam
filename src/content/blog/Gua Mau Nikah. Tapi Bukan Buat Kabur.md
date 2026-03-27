@@ -1,6 +1,6 @@
 ---
-title: "Gue Mau Nikah. Tapi Bukan Buat Kabur"
-description: "Bukan anti nikah. Gue cuma nggak mau menjadikan nikah sebagai jalan keluar dari hidup yang belum beres."
+title: "Gua Mau Nikah. Tapi Bukan Buat Kabur"
+description: "Bukan anti nikah. Gua cuma nggak mau menjadikan nikah sebagai jalan keluar dari hidup yang belum beres."
 pubDate: "Mar 27 2026"
 heroImage: "/images/blog/nikah.webp"
 category: "Refleksi"
@@ -9,7 +9,7 @@ tags: ["Refleksi", "Sarkas", "Relasi", "Self Awareness"]
 
 Aneh ya.
 
-Yang ditanya kapan nikah gue.  
+Yang ditanya kapan nikah gua.  
 Yang panik orang lain.
 
 ---
@@ -23,15 +23,15 @@ Bedanya, ini nggak ada tombol *Skip Ad*.
 
 ---
 
-Gue ngerti.
+Gua ngerti.
 
 Niatnya baik.
 
-Katanya biar gue bahagia.
+Katanya biar gua bahagia.
 
 ---
 
-Tapi yang gue bingung…
+Tapi yang gua bingung…
 
 sejak kapan nikah jadi solusi universal?
 
@@ -45,11 +45,11 @@ versi premium dari “semoga semuanya beres”.
 
 ---
 
-Gue nggak anti nikah.
+Gua nggak anti nikah.
 
 Serius.
 
-Gue juga pengen.
+Gua juga pengen.
 
 Pengen punya pasangan.  
 Pengen punya rumah yang hidup.  
@@ -59,23 +59,23 @@ Pengen punya tempat pulang yang beneran.
 
 Tapi bukan sekarang.
 
-Bukan dalam kondisi gue yang masih berisik di dalam.
+Bukan dalam kondisi gua yang masih berisik di dalam.
 
 ---
 
-Gue lagi di fase…
+Gua lagi di fase…
 
 belajar berdamai.
 
 Sama diri sendiri.  
 Sama ekspektasi.  
-Sama hal-hal yang belum gue capai.
+Sama hal-hal yang belum gua capai.
 
 ---
 
 Karena jujur aja…
 
-gue nggak mau nikah buat kabur.
+gua nggak mau nikah buat kabur.
 
 Nggak mau nikah cuma karena:
 - takut kesepian  
@@ -84,13 +84,13 @@ Nggak mau nikah cuma karena:
 
 ---
 
-Gue juga pernah kepikiran:
+Gua juga pernah kepikiran:
 
-> “Kayaknya kalau gue nikah nanti, gue bakal bahagia.”
+> “Kayaknya kalau gua nikah nanti, gua bakal bahagia.”
 
 Atau:
 
-> “Kayaknya kalau gue punya anak nanti, hidup gue bakal lebih berarti.”
+> “Kayaknya kalau gua punya anak nanti, hidup gua bakal lebih berarti.”
 
 ---
 
@@ -100,22 +100,22 @@ Tapi juga berbahaya.
 
 ---
 
-Karena kalau kebahagiaan gue  
+Karena kalau kebahagiaan gua  
 dititipin ke sesuatu di masa depan…
 
-berarti sekarang gue lagi kosong.
+berarti sekarang gua lagi kosong.
 
 Dan itu bukan masalah yang bisa disuruh nunggu.
 
 ---
 
-Gue pengen bahagia.
+Gua pengen bahagia.
 
 Tapi bukan nanti.
 
-Gue pengen berdamai.
+Gua pengen berdamai.
 
-Sebelum gue ngajak orang lain masuk ke hidup gue.
+Sebelum gua ngajak orang lain masuk ke hidup gua.
 
 ---
 
@@ -127,8 +127,8 @@ Bukan tempat buat nyelamatin diri.
 
 Nikah itu tempat berbagi.
 
-Dan gue nggak mau berbagi sesuatu  
-yang gue sendiri belum beres.
+Dan gua nggak mau berbagi sesuatu  
+yang gua sendiri belum beres.
 
 ---
 
@@ -144,16 +144,16 @@ Jadi kalau ditanya lagi:
 
 “Kapan nikah?”
 
-Gue jawab:
+Gua jawab:
 
 Nanti.
 
-Kalau gue udah nggak lagi lari dari diri sendiri.
+Kalau gua udah nggak lagi lari dari diri sendiri.
 
 ---
 
-Bukan karena gue nggak mau.
+Bukan karena gua nggak mau.
 
-Tapi karena gue mau…
+Tapi karena gua mau…
 
 dengan cara yang bener.
