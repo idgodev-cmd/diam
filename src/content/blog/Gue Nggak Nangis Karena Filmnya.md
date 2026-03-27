@@ -1,155 +1,203 @@
 ---
-title: "Gue Nggak Nangis Karena Filmnya"
-description: "Kadang kita nggak nangis karena cerita di layar, tapi karena sesuatu di dalam diri yang akhirnya kebuka."
+title: "Gue Nangis. Mungkin Karena Gue Juga Lagi Nunggu"
+description: "Filmnya tentang nunggu sukses. Gue nangis karena sadar, gue juga lagi di fase itu."
 pubDate: "Mar 26 2026"
 heroImage: "/images/blog/nonton.webp"
 category: "Refleksi"
-tags: ["Refleksi", "Emosi", "Solitude", "Overthinking"]
+tags: ["Refleksi", "Emosi", "Sarkas", "Quarter Life"]
 ---
 
 Tanggal 26 Maret 2026,  
 gue duduk di bioskop.
 
-Lampu mati.  
-Layar nyala.  
-Orang-orang di sekitar gue fokus ke film.
+Nonton film yang judulnya kurang lebih bilang:  
+“Tunggu aku sukses nanti.”
 
-Dan gue juga awalnya gitu.
+Kalimat yang keliatannya simpel.
 
-Gue kira itu cuma film biasa.  
+Tapi entah kenapa…  
+berat juga ya.
 
-Nggak ada ekspektasi apa-apa.  
-Cuma pengen nonton, ngisi waktu, biar nggak terlalu sepi aja.
+---
 
-Tapi ada satu scene…  
+Niat awal gue biasa aja.
+
+Nonton.  
+Hiburan.  
+Pulang.
+
+Nggak ada rencana nangis.  
+Nggak ada agenda mikir hidup.
+
+---
+
+Sampai ada satu scene…
 
 yang bikin gue tiba-tiba diem.
 
-Nggak gerak.  
-Nggak ngapa-ngapain.  
-Cuma… ngeliat.
+Bukan karena dramanya berisik.
 
-Dan anehnya,  
+Justru karena terlalu deket.
+
+---
+
+Tentang orang yang lagi berjuang.  
+Tentang janji ke diri sendiri.  
+Tentang keyakinan kalau “nanti bakal ada waktunya”.
+
+Dan di situ gue mulai mikir:
+
+> “Ini film… atau ini gue?”
+
+---
+
+Beberapa menit kemudian,  
 mata gue mulai basah.
+
+Gue langsung denial:
+
+> “Ini pasti efek sound system bioskop.”
+
+Iya.
+
+Salah Dolby.
+
+Bukan karena ceritanya kena.
+
+---
+
+Tapi ya jujur aja…
+
+filmnya emang sedih.
+
+Bukan sedih yang lebay.
+
+Tapi sedih yang pelan,  
+yang nggak teriak…  
+tapi nempel.
 
 ---
 
 Di tengah gelapnya bioskop,  
-di antara orang-orang yang nggak gue kenal,
+gue ngerasa kayak lagi ngeliat versi lain dari diri gue sendiri.
 
-gue ngerasa sendirian.
+Versi yang:
 
-Bukan karena nggak ada orang.  
-Tapi karena yang gue rasain  
-kayak cuma gue sendiri yang ngerti.
-
----
-
-Awalnya gue mikir,  
-> “ah lebay banget sih, cuma film doang.”
-
-Tapi makin gue tonton,  
-makin kerasa kalau ini bukan soal filmnya.
-
-Ada sesuatu yang kayak…  
-“kebuka.”
+- lagi ngejar sesuatu yang belum tentu jelas  
+- lagi percaya sama “nanti juga berhasil”  
+- tapi diam-diam capek nunggu  
 
 ---
 
-Kayak ada bagian dari diri gue  
-yang selama ini gue simpen rapi,  
-tiba-tiba keangkat pelan-pelan.
+Lucu ya.
 
-Tanpa izin.
+Kita sering bilang:
+
+> “Nanti aja kalau gue udah sukses…”
+
+Seolah-olah semua hal baik  
+harus nunggu versi “lebih layak” dari diri kita.
 
 ---
 
-Mungkin bukan karena ceritanya.  
-Tapi karena perasaannya familiar.
+Dan tanpa sadar…
+
+kita jadi hidup di masa depan  
+yang belum tentu datang.
+
+---
+
+Scene demi scene lewat.
+
+Dan makin ke sini,  
+yang kebuka bukan cerita filmnya…
+
+tapi pikiran gue sendiri.
+
+---
 
 Tentang:
-- nunggu sesuatu yang belum tentu datang  
-- ngejar sesuatu yang nggak jelas ujungnya  
-- pura-pura kuat padahal capek  
+
+- ekspektasi yang gue taruh ke diri sendiri  
+- tekanan yang nggak pernah gue omongin  
+- dan kebiasaan bilang “gue gapapa” padahal enggak  
 
 ---
 
-Dan yang paling nyebelin…
+Yang paling nyebelin?
 
-gue baru sadar semua itu  
+Gue baru sadar semua itu  
 setelah air mata gue jalan duluan.
 
----
-
-Selama ini gue kira gue baik-baik aja.
-
-Masih ketawa.  
-Masih jalanin hari kayak biasa.  
-Masih bisa ngobrol, masih bisa kerja.
-
-Tapi ternyata…
-
-gue cuma nggak ngasih waktu buat diri gue sendiri  
-buat ngerasa.
+Nggak ada notifikasi.  
+Langsung update.
 
 ---
 
-Film itu nggak bikin gue nangis.
+Film itu sedih.
 
-Dia cuma jadi alasan  
-biar gue akhirnya jujur.
+Tapi bukan cuma karena ceritanya.
 
----
+Dia kayak cermin.
 
-Jujur kalau gue capek.
+Yang dengan santai bilang:
 
-Jujur kalau gue kadang ngerasa ketinggalan.
-
-Jujur kalau ada hal-hal  
-yang selama ini gue pendem  
-biar keliatan “gapapa”.
+> “Lo juga lagi nunggu, kan?”
 
 ---
 
-Dan mungkin…
+Nunggu versi diri yang lebih sukses.  
+Nunggu hidup yang lebih enak.  
+Nunggu momen di mana semuanya akhirnya “beres”.
 
-yang paling jujur dari semuanya:
+---
 
-gue kangen versi diri gue  
-yang dulu lebih ringan.
+Padahal ya…
+
+bisa jadi yang capek itu bukan perjuangannya.
+
+Tapi nunggu terus tanpa pernah ngerasa cukup.
 
 ---
 
 Filmnya selesai.
 
-Lampu bioskop nyala pelan-pelan.  
-Orang-orang mulai berdiri, keluar satu-satu.
+Lampu bioskop nyala.
+
+Orang-orang berdiri, keluar, lanjut hidup masing-masing.
 
 Gue masih duduk.
 
-Bukan karena nggak mau pulang.
+---
 
-Tapi karena untuk pertama kalinya,  
-dalam waktu yang lama…
+Bukan karena sedih.
 
-kepala gue nggak berisik.
+Tapi karena gue lagi mikir:
+
+selama ini…
+
+gue hidup buat sekarang,  
+atau cuma nunggu “nanti”?
 
 ---
 
-Kadang kita nggak butuh solusi.
+Dan untuk pertama kalinya,  
+gue agak jujur sama diri sendiri:
 
-Cuma butuh momen kecil  
-yang bikin kita berhenti bentar…
-
-dan akhirnya dengerin diri sendiri.
+gue capek nunggu.
 
 ---
 
-Kalau lo pernah ngerasain hal yang sama,
+Jadi kalau ada yang nanya:
 
-mungkin bukan karena filmnya juga.
+“Filmnya sedih ya?”
 
-Mungkin…
+Gue jawab:
 
-lo cuma lagi capek,  
-tapi belum sempet ngakuin aja.
+Iya.
+
+---
+
+Tapi yang bikin berat itu…
+
+ternyata gue juga lagi ada di cerita yang sama.
