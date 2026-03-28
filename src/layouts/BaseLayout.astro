@@ -8,9 +8,7 @@ import SEO from "../components/SEO.astro";
 import Onboarding from "../components/Onboarding.astro";
 
 // Icons
-import "@phosphor-icons/web/bold";
-import "@phosphor-icons/web/fill";
-import "@phosphor-icons/web/regular";
+import "../styles/phosphor-subset.css";
 
 interface Props {
   title: string;
@@ -42,6 +40,11 @@ const {
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="generator" content={Astro.generator} />
+
+        <!-- Preload critical fonts -->
+        <link rel="preload" href="/fonts/Phosphor-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+        <link rel="preload" href="/fonts/Phosphor.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+        <link rel="preload" href="/fonts/Phosphor-Fill.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 
         <SEO 
             title={title} 

@@ -1,0 +1,644 @@
+/* Auto-generated Phosphor subset */
+
+
+@font-face {
+  font-family: "Phosphor-Bold";
+  src: url("/fonts/Phosphor-Bold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+.ph-bold {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "Phosphor-Bold" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Enable Ligatures ================ */
+  letter-spacing: 0;
+  -webkit-font-feature-settings: "liga";
+  -moz-font-feature-settings: "liga=1";
+  -moz-font-feature-settings: "liga";
+  -ms-font-feature-settings: "liga" 1;
+  font-feature-settings: "liga";
+  -webkit-font-variant-ligatures: discretionary-ligatures;
+  font-variant-ligatures: discretionary-ligatures;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ph-bold.ph-archive:before {
+  content: "\e00c";
+}
+.ph-bold.ph-arrow-down:before {
+  content: "\e03e";
+}
+.ph-bold.ph-arrow-left:before {
+  content: "\e058";
+}
+.ph-bold.ph-arrow-right:before {
+  content: "\e06c";
+}
+.ph-bold.ph-arrows-clockwise:before {
+  content: "\e094";
+}
+.ph-bold.ph-arrow-up:before {
+  content: "\e08e";
+}
+.ph-bold.ph-article:before {
+  content: "\e0a8";
+}
+.ph-bold.ph-bookmark:before {
+  content: "\e0e8";
+}
+.ph-bold.ph-bookmark-simple:before {
+  content: "\e0ea";
+}
+.ph-bold.ph-book-open:before {
+  content: "\e0e6";
+}
+.ph-bold.ph-books:before {
+  content: "\e758";
+}
+.ph-bold.ph-calendar:before {
+  content: "\e108";
+}
+.ph-bold.ph-check:before {
+  content: "\e182";
+}
+.ph-bold.ph-check-circle:before {
+  content: "\e184";
+}
+.ph-bold.ph-coffee:before {
+  content: "\e1c2";
+}
+.ph-bold.ph-copy:before {
+  content: "\e1ca";
+}
+.ph-bold.ph-eye:before {
+  content: "\e220";
+}
+.ph-bold.ph-ghost:before {
+  content: "\e62a";
+}
+.ph-bold.ph-hands-clapping:before {
+  content: "\e6a0";
+}
+.ph-bold.ph-house:before {
+  content: "\e2c2";
+}
+.ph-bold.ph-lightbulb-filament:before {
+  content: "\e63c";
+}
+.ph-bold.ph-lightning:before {
+  content: "\e2de";
+}
+.ph-bold.ph-link:before {
+  content: "\e2e2";
+}
+.ph-bold.ph-list-bullets:before {
+  content: "\e2f2";
+}
+.ph-bold.ph-magnifying-glass:before {
+  content: "\e30c";
+}
+.ph-bold.ph-moon:before {
+  content: "\e330";
+}
+.ph-bold.ph-moon-stars:before {
+  content: "\e58e";
+}
+.ph-bold.ph-pause:before {
+  content: "\e39e";
+}
+.ph-bold.ph-share-network:before {
+  content: "\e408";
+}
+.ph-bold.ph-shuffle:before {
+  content: "\e422";
+}
+.ph-bold.ph-sparkle:before {
+  content: "\e6a2";
+}
+.ph-bold.ph-sun:before {
+  content: "\e472";
+}
+.ph-bold.ph-text-aa:before {
+  content: "\e6ee";
+}
+.ph-bold.ph-trash:before {
+  content: "\e4a6";
+}
+.ph-bold.ph-user:before {
+  content: "\e4c2";
+}
+.ph-bold.ph-warning-circle:before {
+  content: "\e4e2";
+}
+.ph-bold.ph-whatsapp-logo:before {
+  content: "\e5d0";
+}
+.ph-bold.ph-wifi-high:before {
+  content: "\e4ea";
+}
+.ph-bold.ph-x:before {
+  content: "\e4f6";
+}
+.ph-bold.ph-x-logo:before {
+  content: "\e4bc";
+}
+
+@font-face {
+  font-family: "Phosphor-Fill";
+  src: url("/fonts/Phosphor-Fill.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+.ph-fill {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "Phosphor-Fill" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Enable Ligatures ================ */
+  letter-spacing: 0;
+  -webkit-font-feature-settings: "liga";
+  -moz-font-feature-settings: "liga=1";
+  -moz-font-feature-settings: "liga";
+  -ms-font-feature-settings: "liga" 1;
+  font-feature-settings: "liga";
+  -webkit-font-variant-ligatures: discretionary-ligatures;
+  font-variant-ligatures: discretionary-ligatures;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ph-fill.ph-archive:before {
+  content: "\e00c";
+}
+.ph-fill.ph-arrow-down:before {
+  content: "\e03e";
+}
+.ph-fill.ph-arrow-left:before {
+  content: "\e058";
+}
+.ph-fill.ph-arrow-right:before {
+  content: "\e06c";
+}
+.ph-fill.ph-arrows-clockwise:before {
+  content: "\e094";
+}
+.ph-fill.ph-arrow-up:before {
+  content: "\e08e";
+}
+.ph-fill.ph-article:before {
+  content: "\e0a8";
+}
+.ph-fill.ph-bookmark:before {
+  content: "\e0e8";
+}
+.ph-fill.ph-bookmark-simple:before {
+  content: "\e0ea";
+}
+.ph-fill.ph-book-open:before {
+  content: "\e0e6";
+}
+.ph-fill.ph-books:before {
+  content: "\e758";
+}
+.ph-fill.ph-calendar:before {
+  content: "\e108";
+}
+.ph-fill.ph-check:before {
+  content: "\e182";
+}
+.ph-fill.ph-check-circle:before {
+  content: "\e184";
+}
+.ph-fill.ph-coffee:before {
+  content: "\e1c2";
+}
+.ph-fill.ph-copy:before {
+  content: "\e1ca";
+}
+.ph-fill.ph-eye:before {
+  content: "\e220";
+}
+.ph-fill.ph-ghost:before {
+  content: "\e62a";
+}
+.ph-fill.ph-hands-clapping:before {
+  content: "\e6a0";
+}
+.ph-fill.ph-house:before {
+  content: "\e2c2";
+}
+.ph-fill.ph-lightbulb-filament:before {
+  content: "\e63c";
+}
+.ph-fill.ph-lightning:before {
+  content: "\e2de";
+}
+.ph-fill.ph-link:before {
+  content: "\e2e2";
+}
+.ph-fill.ph-list-bullets:before {
+  content: "\e2f2";
+}
+.ph-fill.ph-magnifying-glass:before {
+  content: "\e30c";
+}
+.ph-fill.ph-moon:before {
+  content: "\e330";
+}
+.ph-fill.ph-moon-stars:before {
+  content: "\e58e";
+}
+.ph-fill.ph-pause:before {
+  content: "\e39e";
+}
+.ph-fill.ph-share-network:before {
+  content: "\e408";
+}
+.ph-fill.ph-shuffle:before {
+  content: "\e422";
+}
+.ph-fill.ph-sparkle:before {
+  content: "\e6a2";
+}
+.ph-fill.ph-sun:before {
+  content: "\e472";
+}
+.ph-fill.ph-text-aa:before {
+  content: "\e6ee";
+}
+.ph-fill.ph-trash:before {
+  content: "\e4a6";
+}
+.ph-fill.ph-user:before {
+  content: "\e4c2";
+}
+.ph-fill.ph-warning-circle:before {
+  content: "\e4e2";
+}
+.ph-fill.ph-whatsapp-logo:before {
+  content: "\e5d0";
+}
+.ph-fill.ph-wifi-high:before {
+  content: "\e4ea";
+}
+.ph-fill.ph-x:before {
+  content: "\e4f6";
+}
+.ph-fill.ph-x-logo:before {
+  content: "\e4bc";
+}
+
+@font-face {
+  font-family: "Phosphor";
+  src: url("/fonts/Phosphor.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+.ph {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "Phosphor" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Enable Ligatures ================ */
+  letter-spacing: 0;
+  -webkit-font-feature-settings: "liga";
+  -moz-font-feature-settings: "liga=1";
+  -moz-font-feature-settings: "liga";
+  -ms-font-feature-settings: "liga" 1;
+  font-feature-settings: "liga";
+  -webkit-font-variant-ligatures: discretionary-ligatures;
+  font-variant-ligatures: discretionary-ligatures;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ph.ph-archive:before {
+  content: "\e00c";
+}
+.ph.ph-arrow-down:before {
+  content: "\e03e";
+}
+.ph.ph-arrow-left:before {
+  content: "\e058";
+}
+.ph.ph-arrow-right:before {
+  content: "\e06c";
+}
+.ph.ph-arrows-clockwise:before {
+  content: "\e094";
+}
+.ph.ph-arrow-up:before {
+  content: "\e08e";
+}
+.ph.ph-article:before {
+  content: "\e0a8";
+}
+.ph.ph-bookmark:before {
+  content: "\e0e8";
+}
+.ph.ph-bookmark-simple:before {
+  content: "\e0ea";
+}
+.ph.ph-book-open:before {
+  content: "\e0e6";
+}
+.ph.ph-books:before {
+  content: "\e758";
+}
+.ph.ph-calendar:before {
+  content: "\e108";
+}
+.ph.ph-check:before {
+  content: "\e182";
+}
+.ph.ph-check-circle:before {
+  content: "\e184";
+}
+.ph.ph-coffee:before {
+  content: "\e1c2";
+}
+.ph.ph-copy:before {
+  content: "\e1ca";
+}
+.ph.ph-eye:before {
+  content: "\e220";
+}
+.ph.ph-ghost:before {
+  content: "\e62a";
+}
+.ph.ph-hands-clapping:before {
+  content: "\e6a0";
+}
+.ph.ph-house:before {
+  content: "\e2c2";
+}
+.ph.ph-lightbulb-filament:before {
+  content: "\e63c";
+}
+.ph.ph-lightning:before {
+  content: "\e2de";
+}
+.ph.ph-link:before {
+  content: "\e2e2";
+}
+.ph.ph-list-bullets:before {
+  content: "\e2f2";
+}
+.ph.ph-magnifying-glass:before {
+  content: "\e30c";
+}
+.ph.ph-moon:before {
+  content: "\e330";
+}
+.ph.ph-moon-stars:before {
+  content: "\e58e";
+}
+.ph.ph-pause:before {
+  content: "\e39e";
+}
+.ph.ph-share-network:before {
+  content: "\e408";
+}
+.ph.ph-shuffle:before {
+  content: "\e422";
+}
+.ph.ph-sparkle:before {
+  content: "\e6a2";
+}
+.ph.ph-sun:before {
+  content: "\e472";
+}
+.ph.ph-text-aa:before {
+  content: "\e6ee";
+}
+.ph.ph-trash:before {
+  content: "\e4a6";
+}
+.ph.ph-user:before {
+  content: "\e4c2";
+}
+.ph.ph-warning-circle:before {
+  content: "\e4e2";
+}
+.ph.ph-whatsapp-logo:before {
+  content: "\e5d0";
+}
+.ph.ph-wifi-high:before {
+  content: "\e4ea";
+}
+.ph.ph-x:before {
+  content: "\e4f6";
+}
+.ph.ph-x-logo:before {
+  content: "\e4bc";
+}
+
+@font-face {
+  font-family: "Phosphor-Duotone";
+  src: url("/fonts/Phosphor-Duotone.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+.ph-duotone {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "Phosphor-Duotone" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ph-duotone.ph-archive:before {
+  content: "\e00c";
+  opacity: 0.2;
+}
+.ph-duotone.ph-arrow-down:before {
+  content: "\e03e";
+  opacity: 0.2;
+}
+.ph-duotone.ph-arrow-left:before {
+  content: "\e058";
+  opacity: 0.2;
+}
+.ph-duotone.ph-arrow-right:before {
+  content: "\e06c";
+  opacity: 0.2;
+}
+.ph-duotone.ph-arrows-clockwise:before {
+  content: "\e094";
+  opacity: 0.2;
+}
+.ph-duotone.ph-arrow-up:before {
+  content: "\e08e";
+  opacity: 0.2;
+}
+.ph-duotone.ph-article:before {
+  content: "\e0a8";
+  opacity: 0.2;
+}
+.ph-duotone.ph-bookmark:before {
+  content: "\e0e8";
+  opacity: 0.2;
+}
+.ph-duotone.ph-bookmark-simple:before {
+  content: "\e0ea";
+  opacity: 0.2;
+}
+.ph-duotone.ph-book-open:before {
+  content: "\e0e6";
+  opacity: 0.2;
+}
+.ph-duotone.ph-books:before {
+  content: "\e758";
+  opacity: 0.2;
+}
+.ph-duotone.ph-calendar:before {
+  content: "\e108";
+  opacity: 0.2;
+}
+.ph-duotone.ph-check:before {
+  content: "\e182";
+  opacity: 0.2;
+}
+.ph-duotone.ph-check-circle:before {
+  content: "\e184";
+  opacity: 0.2;
+}
+.ph-duotone.ph-coffee:before {
+  content: "\e1c2";
+  opacity: 0.2;
+}
+.ph-duotone.ph-copy:before {
+  content: "\e1ca";
+  opacity: 0.2;
+}
+.ph-duotone.ph-eye:before {
+  content: "\e220";
+  opacity: 0.2;
+}
+.ph-duotone.ph-ghost:before {
+  content: "\e62a";
+  opacity: 0.2;
+}
+.ph-duotone.ph-hands-clapping:before {
+  content: "\e6a0";
+  opacity: 0.2;
+}
+.ph-duotone.ph-house:before {
+  content: "\e2c2";
+  opacity: 0.2;
+}
+.ph-duotone.ph-lightbulb-filament:before {
+  content: "\e63c";
+  opacity: 0.2;
+}
+.ph-duotone.ph-lightning:before {
+  content: "\e2de";
+  opacity: 0.2;
+}
+.ph-duotone.ph-link:before {
+  content: "\e2e2";
+  opacity: 0.2;
+}
+.ph-duotone.ph-list-bullets:before {
+  content: "\e2f2";
+  opacity: 0.2;
+}
+.ph-duotone.ph-magnifying-glass:before {
+  content: "\e30c";
+  opacity: 0.2;
+}
+.ph-duotone.ph-moon:before {
+  content: "\e330";
+  opacity: 0.2;
+}
+.ph-duotone.ph-moon-stars:before {
+  content: "\e58e";
+  opacity: 0.2;
+}
+.ph-duotone.ph-pause:before {
+  content: "\e39e";
+  opacity: 0.2;
+}
+.ph-duotone.ph-share-network:before {
+  content: "\e408";
+  opacity: 0.2;
+}
+.ph-duotone.ph-shuffle:before {
+  content: "\e422";
+  opacity: 0.2;
+}
+.ph-duotone.ph-sparkle:before {
+  content: "\e6a2";
+  opacity: 0.2;
+}
+.ph-duotone.ph-sun:before {
+  content: "\e472";
+  opacity: 0.2;
+}
+.ph-duotone.ph-text-aa:before {
+  content: "\e6ee";
+  opacity: 0.2;
+}
+.ph-duotone.ph-trash:before {
+  content: "\e4a6";
+  opacity: 0.2;
+}
+.ph-duotone.ph-user:before {
+  content: "\e4c2";
+  opacity: 0.2;
+}
+.ph-duotone.ph-warning-circle:before {
+  content: "\e4e2";
+  opacity: 0.2;
+}
+.ph-duotone.ph-whatsapp-logo:before {
+  content: "\e5d0";
+  opacity: 0.2;
+}
+.ph-duotone.ph-wifi-high:before {
+  content: "\e4ea";
+  opacity: 0.2;
+}
+.ph-duotone.ph-x:before {
+  content: "\e4f6";
+  opacity: 0.2;
+}
+.ph-duotone.ph-x-logo:before {
+  content: "\e4bc";
+  opacity: 0.2;
+}
